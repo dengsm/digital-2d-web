@@ -170,7 +170,12 @@ function BackgroundsTab() {
                                 label={t('select')}
                                 key={t('select')}
                                 defaultSelectedKeys={[bgType as string]}
-                                onSelectionChange={(e) => setBgType(e.currentKey as string)}
+                                onSelectionChange={(keys) => {
+                                    const selectedKey = Array.from(keys)[0] as string;
+                                    if (selectedKey && selectedKey !== bgType) {
+                                        setBgType(selectedKey);
+                                    }
+                                }}
                             >
                                 {
                                     Object.keys(bgTypeMap).map((key) => (
@@ -247,7 +252,12 @@ function CharactersTab() {
                             label={t('select')}
                             key={t('select')}
                             defaultSelectedKeys={[characterType as string]}
-                            onSelectionChange={(e) => setCharacterType(e.currentKey as string)}
+                            onSelectionChange={(keys) => {
+                                const selectedKey = Array.from(keys)[0] as string;
+                                if (selectedKey && selectedKey !== characterType) {
+                                    setCharacterType(selectedKey);
+                                }
+                            }}
                         >
                             {
                                 Object.keys(characterTypeMap).map((key) => (

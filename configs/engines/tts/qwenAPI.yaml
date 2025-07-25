@@ -1,0 +1,30 @@
+NAME: "QwenTTS" # Name of the engine, will be used for registration
+VERSION: "v0.0.1"
+DESC: "接入阿里云通义千问TTS服务"
+META: {
+  official: "https://help.aliyun.com/zh/dashscope/developer-reference/qwen-tts",
+  configuration: "https://bailian.console.aliyun.com/",
+  tips: "需要配置DASHSCOPE_API_KEY环境变量",
+  fee: "按量计费"
+}
+FORMAT: "wav"         # Output audio format
+SAMPLE_RATE: 24000    # Audio sample rate for Qwen TTS (24kHz)
+# 暴露给前端的参数选项以及默认值
+PARAMETERS: [
+  {
+    name: "voice",
+    description: "Voice for Qwen TTS.",
+    type: "string",
+    required: false,
+    choices: ["Xiaowang", "Xiaowei", "Xiaoyun", "Xiaomo", "Xiaoxuan", "Xiaobei", "Xiaoyan", "Xiaoyou", "Xinyu", "Shiyin", "Ethan", "Zoe", "Alex", "Bella"],
+    default: "Xiaoyun"
+  },
+  {
+    name: "api_key",
+    description: "DashScope API Key for Qwen TTS.",
+    type: "string",
+    required: false,
+    choices: [],
+    default: ""
+  }
+] 

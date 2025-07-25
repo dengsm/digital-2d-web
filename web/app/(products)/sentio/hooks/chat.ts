@@ -84,10 +84,21 @@ export function useChatWithAgent() {
 
     const chatWithAgent = (
         message: string, 
-        postProcess?: (conversation_id: string, message_id: string, think: string, content: string) => void
+        postProcess?: (conversation_id: string, message_id: string, think: string, content: string) => void,
+        imageData?: string,
+        skipUIUpdate?: boolean  // 新增参数：是否跳过UI更新
     ) => {
-        addChatRecord({ role: CHAT_ROLE.HUMAN, think: "", content: message });
-        addChatRecord({ role: CHAT_ROLE.AI, think: "", content: "..." });
+        console.log('chatWithAgent 接收到图片数据:', imageData ? `长度: ${imageData.length}` : '无图片数据');
+        console.log('chatWithAgent skipUIUpdate参数:', skipUIUpdate);
+        
+        // 只有在不跳过UI更新时才添加聊天记录
+        if (!skipUIUpdate) {
+            console.log('添加用户消息和AI等待状态到UI');
+            addChatRecord({ role: CHAT_ROLE.HUMAN, think: "", content: message });
+            addChatRecord({ role: CHAT_ROLE.AI, think: "", content: "..." });
+        } else {
+            console.log('跳过UI更新，避免重复显示消息');
+        }
         controller.current = new AbortController();
         setChatting(true);
         let agentResponse = "";
@@ -211,16 +222,19 @@ export function useChatWithAgent() {
             agentDone = true;
             setChatting(false);
         }
-        api_agent_stream(agentEngine, agentSettings, message, conversationId.current, controller.current.signal, agentCallback, agentErrorCallback);
+        api_agent_stream(agentEngine, agentSettings, message, conversationId.current, controller.current.signal, agentCallback, agentErrorCallback, imageData);
     }
 
     const chat = (
         message: string,
-        postProcess?: (conversation_id: string, message_id: string, think: string, content: string) => void
+        postProcess?: (conversation_id: string, message_id: string, think: string, content: string) => void,
+        imageData?: string,
+        skipUIUpdate?: boolean  // 新增参数：是否跳过UI更新
     ) => {
         // 新对话终止旧对话
         abort();
-        chatWithAgent(message, postProcess);
+        console.log('chat函数调用，skipUIUpdate参数:', skipUIUpdate);
+        chatWithAgent(message, postProcess, imageData, skipUIUpdate);
     }
 
     useEffect(() => {

@@ -49,8 +49,11 @@ export class LAppDelegate {
    * Resize canvas and re-initialize view.
    */
   public onResize(): void {
-    for (let i = 0; i < this._subdelegates.getSize(); i++) {
-      this._subdelegates.at(i).onResize();
+    // _subdelegatesのnullチェックを追加
+    if (this._subdelegates != null) {
+      for (let i = 0; i < this._subdelegates.getSize(); i++) {
+        this._subdelegates.at(i).onResize();
+      }
     }
   }
 
@@ -68,8 +71,11 @@ export class LAppDelegate {
       // 時間更新
       LAppPal.updateTime();
       
-      for (let i = 0; i < this._subdelegates.getSize(); i++) {
-        this._subdelegates.at(i).update();
+      // _subdelegatesのnullチェックを追加
+      if (this._subdelegates != null) {
+        for (let i = 0; i < this._subdelegates.getSize(); i++) {
+          this._subdelegates.at(i).update();
+        }
       }
 
       // ループのために再帰呼び出し

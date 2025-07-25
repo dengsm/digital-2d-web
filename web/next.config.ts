@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   distDir: './dist',
   // 防止dev模式下模拟立即卸载组件和重新挂载组件的行为
   reactStrictMode: false,
+  rewrites: async () => {
+    return [
+      {
+        source: '/chat',
+        destination: '/index.html',
+      },
+    ];
+  },
 };
 
 // const withMDX = createMDX({

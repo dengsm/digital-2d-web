@@ -11,7 +11,7 @@ const inter = Inter({subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: '沐光而行',
-  icons: 'favicon.icon',
+  icons: '/favicon.ico',
 };
 
 export default async function RootLayout({

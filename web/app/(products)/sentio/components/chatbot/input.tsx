@@ -2,10 +2,14 @@
 
 import { useState, useRef, useEffect, memo } from 'react';
 import { StopCircleIcon, MicrophoneIcon, PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { useSentioAsrStore, useChatRecordStore } from '@/lib/store/sentio';
-import { Input, Button, Spinner, addToast, Tooltip } from '@heroui/react';
+import { useSentioAsrStore, useChatRecordStore, useSentioAgentStore, useSentioTtsStore, useSentioBasicStore } from '@/lib/store/sentio';
+import { Input, Button, Spinner, addToast, Tooltip, Modal, ModalContent, ModalHeader, ModalBody } from '@heroui/react';
 import { CHAT_ROLE } from '@/lib/protocol';
-import { api_asr_infer_file } from '@/lib/api/server';
+import { api_asr_infer_file, api_agent_stream, api_tts_infer } from '@/lib/api/server';
+import { Live2dManager } from '@/lib/live2d/live2dManager';
+import { SENTIO_TTS_PUNC, SENTIO_TTS_SENTENCE_LENGTH_MIN } from '@/lib/constants';
+import { base64ToArrayBuffer, ttsTextPreprocess } from '@/lib/func';
+import { convertMp3ArrayBufferToWavArrayBuffer } from '@/lib/utils/audio';
 import { createASRWebsocketClient, WS_RECV_ACTION_TYPE, WS_SEND_ACTION_TYPE } from '@/lib/api/websocket';
 import { useTranslations } from 'next-intl';
 import { convertToMp3, convertFloat32ArrayToMp3, AudioRecoder } from '@/lib/utils/audio';
@@ -14,6 +18,7 @@ import { useMicVAD } from "@ricky0123/vad-react"
 import { useChatWithAgent, useAudioTimer } from '../../hooks/chat';
 import { getSrcPath } from '@/lib/path';
 import clsx from 'clsx';
+import html2canvas from 'html2canvas';
 
 let micRecoder: Recorder | null = null;
 
@@ -28,9 +33,16 @@ export const ChatInput = memo(({
     const [message, setMessage] = useState("");
     const [startMicRecord, setStartMicRecord] = useState(false);
     const [startAsrConvert, setStartAsrConvert] = useState(false);
+    const [screenshotDataUrl, setScreenshotDataUrl] = useState<string | null>(null);
+    const [showScreenshotPreview, setShowScreenshotPreview] = useState(false);
     const { enable: enableASR, engine: asrEngine, settings: asrSettings } = useSentioAsrStore();
+    const { addChatRecord, updateLastRecord } = useChatRecordStore();
+    const { engine: agentEngine, settings: agentSettings } = useSentioAgentStore();
+    const { engine: ttsEngine, settings: ttsSettings } = useSentioTtsStore();
+    const { sound } = useSentioBasicStore();
     const { chat, abort, chatting } = useChatWithAgent();
     const { startAudioTimer, stopAudioTimer } = useAudioTimer();
+    const conversationIdRef = useRef<string>("");
     const handleStartRecord = () => {
         abort();
         if (micRecoder == null) {
@@ -77,16 +89,403 @@ export const ChatInput = memo(({
     const onFileClick = () => {
         // TODO: open file dialog
     }
-    const onSendClick = () => {
+    const onSendClick = async () => {
         if (message == "") return;
-        chat(message, postProcess);
+        
+        // 保存当前消息内容
+        const currentMessage = message;
+        
+        // 立即清空输入框
         setMessage("");
+        console.log('立即显示用户消息:', currentMessage);
+        
+        // 立即在UI上显示用户消息和AI等待状态
+        addChatRecord({ role: CHAT_ROLE.HUMAN, think: "", content: currentMessage });
+        addChatRecord({ role: CHAT_ROLE.AI, think: "", content: "..." });
+        
+        // 异步获取截图并发送完整消息（不再重复添加UI消息）
+        sendMessageWithScreenshot(currentMessage);
     }
+    
+    // 异步获取截图并发送完整消息
+    const sendMessageWithScreenshot = async (messageContent: string) => {
+        let screenshotDataUrl: string | null = null;
+        try {
+            // 等待一秒确保页面渲染完成
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            console.log('开始异步截取整个网页内容...');
+            screenshotDataUrl = await captureFullPageScreenshot();
+            
+            // 全页面截图函数（重构版本 - 针对index.html父页面截图）
+            async function captureFullPageScreenshot(): Promise<string> {
+                console.log('=== 开始全页面截图（针对index.html父页面） ===');
+                
+                // 检查是否在iframe中
+                const isInIframe = window !== window.top;
+                console.log('是否在iframe中:', isInIframe);
+                
+                if (isInIframe) {
+                    // 在iframe中，需要通过postMessage请求父页面截图
+                    console.log('检测到iframe环境，将请求父页面执行截图');
+                    
+                    return new Promise((resolve, reject) => {
+                        // 设置超时处理
+                        const timeout = setTimeout(() => {
+                            console.error('父页面截图请求超时');
+                            reject(new Error('父页面截图请求超时'));
+                        }, 30000); // 30秒超时
+                        
+                        // 监听父页面的回复
+                        const messageHandler = (event: MessageEvent) => {
+                            console.log('收到父页面消息:', event.data);
+                            
+                            if (event.data.type === 'SCREENSHOT_RESPONSE') {
+                                clearTimeout(timeout);
+                                window.removeEventListener('message', messageHandler);
+                                
+                                if (event.data.success) {
+                                    console.log('父页面截图成功，数据大小:', Math.round(event.data.imageData.length / 1024), 'KB');
+                                    resolve(event.data.imageData);
+                                } else {
+                                    console.error('父页面截图失败:', event.data.error);
+                                    reject(new Error(event.data.error || '父页面截图失败'));
+                                }
+                            }
+                        };
+                        
+                        window.addEventListener('message', messageHandler);
+                        
+                        // 发送截图请求给父页面
+                        const request = {
+                            type: 'SCREENSHOT_REQUEST',
+                            timestamp: Date.now(),
+                            source: 'digital-human-iframe'
+                        };
+                        
+                        console.log('发送截图请求给父页面:', request);
+                        window.parent.postMessage(request, '*');
+                    });
+                } else {
+                    // 不在iframe中，直接截取当前页面
+                    console.log('不在iframe中，直接截取当前页面');
+                    return await captureCurrentPageDirectly();
+                }
+            }
+            
+            // 直接截取当前页面的函数
+            async function captureCurrentPageDirectly(): Promise<string> {
+                console.log('开始直接截取当前页面');
+                
+                const targetElement = document.documentElement || document.body;
+                
+                // 计算完整的尺寸
+                const fullWidth = Math.max(
+                    document.documentElement.scrollWidth,
+                    document.documentElement.offsetWidth,
+                    document.documentElement.clientWidth,
+                    window.innerWidth
+                );
+                
+                const fullHeight = Math.max(
+                    document.documentElement.scrollHeight,
+                    document.documentElement.offsetHeight,
+                    document.documentElement.clientHeight,
+                    window.innerHeight
+                );
+                
+                console.log('页面尺寸:', fullWidth, 'x', fullHeight);
+                
+                const canvasOptions: any = {
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    scale: 1,
+                    logging: true,
+                    width: fullWidth,
+                    height: fullHeight,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: window.innerWidth,
+                    windowHeight: window.innerHeight,
+                    x: 0,
+                    y: 0,
+                    foreignObjectRendering: true,
+                    removeContainer: false,
+                    imageTimeout: 15000
+                };
+                
+                try {
+                    const canvas = await html2canvas(targetElement, canvasOptions);
+                    console.log('直接截图成功，尺寸:', canvas.width, 'x', canvas.height);
+                    return canvas.toDataURL('image/png', 1.0);
+                } catch (error) {
+                    console.error('直接截图失败:', error);
+                    throw error;
+                }
+            }
+            
+            // 截图完成，一次性发送带image字段的完整消息
+            console.log('截图完成，准备发送带截图的完整消息');
+            
+        } catch (error) {
+            console.error('异步截图失败:', error);
+            console.log('截图失败，将发送不带截图的消息');
+        }
+        
+        // 无论截图成功与否，都发送消息给后端（带或不带截图）
+        if (screenshotDataUrl) {
+            console.log('发送带截图的完整消息给后端，截图大小:', Math.round(screenshotDataUrl.length / 1024), 'KB');
+        } else {
+            console.log('发送不带截图的消息给后端');
+        }
+        
+        // 发送消息+截图数据给后端（注意：UI已经在onSendClick中显示了）
+        sendMessageToBackend(messageContent, screenshotDataUrl);
+    }
+    
+    // 发送消息和截图数据到后端（不重复添加UI消息）
+    const sendMessageToBackend = (messageContent: string, screenshotData: string | null) => {
+        console.log('🚀 发送消息到后端，包含截图数据，避免重复UI显示');
+        console.log('📝 消息内容:', messageContent);
+        console.log('📷 截图数据:', screenshotData ? `存在，长度: ${screenshotData.length}` : '无');
+        console.log('🤖 Agent引擎:', agentEngine);
+        console.log('⚙️ Agent设置:', agentSettings);
+        console.log('💬 会话ID:', conversationIdRef.current);
+        
+        // 创建AbortController用于取消请求
+        const controller = new AbortController();
+        
+        // 累积AI回复内容和思考内容
+        let accumulatedResponse = "";
+        let accumulatedThink = "";
+        
+        // TTS相关状态
+        let ttsProcessIndex = 0;
+        let agentDone = true;
+        
+        // 根据断句符号找到第一个断句
+        const findPuncIndex = (content: string, beginIndex: number) => {
+            let latestIndex = -1;
+            // 找最近的断句标点符号
+            for (let i = 0; i < SENTIO_TTS_PUNC.length; i++) {
+                const index = content.indexOf(SENTIO_TTS_PUNC[i], beginIndex);
+                if (index > beginIndex) {
+                    if (latestIndex < 0 || index < latestIndex) {
+                        latestIndex = index;
+                    }
+                }
+            }
+            return latestIndex;
+        };
+        
+        // TTS处理函数
+        const doTTS = () => {
+            if (!!!controller) return;
+            // agent持续输出中 | agentResponse未处理完毕
+            if (!agentDone || accumulatedResponse.length > ttsProcessIndex) {
+                let ttsText = "";
+                const ttsCallback = (ttsResult: string) => {
+                    if (ttsResult != "") {
+                        const audioData = base64ToArrayBuffer(ttsResult);
+                        convertMp3ArrayBufferToWavArrayBuffer(audioData).then((buffer) => {
+                            // 将音频数据放入队列
+                            Live2dManager.getInstance().pushAudioQueue(buffer);
+                            ttsText = "";  
+                        })
+                    }
+                    // TTS处理完毕，继续处理下一个断句
+                    doTTS();
+                };
+
+                let beginIndex = ttsProcessIndex;
+                while (beginIndex >= ttsProcessIndex) {
+                    const puncIndex = findPuncIndex(accumulatedResponse, beginIndex);
+                    // 找到断句
+                    if (puncIndex > beginIndex) {
+                        if (puncIndex - ttsProcessIndex > SENTIO_TTS_SENTENCE_LENGTH_MIN) {
+                            ttsText = accumulatedResponse.substring(ttsProcessIndex, puncIndex + 1);
+                            ttsProcessIndex = puncIndex + 1;
+                            break;
+                        } else {
+                            // 长度不符合, 继续往后找
+                            beginIndex = puncIndex + 1;
+                            continue;
+                        }
+                    }
+                    // 未找到
+                    beginIndex = -1;
+                }
+                if (ttsText.length == 0 && agentDone) {
+                    // agent输出完毕，但未找到断句符号，则将剩余内容全部进行TTS
+                    ttsText = accumulatedResponse.substring(ttsProcessIndex);
+                    ttsProcessIndex = accumulatedResponse.length;
+                }
+                if (ttsText != "") {
+                    // 处理断句tts
+                    const processText = ttsTextPreprocess(ttsText);
+                    if (!!processText) {
+                        api_tts_infer(
+                            ttsEngine, 
+                            ttsSettings, 
+                            processText, 
+                            controller.signal
+                        ).then((ttsResult) => {ttsCallback(ttsResult)});
+                    } else {
+                        ttsCallback("");
+                    }
+                } else {
+                    // 10ms 休眠定时器执行
+                    setTimeout(() => {
+                        doTTS();
+                    }, 10);
+                }
+            }
+        };
+        
+        // 定义回调函数处理AI响应 - 优化版本，去除预期之外的内容并添加TTS支持
+        const agentCallback = (response: any) => {
+            console.log('✅ 收到AI响应:', response);
+            console.log('📊 响应事件类型:', response.event);
+            console.log('📄 响应数据:', response.data);
+            
+            const event = response.event;
+            const data = response.data;
+            
+            // 只处理有效的数据内容，过滤空值和无意义内容
+            const isValidData = data && typeof data === 'string' && data.trim() !== '';
+            
+            // 根据不同的事件类型处理
+            switch (event) {
+                case 'conversation_id':
+                case 'CONVERSATION_ID':
+                    console.log('🆔 会话ID:', data);
+                    conversationIdRef.current = data;
+                    break;
+                    
+                case 'message_id':
+                case 'MESSAGE_ID':
+                    console.log('📧 消息ID:', data);
+                    break;
+                    
+                case 'agent_thinking':
+                case 'think':
+                case 'THINK':
+                    if (isValidData) {
+                        console.log('🤔 AI思考中:', data);
+                        accumulatedThink += data;
+                        // 只有在有实际回复内容时才显示，避免显示占位符
+                        const displayContent = accumulatedResponse || (accumulatedThink ? "思考中..." : "");
+                        updateLastRecord({ role: CHAT_ROLE.AI, think: accumulatedThink, content: displayContent });
+                    }
+                    break;
+                    
+                case 'agent_response':
+                case 'text':
+                case 'TEXT':
+                    if (isValidData) {
+                        console.log('💬 AI回复内容片段:', data);
+                        accumulatedResponse += data;
+                        updateLastRecord({ role: CHAT_ROLE.AI, think: accumulatedThink, content: accumulatedResponse });
+                        
+                        // 触发TTS语音播报
+                        if (agentDone && sound) {
+                            console.log('🔊 首次触发TTS语音播报');
+                            agentDone = false;
+                            doTTS();
+                        }
+                    }
+                    break;
+                    
+                case 'task':
+                case 'TASK':
+                case 'done':
+                case 'DONE':
+                    console.log('✅ AI回复完成，最终内容:', accumulatedResponse);
+                    // 确保最终内容被正确显示，清除思考内容
+                    if (accumulatedResponse && accumulatedResponse.trim() !== '') {
+                        console.log('🎆 最终内容:', accumulatedResponse);
+                        updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: accumulatedResponse.trim() });
+                    } else {
+                        // 如果没有有效回复内容，显示默认消息
+                        updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，没有收到有效回复。' });
+                    }
+                    
+                    // 处理TTS结束逻辑
+                    if (postProcess) {
+                        postProcess(conversationIdRef.current, "", accumulatedThink, accumulatedResponse);
+                    }
+                    // 标记agent输出结束，让TTS处理剩余内容
+                    agentDone = true;
+                    break;
+                    
+                case 'error':
+                case 'ERROR':
+                    console.error('❌ AI响应错误:', data);
+                    updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，AI响应出现错误，请重试。' });
+                    break;
+                    
+                default:
+                    // 对于未知事件类型，只记录日志，不处理内容，避免添加预期之外的内容
+                    console.log('❓ 未知事件类型，已忽略:', event, '数据:', data);
+                    break;
+            }
+        };
+        
+        const agentErrorCallback = (error: Error) => {
+            console.error('❌ Agent API错误:', error);
+            console.error('🔍 错误详情:', error.message);
+            console.error('📋 错误堆栈:', error.stack);
+            updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，发生了错误，请重试。' });
+        };
+        
+        console.log('🔄 开始调用API...');
+        // 直接调用API，不通过chat函数（避免重复添加UI消息）
+        try {
+            api_agent_stream(
+                agentEngine,
+                agentSettings,
+                messageContent,
+                conversationIdRef.current,
+                controller.signal,
+                agentCallback,
+                agentErrorCallback,
+                screenshotData
+            );
+            console.log('✨ API调用已发起');
+        } catch (error) {
+            console.error('💥 API调用失败:', error);
+            updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，API调用失败，请重试。' });
+        }
+    };
+    
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             onSendClick();
         }
     }
+    
+    // 生成占位图片函数
+    const generatePlaceholderImage = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 400;
+        canvas.height = 300;
+        
+        // 绘制黑色背景
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // 绘制白色文字
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Live2D 数字人截图', canvas.width / 2, canvas.height / 2 - 10);
+        ctx.fillText('(技术限制，显示占位图)', canvas.width / 2, canvas.height / 2 + 20);
+        
+        return canvas.toDataURL('image/png');
+    };
+    
     // 快捷键
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -162,6 +561,32 @@ export const ChatInput = memo(({
                     <PaperAirplaneIcon className='size-6' />
                 </Button>
             </div>
+            
+            {/* 截图预览模态框 */}
+            <Modal 
+                isOpen={showScreenshotPreview} 
+                onClose={() => setShowScreenshotPreview(false)}
+                size="2xl"
+                scrollBehavior="inside"
+            >
+                <ModalContent>
+                    <ModalHeader className="flex flex-col gap-1">
+                        截图预览
+                    </ModalHeader>
+                    <ModalBody className="pb-6">
+                        {screenshotDataUrl && (
+                            <div className="bg-black rounded p-2">
+                                <img 
+                                    src={screenshotDataUrl} 
+                                    alt="Live2D截图" 
+                                    className="w-full h-auto rounded"
+                                    style={{ backgroundColor: '#000000' }}
+                                />
+                            </div>
+                        )}
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
         </div>
     )
 });
@@ -197,6 +622,7 @@ export const ChatVadInput = memo(() => {
         let asrResult = ""
         asrResult = await api_asr_infer_file(asrEngine, asrSettings, mp3Blob);
         if (asrResult.length > 0) {
+            // ASR结果直接调用chat，不跳过UI更新（这是正常的语音输入流程）
             chat(asrResult);
         }
     }
@@ -390,7 +816,9 @@ export const ChatStreamInput = memo(() => {
                         break;
                     case WS_RECV_ACTION_TYPE.ENGINE_FINAL_OUTPUT:
                         deleteLastRecord();
-                        chat(recvData);
+                        // 传入skipUIUpdate: true，避免重复显示消息（因为ASR已经在PARTIAL_OUTPUT阶段显示了用户消息）
+                        console.log('ASR语音识别完成，调用chat函数，跳过UI更新避免重复显示');
+                        chat(recvData, undefined, undefined, true);
                         break;
                     case WS_RECV_ACTION_TYPE.ENGINE_STOPPED:
                         setEngineLoading(true);

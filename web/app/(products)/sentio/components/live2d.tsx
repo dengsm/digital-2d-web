@@ -52,7 +52,7 @@ export function Live2d() {
     }, []);
 
     return (
-        <div className='absolute top-0 left-0 w-full h-full z-0'>
+        <div id='live2d-container' className='absolute top-0 left-0 w-full h-full z-0'>
             {
                 background && (background.link.endsWith('.mp4') ? 
                 <video 

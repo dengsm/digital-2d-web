@@ -14,8 +14,23 @@ export class LAppGlManager {
   }
 
   public initialize(canvas: HTMLCanvasElement): boolean {
-    // glコンテキストを初期化
-    this._gl = canvas.getContext('webgl2');
+    // glコンテキストを初期化 - preserveDrawingBufferを有効にして截图を可能にする
+    this._gl = canvas.getContext('webgl2', {
+      preserveDrawingBuffer: true,
+      antialias: true,
+      alpha: true,
+      premultipliedAlpha: false
+    });
+
+    if (!this._gl) {
+      // webgl2が失敗した場合、webgl1を試す
+      this._gl = canvas.getContext('webgl', {
+        preserveDrawingBuffer: true,
+        antialias: true,
+        alpha: true,
+        premultipliedAlpha: false
+      });
+    }
 
     if (!this._gl) {
       // gl初期化失敗

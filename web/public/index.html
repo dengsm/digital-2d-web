@@ -1,0 +1,2848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <style>
+        .iframe-container {
+            width: 100%;
+            max-width: 1200px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙马科技-鸿源技术学校AI助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 明学明事明德明志 艺术字样式 */
+        .mingxue-art {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 50px 0;
+        }
+        .mingxue-char {
+            font-family: 'STXingkai', 'KaiTi', 'FZShuTi', 'FZYaoti', '华文行楷', cursive, serif;
+            font-size: 4rem;
+            color: #764ba2;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px #e1e8ed, 0 2px 0 #fff, 0 0 8px #667eea44;
+            transition: transform 0.2s;
+        }
+        .mingxue-char:hover {
+            color: #1e3c72;
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        /* 缩小左侧栏用户信息和联系我们 */
+        .teacher-panel .user-info,
+        .teacher-panel .info-section {
+            font-size: 12px;
+            padding: 10px 10px 8px 10px;
+        }
+        .teacher-panel .user-info h3,
+        .teacher-panel .info-section h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .teacher-panel .info-input {
+            font-size: 12px;
+            padding: 7px 10px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+        }
+        .teacher-panel .contact-info p {
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        .teacher-panel .info-pic{
+            position: absolute;
+            bottom: -4px;
+            height: 230px;
+            width: 100%;
+            background: url(pic/pic1.png);
+            background-size: 100% 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            height: 95vh;
+            max-width: 95%;
+            width: 95%;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .teacher-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px 0 0 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-intro {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-intro::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .feature-intro .intro-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        .feature-intro .intro-text {
+            color: white;
+            font-size: 13px;
+            line-height: 1.4;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-intro .intro-highlight {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .feature-intro .intro-highlight.clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-intro .intro-highlight.clickable:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .teacher-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .teacher {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .teacher::before {
+            content: '🤖';
+            font-size: 48px;
+            position: absolute;
+            animation: pulse 2s infinite;
+        }
+
+        .teacher .circuit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: scan 3s linear infinite;
+        }
+
+        .teacher-name {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .teacher-subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .user-info h3 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .info-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .info-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .info-input::placeholder {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+
+        .chat-panel {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: #f8f9fa;
+            min-width: 0; /* 防止内容溢出 */
+            position: relative;
+            animation: slideInUp 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .right-panel {
+            flex: 2;
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('pic/playground.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            backdrop-filter: blur(5px);
+            border-radius: 0 20px 20px 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: slideInRight 0.6s ease-out 0.1s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 操场人物样式 */
+        .playground-characters {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .character {
+            position: absolute;
+            bottom: 5%;
+            transition: transform 0.3s ease;
+            opacity: 0.9;
+        }
+
+        .character img {
+            width: auto;
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.3));
+        }
+
+        .character1 {
+            left: 5%;
+            animation: float1 4s ease-in-out infinite;
+        }
+
+        .character2 {
+            right: 5%;
+            animation: float2 3.5s ease-in-out infinite 1s;
+        }
+
+        @keyframes float1 {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-10px) scale(1.02);
+            }
+        }
+
+        @keyframes float2 {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.01);
+            }
+        }
+
+        /* 添加操场氛围文字 */
+        .playground-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .playground-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .playground-subtitle {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .school-features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .feature-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+            text-align: left;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .info-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .info-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .info-section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .info-section h3 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-info p {
+            color: #495057;
+            font-size: 14px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .popular-majors {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .major-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .major-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .service-hours p {
+            color: #495057;
+            font-size: 14px;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .chat-header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* 响应式设计 - 针对不同屏幕尺寸优化chat-header */
+        @media (max-width: 768px) {
+            .chat-header {
+                padding: 8px;
+            }
+            .chat-header img {
+                height: 50px;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .chat-header {
+                padding: 15px;
+            }
+            .chat-header img {
+                height: 70px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chat-header {
+                padding: 5px;
+            }
+            .chat-header img {
+                height: 40px;
+            }
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .chat-messages {
+            flex: 1;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e8ed;
+        }
+
+        @media (min-width: 769px) {
+            .chat-messages {
+                max-height: calc(100vh - 240px);
+            }
+        }
+
+        @media (max-width: 1200px) and (min-width: 769px) {
+            .container {
+                max-width: 95%;
+                width: 95%;
+                margin: 0 auto;
+                border-radius: 20px;
+                height: 100vh;
+            }
+
+            .teacher-panel {
+                border-radius: 0;
+                flex: 1;
+            }
+
+            .right-panel {
+                border-radius: 0;
+                flex: 2;
+            }
+
+            body {
+                align-items: stretch;
+            }
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message.assistant::before {
+            content: '🤖';
+            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .message.user::after {
+            content: '👤';
+            font-size: 20px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #34495e;
+            border-radius: 50%;
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            animation: fadeIn 0.5s ease-in;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 8px 0;
+            max-width: 100%;
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        /* 测评结果样式 */
+        .result-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #667eea;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 15px 0;
+            max-width: 100%;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .result-title {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-content {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            line-height: 1.7;
+            color: #2c3e50;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .result-content h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .result-content h4 {
+            color: #495057;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 16px 0 8px 0;
+        }
+
+        .result-content .mbti-type {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 8px 0;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-content .compatibility-rate {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .result-content .strength {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .result-content .weakness {
+            color: #fd7e14;
+            font-weight: 600;
+        }
+
+        .result-content ul {
+            margin: 10px 0;
+            padding-left: 0;
+        }
+
+        .result-content li {
+            list-style: none;
+            padding: 8px 0 8px 25px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .result-content li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .result-content .major-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-content .major-title {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-disclaimer {
+            text-align: center;
+            color: #95a5a6;
+            font-size: 12px;
+            margin-top: 15px;
+            padding: 8px;
+            border-top: 1px solid #e9ecef;
+            font-style: italic;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .option-item.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .option-radio {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option-label {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .submit-answer {
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-answer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-answer:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message.user .message-bubble {
+            background: #2c3e50;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .message.assistant .message-bubble {
+            background: #f8f9fa;
+            color: #2c3e50;
+            margin-right: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .message.assistant .message-bubble .result-container {
+            margin: 0;
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            margin-right: -20px;
+        }
+
+        .message.assistant .message-bubble .question-container {
+            margin: 0;
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            margin-right: -20px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-button {
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 10px;
+        }
+
+        .loading-dots {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* 进度条样式 */
+        .progress-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e8ed;
+        }
+
+        .progress-title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .progress-title .progress-icon {
+            font-size: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.4) 50%, 
+                transparent 100%);
+            animation: shimmer-progress 2s infinite;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-stages {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        .progress-stage {
+            color: #95a5a6;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .progress-stage.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .progress-stage.completed {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer-progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                height: calc(100vh - 20px);
+                border-radius: 20px;
+            }
+
+            .teacher-panel {
+                width: 100%;
+                height: auto;
+                min-height: 140px;
+                border-radius: 20px 20px 0 0;
+                flex-direction: column;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.95);
+                order: 1; /* 确保左侧面板在移动端显示在最前 */
+            }
+
+            .right-panel {
+                width: 100%;
+                border-radius: 0 0 20px 20px;
+                padding: 15px;
+                order: 3; /* 确保右侧面板在移动端显示在最后 */
+            }
+
+            .chat-panel {
+                order: 2; /* 确保聊天面板在中间 */
+                border-radius: 0;
+            }
+
+            .feature-intro {
+                margin-bottom: 15px;
+                padding: 12px;
+            }
+
+            .feature-intro .intro-icon {
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+
+            .feature-intro .intro-text {
+                font-size: 12px;
+                line-height: 1.3;
+            }
+
+            .teacher-container {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+
+            .teacher {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+
+            .teacher::before {
+                font-size: 32px;
+            }
+
+            .user-info {
+                margin-top: 0;
+                width: 100%;
+                flex: 1;
+            }
+
+            .user-info h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+                text-align: left;
+            }
+
+            .info-input {
+                padding: 10px 12px;
+                margin-bottom: 8px;
+                font-size: 13px;
+            }
+
+            .chat-panel {
+                background: #f8f9fa;
+            }
+
+            .chat-header h1 {
+                font-size: 20px;
+            }
+
+            .chat-messages {
+                max-height: calc(100vh - 320px);
+                padding: 16px;
+            }
+
+            .question-container {
+                padding: 12px 16px;
+                margin: 6px 0;
+                border-radius: 10px;
+            }
+
+            .question-title {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .question-options {
+                gap: 6px;
+            }
+
+            .option-item {
+                padding: 10px 14px;
+                border-radius: 6px;
+            }
+
+            .option-label {
+                font-size: 13px;
+            }
+
+            .submit-answer {
+                padding: 8px 18px;
+                font-size: 13px;
+                margin-top: 10px;
+                border-radius: 18px;
+            }
+
+            .result-container {
+                padding: 16px;
+                margin: 10px 0;
+            }
+
+            .result-title {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+
+            .result-content {
+                padding: 16px;
+            }
+
+            .result-content h3 {
+                font-size: 16px;
+                margin: 15px 0 10px 0;
+            }
+
+            .result-content h4 {
+                font-size: 14px;
+                margin: 12px 0 6px 0;
+            }
+
+            .result-content .mbti-type {
+                font-size: 14px;
+                padding: 8px 16px;
+                margin: 6px 0;
+            }
+
+            .result-content .compatibility-rate {
+                font-size: 12px;
+                padding: 4px 12px;
+                margin-left: 8px;
+            }
+
+            .result-content .major-section {
+                padding: 12px 16px;
+                margin: 12px 0;
+            }
+
+            .result-content .major-title {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .result-content li {
+                padding: 6px 0 6px 20px;
+                font-size: 13px;
+            }
+
+            .result-content li:before {
+                font-size: 12px;
+                top: 6px;
+            }
+
+            .chat-input-container {
+                padding: 12px;
+            }
+
+            .chat-input {
+                padding: 14px 18px;
+                font-size: 14px;
+            }
+
+            .send-button {
+                padding: 14px 20px;
+                font-size: 14px;
+            }
+
+            /* 移动端进度条样式 */
+            .progress-container {
+                padding: 16px;
+                margin: 16px 0;
+            }
+
+            .progress-title {
+                font-size: 14px;
+                margin-bottom: 12px;
+            }
+
+            .progress-title .progress-icon {
+                font-size: 16px;
+            }
+
+            .progress-bar-container {
+                height: 6px;
+                margin-bottom: 12px;
+            }
+
+            .progress-text {
+                font-size: 12px;
+            }
+
+            .progress-stages {
+                margin: 12px 0;
+                font-size: 11px;
+            }
+
+            .progress-stage {
+                padding: 2px 4px;
+                border-radius: 4px;
+                background: #f8f9fa;
+            }
+
+            .progress-stage.active {
+                background: #e3f2fd;
+            }
+
+            .progress-stage.completed {
+                background: #e8f5e8;
+            }
+
+            .result-disclaimer {
+                font-size: 11px;
+                margin-top: 12px;
+                padding: 6px;
+            }
+
+            /* 移动端右侧面板样式 */
+            .right-panel {
+                background-size: cover;
+                background-position: center bottom;
+            }
+
+            .playground-overlay {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.95);
+            }
+
+            .playground-title {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .playground-subtitle {
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+
+            .school-features {
+                gap: 6px;
+            }
+
+            .feature-item {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .playground-characters {
+                position: absolute;
+                bottom: 0;
+                height: 60%;
+            }
+
+            .character img {
+                height: 80px;
+            }
+
+            .character1 {
+                left: 5%;
+            }
+
+            .character2 {
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="teacher-panel">
+          
+            <div class="feature-intro">
+                 <div class="intro-icon">🤖💬</div>
+                                 <div class="intro-text">
+                    我可以和你聊天也可以给你进行专业推荐，只需要发送<span class="intro-highlight clickable" onclick="insertText('专业推荐')">"专业推荐"</span>即可！
+                </div>
+             </div>
+            
+            <!--<div class="teacher-container">
+                <div class="teacher">
+                    <div class="circuit"></div>
+                </div>
+                <div class="teacher-name">鸿源技术学校AI助手</div>
+                <div class="teacher-subtitle">您的专属学习顾问</div>
+            </div>-->
+            <div class="user-info">
+                <h3>用户信息</h3>
+                <input type="text" class="info-input" id="userName" placeholder="请输入您的姓名">
+                <input type="text" class="info-input" id="userPhone" placeholder="请输入您的手机号">
+                <input type="text" class="info-input" id="userIdCard" placeholder="请输入您的身份证号">
+            </div>
+               <!-- 明学 明事 明德 明志 艺术字 -->
+               <div class="mingxue-art">
+                <span class="mingxue-char">明学</span>
+                <span class="mingxue-char">明事</span>
+                <span class="mingxue-char">明德</span>
+                <span class="mingxue-char">明志</span>
+            </div>
+            <!--div class="info-section">
+                <h3>💬 联系我们</h3>
+                <div class="contact-info">
+                    <p>📞 咨询电话：13800138000</p>
+                    <p>📧 邮箱：info@hongyuan.edu.cn</p>
+                    <p>💻 技术支持：珠海龙马科技</p>
+                </div>
+            </div-->
+            <div class="info-pic">
+            </div>
+        </div>
+
+        <div class="chat-panel">
+            <div class="chat-header">
+                <img src="pic/school_name.png" alt="鸿源技术学校AI助手" style="max-width: 100%; height: 90px; display: block; margin: 0 auto; object-fit: contain;" />
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-bubble">
+                        👋 您好！我是鸿源技术学校AI助手，很高兴为您服务！<br>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <span class="loading-dots">处理中...</span>
+            </div>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-title">
+                    <span class="progress-icon">🔄</span>
+                    <span id="progressTitle">正在分析您的回答...</span>
+                </div>
+                <div class="progress-stages">
+                    <span class="progress-stage" id="stage1">接收答案</span>
+                    <span class="progress-stage" id="stage2">分析处理</span>
+                    <span class="progress-stage" id="stage3">生成结果</span>
+                    <span class="progress-stage" id="stage4">完成</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">0%</div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="请输入您的问题或想法..." />
+                <button class="send-button" id="sendButton">发送</button>
+            </div>
+        </div>
+
+                <div class="right-panel">
+            
+            <div class="iframe-container">
+                <!-- 可拖动的浮窗嵌入完整网页 -->
+                <div id="draggable-window" class="draggable-window">
+                    <div class="window-header" id="window-header">
+                        <span class="window-title"></span>
+                        <div class="window-controls">
+                            <button class="minimize-btn" id="minimizeBtn">−</button>
+                        </div>
+                    </div>
+                    <div class="window-content">
+                        <iframe 
+                            src="/sentio" 
+                            id="main-iframe"
+                            style="width: 100%; height: 100%; border: none; border-radius: 25px;"
+                            allow="microphone; camera; clipboard-read; clipboard-write"
+                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads allow-presentation">
+                        </iframe>
+                    </div>
+                    <!-- 调整大小的手柄 -->
+                    <div class="resize-handle resize-handle-se" data-direction="se"></div>
+                    <div class="resize-handle resize-handle-s" data-direction="s"></div>
+                    <div class="resize-handle resize-handle-e" data-direction="e"></div>
+                    <div class="resize-handle resize-handle-n" data-direction="n"></div>
+                    <div class="resize-handle resize-handle-w" data-direction="w"></div>
+                    <div class="resize-handle resize-handle-ne" data-direction="ne"></div>
+                    <div class="resize-handle resize-handle-nw" data-direction="nw"></div>
+                    <div class="resize-handle resize-handle-sw" data-direction="sw"></div>
+                </div>
+
+                <style>
+                    .draggable-window {
+                        position: fixed;
+                        top: 50px;
+                        right: 50px;
+                        width: 400px;
+                        height: 600px;
+                        min-width: 300px;
+                        min-height: 200px;
+                        background: transparent; /* 透明背景 */
+                        border-radius: 25px; /* 更大的圆弧 */
+                        border: none; /* 移除边框 */
+                        box-shadow: none; /* 移除阴影 */
+                        z-index: 1000;
+                        overflow: hidden;
+                        transition: none; /* 禁用过渡效果以便调整大小 */
+                    }
+                    
+                    .draggable-window.minimized {
+                        height: 50px;
+                        transition: all 0.3s ease; /* 只在最小化时使用过渡 */
+                    }
+                    
+                    .window-header {
+                        background: transparent; /* 透明背景 */
+                        color: white;
+                        padding: 12px 16px;
+                        cursor: move;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        user-select: none;
+                        font-weight: 500;
+                        border-radius: 25px 25px 0 0; /* 上方圆角 */
+                        overflow: hidden;
+                    }
+                    
+                    .window-title {
+                        font-size: 14px;
+                    }
+                    
+                    .window-controls {
+                        display: flex;
+                        gap: 8px;
+                    }
+                    
+                    .window-controls button {
+                        width: 24px;
+                        height: 24px;
+                        border: none;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: normal;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    
+                    .minimize-btn {
+                        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+                        color: #fff;
+                        box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+                        border: 2px solid rgba(255, 255, 255, 0.3);
+                    }
+                    
+                    .minimize-btn::before {
+                        content: '💭';
+                        font-size: 12px;
+                        position: absolute;
+                        animation: bubble-float 2s ease-in-out infinite;
+                    }
+                    
+                    @keyframes bubble-float {
+                        0%, 100% { transform: translateY(0px) scale(1); }
+                        50% { transform: translateY(-2px) scale(1.05); }
+                    }
+                    
+                    .window-controls button:hover {
+                        transform: scale(1.15);
+                        box-shadow: 0 6px 20px rgba(255, 154, 158, 0.6);
+                    }
+                    
+                    .minimize-btn:hover::before {
+                        animation: bubble-bounce 0.6s ease-in-out;
+                    }
+                    
+                    @keyframes bubble-bounce {
+                        0%, 100% { transform: translateY(0px) scale(1); }
+                        25% { transform: translateY(-3px) scale(1.1); }
+                        75% { transform: translateY(-1px) scale(1.05); }
+                    }
+                    
+                    .window-content {
+                        height: calc(100% - 50px);
+                        overflow: hidden;
+                        border-radius: 25px; /* 四个角都是25px圆角 */
+                    }
+                    
+                    /* 确保 iframe 也有圆角 */
+                    .window-content iframe {
+                        border-radius: 25px; /* 四个角都是25px圆角 */
+                    }
+                    
+                    .draggable-window.minimized .window-content {
+                        display: none;
+                    }
+                    
+                    /* 调整大小手柄样式 */
+                    .resize-handle {
+                        position: absolute;
+                        background: transparent;
+                        z-index: 1001;
+                    }
+                    
+                    .resize-handle-n {
+                        top: 0;
+                        left: 10px;
+                        right: 10px;
+                        height: 5px;
+                        cursor: n-resize;
+                    }
+                    
+                    .resize-handle-s {
+                        bottom: 0;
+                        left: 10px;
+                        right: 10px;
+                        height: 5px;
+                        cursor: s-resize;
+                    }
+                    
+                    .resize-handle-e {
+                        top: 10px;
+                        right: 0;
+                        bottom: 10px;
+                        width: 5px;
+                        cursor: e-resize;
+                    }
+                    
+                    .resize-handle-w {
+                        top: 10px;
+                        left: 0;
+                        bottom: 10px;
+                        width: 5px;
+                        cursor: w-resize;
+                    }
+                    
+                    .resize-handle-ne {
+                        top: 0;
+                        right: 0;
+                        width: 10px;
+                        height: 10px;
+                        cursor: ne-resize;
+                    }
+                    
+                    .resize-handle-nw {
+                        top: 0;
+                        left: 0;
+                        width: 10px;
+                        height: 10px;
+                        cursor: nw-resize;
+                    }
+                    
+                    .resize-handle-se {
+                        bottom: 0;
+                        right: 0;
+                        width: 10px;
+                        height: 10px;
+                        cursor: se-resize;
+                    }
+                    
+                    .resize-handle-sw {
+                        bottom: 0;
+                        left: 0;
+                        width: 10px;
+                        height: 10px;
+                        cursor: sw-resize;
+                    }
+                    
+                    /* 调整大小时的视觉反馈 */
+                    .draggable-window.resizing {
+                        user-select: none;
+                    }
+                </style>
+
+                <script>
+                    // 窗口状态管理
+                    class DraggableWindow {
+                        constructor(element) {
+                            this.element = element;
+                            this.isDragging = false;
+                            this.isResizing = false;
+                            this.resizeDirection = '';
+                            
+                            // 位置和尺寸
+                            this.x = 0;
+                            this.y = 0;
+                            this.width = 400;
+                            this.height = 600;
+                            
+                            // 鼠标和窗口起始状态
+                            this.startMouseX = 0;
+                            this.startMouseY = 0;
+                            this.startX = 0;
+                            this.startY = 0;
+                            this.startWidth = 0;
+                            this.startHeight = 0;
+                            
+                            this.init();
+                        }
+                        
+                        init() {
+                            const header = this.element.querySelector('#window-header');
+                            const minimizeBtn = this.element.querySelector('#minimizeBtn');
+                            const resizeHandles = this.element.querySelectorAll('.resize-handle');
+                            
+                            // 拖动事件
+                            header.addEventListener('mousedown', (e) => this.startDrag(e));
+                            
+                            // 调整大小事件
+                            resizeHandles.forEach(handle => {
+                                handle.addEventListener('mousedown', (e) => this.startResize(e));
+                            });
+                            
+                            // 全局事件
+                            document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                            document.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+                            
+                            // 最小化按钮
+                            minimizeBtn.addEventListener('click', () => {
+                                this.element.classList.toggle('minimized');
+                            });
+                            
+                            // 初始化位置
+                            this.updatePosition();
+                        }
+                        
+                        startDrag(e) {
+                            if (e.target.classList.contains('resize-handle')) return;
+                            if (e.target.id === 'minimizeBtn') return;
+                            
+                            this.isDragging = true;
+                            this.startMouseX = e.clientX;
+                            this.startMouseY = e.clientY;
+                            this.startX = this.x;
+                            this.startY = this.y;
+                            
+                            this.element.style.cursor = 'grabbing';
+                            document.body.style.userSelect = 'none';
+                            e.preventDefault();
+                        }
+                        
+                        startResize(e) {
+                            this.isResizing = true;
+                            this.resizeDirection = e.target.getAttribute('data-direction');
+                            
+                            this.startMouseX = e.clientX;
+                            this.startMouseY = e.clientY;
+                            this.startX = this.x;
+                            this.startY = this.y;
+                            this.startWidth = this.width;
+                            this.startHeight = this.height;
+                            
+                            document.body.style.userSelect = 'none';
+                            document.body.style.cursor = e.target.style.cursor;
+                            this.element.classList.add('resizing');
+                            
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                        
+                        handleMouseMove(e) {
+                            if (this.isDragging) {
+                                this.drag(e);
+                            } else if (this.isResizing) {
+                                this.resize(e);
+                            }
+                        }
+                        
+                        handleMouseUp(e) {
+                            if (this.isDragging) {
+                                this.endDrag();
+                            } else if (this.isResizing) {
+                                this.endResize();
+                            }
+                        }
+                        
+                        drag(e) {
+                            const deltaX = e.clientX - this.startMouseX;
+                            const deltaY = e.clientY - this.startMouseY;
+                            
+                            this.x = this.startX + deltaX;
+                            this.y = this.startY + deltaY;
+                            
+                            this.updatePosition();
+                        }
+                        
+                        resize(e) {
+                            const deltaX = e.clientX - this.startMouseX;
+                            const deltaY = e.clientY - this.startMouseY;
+                            
+                            let newX = this.startX;
+                            let newY = this.startY;
+                            let newWidth = this.startWidth;
+                            let newHeight = this.startHeight;
+                            
+                            // 根据方向调整
+                            if (this.resizeDirection.includes('e')) {
+                                newWidth = Math.max(300, this.startWidth + deltaX);
+                            }
+                            if (this.resizeDirection.includes('w')) {
+                                newWidth = Math.max(300, this.startWidth - deltaX);
+                                newX = this.startX + (this.startWidth - newWidth);
+                            }
+                            if (this.resizeDirection.includes('s')) {
+                                newHeight = Math.max(200, this.startHeight + deltaY);
+                            }
+                            if (this.resizeDirection.includes('n')) {
+                                newHeight = Math.max(200, this.startHeight - deltaY);
+                                newY = this.startY + (this.startHeight - newHeight);
+                            }
+                            
+                            this.x = newX;
+                            this.y = newY;
+                            this.width = newWidth;
+                            this.height = newHeight;
+                            
+                            this.updatePosition();
+                            this.updateSize();
+                        }
+                        
+                        endDrag() {
+                            this.isDragging = false;
+                            this.element.style.cursor = 'default';
+                            document.body.style.userSelect = '';
+                        }
+                        
+                        endResize() {
+                            this.isResizing = false;
+                            this.resizeDirection = '';
+                            this.element.classList.remove('resizing');
+                            document.body.style.userSelect = '';
+                            document.body.style.cursor = '';
+                        }
+                        
+                        updatePosition() {
+                            this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+                        }
+                        
+                        updateSize() {
+                            this.element.style.width = this.width + 'px';
+                            this.element.style.height = this.height + 'px';
+                        }
+                    }
+                    
+                    // 初始化窗口
+                    let draggableWindow;
+                    
+                    // 页面加载完成后初始化
+                    window.addEventListener('load', function() {
+                        const windowElement = document.getElementById('draggable-window');
+                        draggableWindow = new DraggableWindow(windowElement);
+                        
+                        // 显示窗口
+                        setTimeout(function() {
+                            windowElement.style.opacity = '1';
+                        }, 500);
+                    });
+                </script>
+
+            </div>
+            <!--
+           
+            <div class="playground-overlay">
+                <div class="playground-title">🏫 鸿源技术学校</div>
+                <div class="playground-subtitle">培养技能人才，成就美好未来</div>
+                <div class="school-features">
+                    <div class="feature-item">🌟 现代化教学设施</div>
+                    <div class="feature-item">👨‍🏫 专业师资团队</div>
+                    <div class="feature-item">🏃‍♂️ 完善体育设施</div>
+                    <div class="feature-item">💼 就业保障体系</div>
+                    <div class="feature-item">🎯 个性化培养方案</div>
+                </div>
+            </div>
+        -->
+            <!-- 操场人物 -->
+            <div class="playground-characters">
+                <div class="character character1">
+                    <img src="pic/1.png" alt="学生1" />
+                </div>
+                <div class="character character2">
+                    <img src="pic/2.png" alt="学生2" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+        const loading = document.getElementById('loading');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressTitle = document.getElementById('progressTitle');
+
+        // 生成UUID作为session_id
+        function generateUUID() {
+            return 'session_' + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+                return (Math.random() * 16 | 0).toString(16);
+            });
+        }
+
+        // 页面加载时生成session_id
+        const sessionId = generateUUID();
+        console.log('Generated session_id:', sessionId);
+
+        // 添加全局question_id状态管理
+        let currentQuestionId = 111; // 默认值
+        console.log('Initial question_id:', currentQuestionId);
+
+        // 添加全局class_id状态管理
+        let currentClassId = "1"; // 默认值
+        console.log('Initial class_id:', currentClassId);
+
+        // 进度条控制变量
+        let progressInterval;
+        let currentProgress = 0;
+
+        // 进度条控制函数
+        function showProgress(isAnswer = false) {
+            const container = progressContainer;
+            const bar = progressBar;
+            const text = progressText;
+            const title = progressTitle;
+            
+            // 设置标题
+            title.textContent = isAnswer ? '正在分析您的回答...' : '回答中...';
+            
+            // 显示进度条
+            container.style.display = 'block';
+            
+            // 重置进度
+            currentProgress = 0;
+            updateProgress(0);
+            
+            // 启动进度动画
+            startProgressAnimation();
+        }
+
+        function hideProgress() {
+            progressContainer.style.display = 'none';
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            currentProgress = 0;
+            
+            // 重置所有阶段状态
+            const stages = document.querySelectorAll('.progress-stage');
+            stages.forEach(stage => {
+                stage.classList.remove('active', 'completed');
+            });
+        }
+
+        function updateProgress(percentage) {
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = Math.round(percentage) + '%';
+            
+            // 更新阶段状态
+            updateStages(percentage);
+        }
+
+        function updateStages(percentage) {
+            const stages = document.querySelectorAll('.progress-stage');
+            stages.forEach(stage => {
+                stage.classList.remove('active', 'completed');
+            });
+            
+            if (percentage >= 0 && percentage < 25) {
+                document.getElementById('stage1').classList.add('active');
+            } else if (percentage >= 25 && percentage < 50) {
+                document.getElementById('stage1').classList.add('completed');
+                document.getElementById('stage2').classList.add('active');
+            } else if (percentage >= 50 && percentage < 75) {
+                document.getElementById('stage1').classList.add('completed');
+                document.getElementById('stage2').classList.add('completed');
+                document.getElementById('stage3').classList.add('active');
+            } else if (percentage >= 75 && percentage < 100) {
+                document.getElementById('stage1').classList.add('completed');
+                document.getElementById('stage2').classList.add('completed');
+                document.getElementById('stage3').classList.add('completed');
+                document.getElementById('stage4').classList.add('active');
+            } else if (percentage >= 100) {
+                document.getElementById('stage1').classList.add('completed');
+                document.getElementById('stage2').classList.add('completed');
+                document.getElementById('stage3').classList.add('completed');
+                document.getElementById('stage4').classList.add('completed');
+            }
+        }
+
+        function startProgressAnimation() {
+            // 清除之前的定时器
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+            
+            // 模拟进度增长
+            progressInterval = setInterval(() => {
+                if (currentProgress < 90) {
+                    // 前90%比较快
+                    currentProgress += Math.random() * 8 + 2;
+                    if (currentProgress > 90) currentProgress = 90;
+                    updateProgress(currentProgress);
+                } else {
+                    // 最后10%比较慢，等待实际响应
+                    currentProgress += Math.random() * 2 + 0.5;
+                    if (currentProgress > 98) currentProgress = 98;
+                    updateProgress(currentProgress);
+                }
+            }, 200);
+        }
+
+        function completeProgress() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            
+            // 快速完成到100%
+            currentProgress = 100;
+            updateProgress(100);
+            
+            // 短暂延迟后隐藏
+            setTimeout(() => {
+                hideProgress();
+            }, 800);
+        }
+
+        // 获取用户信息的函数
+        function getUserInfo() {
+            const userName = document.getElementById('userName').value.trim();
+            const userPhone = document.getElementById('userPhone').value.trim();
+            const userIdCard = document.getElementById('userIdCard').value.trim();
+            return { userName, userPhone, userIdCard };
+        }
+
+        function addMessage(content, isUser = false, isQuestion = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            if (isQuestion && content.question) {
+                // 更新当前的question_id
+                if (content.question_id) {
+                    currentQuestionId = content.question_id;
+                    console.log('Updated question_id to:', currentQuestionId);
+                }
+                // 更新当前的class_id
+                if (content.class_id) {
+                    currentClassId = content.class_id;
+                    console.log('Updated class_id to:', currentClassId);
+                }
+                // 显示选择题
+                bubbleDiv.innerHTML = renderQuestion(content);
+            } else {
+                // 显示普通文本消息 - 通过parseMarkdown处理格式
+                bubbleDiv.innerHTML = parseMarkdown(content);
+            }
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatMessages.appendChild(messageDiv);
+            
+            // 滚动到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 处理Markdown格式的函数
+        function parseMarkdown(text) {
+            if (!text) return '';
+            
+            let html = text;
+            
+            // 处理换行符 - 修复：处理实际的\n而不是\\n
+            html = html.replace(/\n/g, '<br>');
+            html = html.replace(/\\n/g, '<br>');
+            
+            // 处理专业推荐标题 - 更精确的匹配
+            html = html.replace(/🥇\s*推荐专业([一二三])：([^（\n]+)（适配率：(\d+%)）/g, 
+                '<div class="major-section"><div class="major-title">🥇 推荐专业$1：$2<span class="compatibility-rate">适配率：$3</span></div>');
+            html = html.replace(/🥈\s*推荐专业([一二三])：([^（\n]+)（适配率：(\d+%)）/g, 
+                '<div class="major-section"><div class="major-title">🥈 推荐专业$1：$2<span class="compatibility-rate">适配率：$3</span></div>');
+            html = html.replace(/🥉\s*推荐专业([一二三])：([^（\n]+)（适配率：(\d+%)）/g, 
+                '<div class="major-section"><div class="major-title">🥉 推荐专业$1：$2<span class="compatibility-rate">适配率：$3</span></div>');
+            
+            // 处理粗体文本 **text**
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // 处理MBTI类型特殊显示
+            html = html.replace(/ENFJ-"([^"]+)"/g, '<span class="mbti-type">ENFJ-"$1"</span>');
+            html = html.replace(/ENFJ型/g, '<span class="mbti-type">ENFJ型</span>');
+            
+            // 处理适配率
+            html = html.replace(/（适配率：(\d+%)）/g, '<span class="compatibility-rate">适配率：$1</span>');
+            
+            // 处理推荐理由标题
+            html = html.replace(/推荐理由：/g, '<h4>💡 推荐理由：</h4>');
+            
+            // 处理优势/弱势标签
+            html = html.replace(/优势：/g, '<span class="strength">优势：</span>');
+            html = html.replace(/弱势：/g, '<span class="weakness">弱势：</span>');
+            html = html.replace(/性格匹配：/g, '<strong>性格匹配：</strong>');
+            html = html.replace(/兴趣契合：/g, '<strong>兴趣契合：</strong>');
+            html = html.replace(/优势发挥：/g, '<strong>优势发挥：</strong>');
+            html = html.replace(/发展前景：/g, '<strong>发展前景：</strong>');
+            
+            // 处理列表项（以 - 开头的行）
+            const lines = html.split('<br>');
+            let inList = false;
+            let processedLines = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line.startsWith('- ')) {
+                    if (!inList) {
+                        processedLines.push('<ul>');
+                        inList = true;
+                    }
+                    processedLines.push(`<li>${line.substring(2)}</li>`);
+                } else {
+                    if (inList) {
+                        processedLines.push('</ul>');
+                        inList = false;
+                    }
+                    if (line) {
+                        processedLines.push(line);
+                    }
+                }
+            }
+            
+            if (inList) {
+                processedLines.push('</ul>');
+            }
+            
+            html = processedLines.join('<br>');
+            
+            // 关闭专业区块
+            html = html.replace(/(<div class="major-section">[\s\S]*?)(<div class="major-section">|$)/g, 
+                '$1</div>$2');
+            
+            // 处理其他标题
+            html = html.replace(/\*\*([^*]+)：\*\*/g, '<h3>$1：</h3>');
+            
+            // 清理多余的空行
+            html = html.replace(/(<br>\s*){2,}/g, '<br><br>');
+            
+            return html;
+        }
+
+        function renderQuestion(data) {
+            console.log('Rendering question with data:', data);
+            const questionId = data.question_id;
+            const question = data.question;
+            const options = data.options || [];
+            const optionType = data.option_type || 'radio';
+            
+            console.log('Extracted question_id:', questionId);
+            
+            // 如果 question_id 为 0，表示测评完成，只显示结果文本
+            if (questionId === 0) {
+                const formattedContent = parseMarkdown(question);
+                let html = `
+                    <div class="result-container" data-question-id="${questionId}">
+                        <div class="result-title">
+                            🎉 AI专业推荐 🎉
+                        </div>
+                        <div class="result-content">
+                            ${formattedContent}
+                        </div>
+                        <div class="result-disclaimer">
+                            答案由 AI 模型生成,仅供参考
+                        </div>
+                    </div>
+                `;
+                return html;
+            }
+            
+            // 如果 question_id 为 88，只显示回答内容，不显示提交按钮
+            if (questionId === 88) {
+                let html = `
+                    <div class="question-container" data-question-id="${questionId}">
+                        <div style="background: white; padding: 20px; border-radius: 8px; line-height: 1.6; color: #333;">
+                            ${question}
+                        </div>
+                    </div>
+                `;
+                return html;
+            }
+            
+            // 正常的选择题渲染
+            let html = `
+                <div class="question-container" data-question-id="${questionId}">
+                    <div class="question-title">${question}</div>
+                    <div class="question-options">
+            `;
+            
+            options.forEach((option, index) => {
+                html += `
+                    <div class="option-item" onclick="selectOption(${questionId}, '${option.value}', this)">
+                        <input type="${optionType}" name="question_${questionId}" value="${option.value}" class="option-radio" />
+                        <span class="option-label">${option.label}</span>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <button class="submit-answer" onclick="submitAnswer(${questionId})" disabled>提交答案</button>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        function selectOption(questionId, value, element) {
+            // 移除同一题目下其他选项的选中状态
+            const container = element.closest('.question-container');
+            const allOptions = container.querySelectorAll('.option-item');
+            allOptions.forEach(option => option.classList.remove('selected'));
+            
+            // 选中当前选项
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+            
+            // 启用提交按钮
+            const submitButton = container.querySelector('.submit-answer');
+            submitButton.disabled = false;
+        }
+
+        async function submitAnswer(questionId) {
+            const container = document.querySelector(`[data-question-id="${questionId}"]`);
+            const selectedOption = container.querySelector('input:checked');
+            
+            if (!selectedOption) {
+                alert('请选择一个答案');
+                return;
+            }
+            
+            const selectedValue = selectedOption.value;
+            const selectedLabel = selectedOption.closest('.option-item').querySelector('.option-label').textContent;
+            
+            // 显示用户选择
+            addMessage(`我选择：${selectedLabel}`, true);
+            
+            // 禁用题目
+            container.style.opacity = '0.7';
+            container.style.pointerEvents = 'none';
+            
+            // 只有question_id为87时才显示进度条
+            showLoading(currentQuestionId === 87);
+            
+            try {
+                console.log('Submitting answer with question_id:', currentQuestionId, 'class_id:', currentClassId);
+                
+                const userInfo = getUserInfo();
+                const url = new URL('https://n8n.ailongma.com/webhook/assessment');
+                url.searchParams.append('app_id', 'app_002');
+                url.searchParams.append('session_id', sessionId);
+                url.searchParams.append('user_id', '4');
+                url.searchParams.append('username', userInfo.userName);
+                url.searchParams.append('phone', userInfo.userPhone);
+                url.searchParams.append('id_card', userInfo.userIdCard);
+                
+                const requestBody = {
+                    resources: [
+                        {
+                            type: "text",
+                            question_id: currentQuestionId,
+                            value: selectedValue,
+                            class_id: currentClassId
+                        }
+                    ]
+                };
+                
+                const response = await fetch(url.toString(), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+                console.log('Received response data:', data);
+                
+                if (data.output) {
+                    if (data.output.question) {
+                        // 如果返回的是新题目
+                        console.log('Processing question data:', data.output);
+                        addMessage(data.output, false, true);
+                    } else {
+                        // 如果返回的是普通文本
+                        console.log('Processing text response:', data.output);
+                        addMessage(data.output || '感谢您的回答！');
+                    }
+                } else {
+                    addMessage(`❌ 抱歉，响应中没有找到output字段`);
+                }
+            } catch (error) {
+                addMessage(`❌ 网络错误，请检查连接后重试：${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function showLoading(isAnswer = false) {
+            if (isAnswer) {
+                // 如果是分析回答，显示进度条
+                showProgress(true);
+            } else {
+                // 显示简单的loading提示
+                loading.style.display = 'block';
+                const loadingText = '回答中...';
+                loading.querySelector('.loading-dots').textContent = loadingText;
+            }
+            
+            // 禁用发送按钮
+            sendButton.disabled = true;
+            const buttonText = isAnswer ? '分析中...' : '处理中...';
+            sendButton.textContent = buttonText;
+        }
+
+        function hideLoading() {
+            // 隐藏loading元素
+            loading.style.display = 'none';
+            
+            // 完成并隐藏进度条
+            completeProgress();
+            
+            // 恢复发送按钮
+            sendButton.disabled = false;
+            sendButton.textContent = '发送';
+        }
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // 添加用户消息
+            addMessage(message, true);
+            chatInput.value = '';
+            showLoading(false);
+
+            try {
+                console.log('Sending message with question_id:', currentQuestionId, 'class_id:', currentClassId);
+                
+                const userInfo = getUserInfo();
+                const url = new URL('https://n8n.ailongma.com/webhook/assessment');
+                url.searchParams.append('app_id', 'app_002');
+                url.searchParams.append('session_id', sessionId);
+                url.searchParams.append('user_id', '4');
+                url.searchParams.append('username', userInfo.userName);
+                url.searchParams.append('phone', userInfo.userPhone);
+                url.searchParams.append('id_card', userInfo.userIdCard);
+                
+                const requestBody = {
+                    resources: [
+                        {
+                            type: "text",
+                            question_id: currentQuestionId,
+                            value: message,
+                            class_id: currentClassId
+                        }
+                    ]
+                };
+                
+                const response = await fetch(url.toString(), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+                console.log('Received response data (sendMessage):', data);
+                
+                if (data.output) {
+                    if (data.output.question) {
+                        // 如果返回的是选择题
+                        console.log('Processing question data (sendMessage):', data.output);
+                        addMessage(data.output, false, true);
+                    } else {
+                        // 如果返回的是普通文本
+                        console.log('Processing text response (sendMessage):', data.output);
+                        addMessage(data.output || '收到您的消息');
+                    }
+                } else {
+                    addMessage(`❌ 抱歉，响应中没有找到output字段`);
+                }
+            } catch (error) {
+                addMessage(`❌ 网络错误，请检查连接后重试：${error.message}`);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 事件监听器
+        sendButton.addEventListener('click', sendMessage);
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 页面加载时聚焦输入框
+        window.addEventListener('load', () => {
+            chatInput.focus();
+        });
+
+        // 插入文本到输入框的函数
+        function insertText(text) {
+            const chatInput = document.getElementById('chatInput');
+            chatInput.value = text;
+            chatInput.focus();
+            
+            // 可选：自动发送消息
+            // sendMessage();
+        }
+
+        // 页面加载后为专业项目添加点击事件
+        window.addEventListener('load', () => {
+            // 为热门专业添加点击事件
+            const majorItems = document.querySelectorAll('.major-item');
+            majorItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const majorValue = item.getAttribute('data-value');
+                    insertText(majorValue);
+                });
+            });
+        });
+
+     
+    </script>
+
+    <!-- 父页面截图处理器 - 移动到页面末尾避免干扰 -->
+    <script>
+        // 父页面截图处理器 - 用于index.html
+        // 监听来自iframe的截图请求并执行完整页面截图
+
+        console.log('父页面截图处理器已加载');
+
+        // 动态加载html2canvas库（如果尚未加载）
+        function loadHtml2Canvas() {
+            return new Promise((resolve, reject) => {
+                // 检查是否已经加载
+                if (window.html2canvas) {
+                    console.log('html2canvas已存在，无需重复加载');
+                    resolve(window.html2canvas);
+                    return;
+                }
+                
+                console.log('开始加载html2canvas库...');
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                script.onload = () => {
+                    console.log('html2canvas库加载成功');
+                    resolve(window.html2canvas);
+                };
+                script.onerror = () => {
+                    console.error('html2canvas库加载失败');
+                    reject(new Error('html2canvas库加载失败'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        // 提取并输出当前会话内容的函数
+        function writelog() {
+            console.log('=== writelog: 开始提取当前位置的会话内容 ===');
+            
+            try {
+                // 获取当前滚动位置信息
+                const scrollInfo = {
+                    scrollTop: window.pageYOffset || document.documentElement.scrollTop,
+                    scrollLeft: window.pageXOffset || document.documentElement.scrollLeft,
+                    viewportWidth: window.innerWidth,
+                    viewportHeight: window.innerHeight,
+                    timestamp: new Date().toLocaleString()
+                };
+                console.log('当前页面滚动位置:', scrollInfo);
+                
+                // 获取左侧聊天容器
+                const chatContainer = document.getElementById('chatMessages');
+                if (!chatContainer) {
+                    console.log('writelog: 未找到聊天容器 #chatMessages');
+                    return;
+                }
+                
+                // 获取聊天容器的位置和尺寸信息
+                const containerRect = chatContainer.getBoundingClientRect();
+                const containerScrollTop = chatContainer.scrollTop;
+                const containerScrollHeight = chatContainer.scrollHeight;
+                const containerClientHeight = chatContainer.clientHeight;
+                
+                console.log('聊天容器信息:', {
+                    containerRect: {
+                        top: containerRect.top,
+                        bottom: containerRect.bottom,
+                        height: containerRect.height
+                    },
+                    scroll: {
+                        scrollTop: containerScrollTop,
+                        scrollHeight: containerScrollHeight,
+                        clientHeight: containerClientHeight
+                    }
+                });
+                
+                // 提取所有聊天消息
+                const messages = chatContainer.querySelectorAll('.message');
+                const chatHistory = [];
+                const visibleMessages = [];
+                
+                console.log(`writelog: 找到 ${messages.length} 条消息`);
+                console.log(`writelog: 聊天容器可视区域范围: ${containerRect.top.toFixed(1)} - ${containerRect.bottom.toFixed(1)}`);
+                
+                messages.forEach((message, index) => {
+                    const isUser = message.classList.contains('user');
+                    const isAssistant = message.classList.contains('assistant');
+                    const bubble = message.querySelector('.message-bubble');
+                    
+                    if (bubble) {
+                        const content = bubble.textContent || bubble.innerText || '';
+                        const role = isUser ? '用户' : (isAssistant ? 'AI助手' : '未知');
+                        
+                        // 获取消息元素的位置信息（相对于视口）
+                        const rect = message.getBoundingClientRect();
+                        
+                        // 关键修正：计算消息相对于聊天容器的可见性
+                        // 检查消息是否在聊天容器的可视区域内
+                        const messageTopRelativeToContainer = rect.top - containerRect.top;
+                        const messageBottomRelativeToContainer = rect.bottom - containerRect.top;
+                        
+                        // 计算在聊天容器内的可见部分
+                        let visibleRatio = 0;
+                        let visibleHeight = 0;
+                        
+                        // 检查消息是否与聊天容器的可视区域有交集
+                        if (messageBottomRelativeToContainer > 0 && messageTopRelativeToContainer < containerRect.height) {
+                            const visibleTop = Math.max(0, messageTopRelativeToContainer);
+                            const visibleBottom = Math.min(containerRect.height, messageBottomRelativeToContainer);
+                            visibleHeight = Math.max(0, visibleBottom - visibleTop);
+                            visibleRatio = rect.height > 0 ? visibleHeight / rect.height : 0;
+                        }
+                        
+                        // 更严格的可见性判断：
+                        // 方案1：基于可见比例（至少可见 50% 才算真正可见，80%肯定可见）
+                        const minVisibleRatio = 0.5;
+                        const isVisibleByRatio = visibleRatio >= minVisibleRatio;
+                        
+                        // 方案2：基于阈值（至少可见 40px 才算有效可见）
+                        const minVisibleHeight = 40;
+                        const isVisibleByHeight = visibleHeight >= minVisibleHeight;
+                        
+                        // 方案3：边缘检测 - 避免紧贴容器边缘的消息被误判
+                        const edgeBuffer = 10; // 距离容器边缘的缓冲区
+                        const isNotTooCloseToTop = messageTopRelativeToContainer >= -edgeBuffer;
+                        const isNotTooCloseToBottom = messageBottomRelativeToContainer <= containerRect.height + edgeBuffer;
+                        const isNotAtEdge = isNotTooCloseToTop && isNotTooCloseToBottom;
+                        
+                        // 方案4：完整性检测 - 确保消息的关键部分都在容器内
+                        const messageCenterRelativeToContainer = messageTopRelativeToContainer + rect.height / 2;
+                        const isCenterInViewport = messageCenterRelativeToContainer >= 0 && messageCenterRelativeToContainer <= containerRect.height;
+                        
+                        // 综合判断：分层判断逻辑
+                        let isVisible = false;
+                        
+                        // 高可见比例消息（80%+）：放宽其他条件
+                        if (visibleRatio >= 0.8) {
+                            // 80%以上可见比例的消息，只需要满足基本的高度要求
+                            isVisible = isVisibleByHeight;
+                        }
+                        // 中等可见比例消息（50%-80%）：需要满足更多条件
+                        else if (visibleRatio >= 0.5) {
+                            isVisible = isVisibleByRatio && isVisibleByHeight && isNotAtEdge;
+                        }
+                        // 低可见比例消息（<50%）：需要满足所有严格条件
+                        else {
+                            isVisible = isVisibleByRatio && isVisibleByHeight && isNotAtEdge && isCenterInViewport;
+                        }
+                        
+                        // 详细调试信息
+                        const debugInfo = {
+                            messageIndex: index + 1,
+                            role: role,
+                            viewportRect: `${rect.top.toFixed(1)} - ${rect.bottom.toFixed(1)}`,
+                            containerRelativeRect: `${messageTopRelativeToContainer.toFixed(1)} - ${messageBottomRelativeToContainer.toFixed(1)}`,
+                            visibleHeight: visibleHeight.toFixed(1),
+                            visibleRatio: (visibleRatio * 100).toFixed(1) + '%',
+                            messageCenterInContainer: messageCenterRelativeToContainer.toFixed(1),
+                            containerHeight: containerRect.height.toFixed(1),
+                            checks: {
+                                isVisibleByRatio: isVisibleByRatio,
+                                isVisibleByHeight: isVisibleByHeight,
+                                isNotAtEdge: isNotAtEdge,
+                                isCenterInViewport: isCenterInViewport
+                            },
+                            finalVisible: isVisible
+                        };
+                        console.log(`writelog: 消息 ${index + 1} 详细信息:`, debugInfo);
+                        
+                        const messageData = {
+                            index: index + 1,
+                            role: role,
+                            content: content.trim(),
+                            timestamp: new Date().toLocaleString(),
+                            position: {
+                                // 相对于视口的位置
+                                viewportTop: rect.top,
+                                viewportBottom: rect.bottom,
+                                // 相对于聊天容器的位置
+                                containerTop: messageTopRelativeToContainer,
+                                containerBottom: messageBottomRelativeToContainer,
+                                height: rect.height
+                            },
+                            visibility: {
+                                isVisible: isVisible,
+                                visibleRatio: Math.round(visibleRatio * 100) / 100, // 保留两位小数
+                                inViewport: rect.bottom > 0 && rect.top < scrollInfo.viewportHeight
+                            }
+                        };
+                        
+                        chatHistory.push(messageData);
+                        
+                        // 只记录可见的消息
+                        if (isVisible) {
+                            visibleMessages.push(messageData);
+                            console.log(`writelog: [可见] 消息 ${index + 1} [${role}] 可见比例:${Math.round(visibleRatio * 100)}%`, content.trim());
+                        } else {
+                            let reason = '部分可见';
+                            if (messageBottomRelativeToContainer <= 0) {
+                                reason = '在容器上方';
+                            } else if (messageTopRelativeToContainer >= containerRect.height) {
+                                reason = '在容器下方';
+                            } else if (!isVisibleByRatio) {
+                                reason = '可见比例不足';
+                            } else if (!isVisibleByHeight) {
+                                reason = '可见高度不足';
+                            } else if (!isNotAtEdge) {
+                                reason = '太靠近边缘';
+                            } else if (!isCenterInViewport) {
+                                reason = '中心不在容器内';
+                            }
+                            console.log(`writelog: [不可见] 消息 ${index + 1} [${role}] ${reason} 容器位置:${messageTopRelativeToContainer.toFixed(1)}-${messageBottomRelativeToContainer.toFixed(1)} 可见比例:${Math.round(visibleRatio * 100)}%`);
+                        }
+                    }
+                });
+                
+                // 输出汇总信息
+                console.log('=== writelog: 聊天记录汇总 ===');
+                console.log('writelog: 总消息数:', chatHistory.length);
+                console.log('writelog: 当前可见消息数:', visibleMessages.length);
+                console.log('writelog: 当前可见的聊天内容:', visibleMessages);
+                
+                // 如果有可见消息，详细输出
+                if (visibleMessages.length > 0) {
+                    console.log('=== 当前窗口可见的聊天消息详情 ===');
+                    visibleMessages.forEach((msg, idx) => {
+                        console.log(`可见消息 ${idx + 1}: [${msg.role}] ${msg.content}`);
+                    });
+                } else {
+                    console.log('writelog: 当前窗口内没有可见的聊天消息');
+                }
+                
+                // 返回数据供调用者使用
+                return {
+                    chatHistory: chatHistory,
+                    visibleMessages: visibleMessages,
+                    scrollInfo: scrollInfo,
+                    totalMessages: chatHistory.length,
+                    visibleMessagesCount: visibleMessages.length,
+                    extractTime: new Date().toISOString()
+                };
+                
+            } catch (error) {
+                console.error('writelog: 提取会话内容时出错:', error);
+                return null;
+            }
+        }
+        
+        // 父页面截图函数 - 使用DOM截图方案（无需权限弹窗）
+        async function captureParentPageScreenshot() {
+            console.log('=== 开始使用DOM截图方案 ===');
+            
+            try {
+                // 动态加载html2canvas
+                if (!window.html2canvas) {
+                    console.log('加载html2canvas库...');
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
+                
+                // 获取当前滚动位置
+                const currentScrollX = window.pageXOffset || document.documentElement.scrollLeft;
+                const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                
+                console.log('当前滚动位置:', currentScrollX, 'x', currentScrollY);
+                console.log('视口尺寸:', viewportWidth, 'x', viewportHeight);
+                
+                // 使用更简单的方法：直接截取body元素，并设置正确的滚动参数
+                const options = {
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    scale: 1,
+                    logging: false,
+                    width: viewportWidth,
+                    height: viewportHeight,
+                    windowWidth: viewportWidth,
+                    windowHeight: viewportHeight,
+                    scrollX: currentScrollX,
+                    scrollY: currentScrollY,
+                    x: currentScrollX,
+                    y: currentScrollY,
+                    foreignObjectRendering: false, // 禁用以避免问题
+                    removeContainer: true,
+                    imageTimeout: 10000
+                };
+                
+                console.log('开始执行DOM截图...');
+                
+                // 直接截取document.body
+                const canvas = await html2canvas(document.body, options);
+                
+                console.log('DOM截图成功！');
+                console.log('截图尺寸:', canvas.width, 'x', canvas.height);
+                
+                // 转换为图片数据
+                const imageData = canvas.toDataURL('image/png', 0.9);
+                const fileSizeKB = Math.round(imageData.length / 1024);
+                console.log('截图文件大小:', fileSizeKB, 'KB');
+                
+                return imageData;
+                
+            } catch (error) {
+                console.error('父页面截图失败:', error);
+                throw error;
+            }
+        }
+
+        // 监听来自iframe的消息
+        window.addEventListener('message', async (event) => {
+            // 检查是否是截图请求
+            if (event.data && event.data.type === 'SCREENSHOT_REQUEST') {
+                console.log('收到iframe的截图请求，开始处理...');
+                
+                try {
+                    // 在截图前调用writelog函数提取当前会话内容
+                    console.log('调用writelog函数提取当前位置的会话内容...');
+                    const chatData = writelog();
+                    
+                    // 执行截图
+                    const imageData = await captureParentPageScreenshot();
+                    
+                    // 发送成功响应
+                    const response = {
+                        type: 'SCREENSHOT_RESPONSE',
+                        success: true,
+                        imageData: imageData,
+                        timestamp: Date.now(),
+                        originalRequest: event.data
+                    };
+                    
+                    console.log('截图完成，发送响应给iframe');
+                    event.source.postMessage(response, '*');
+                    
+                } catch (error) {
+                    console.error('处理截图请求时出错:', error);
+                    
+                    // 发送失败响应
+                    const response = {
+                        type: 'SCREENSHOT_RESPONSE',
+                        success: false,
+                        error: error.message || '截图失败',
+                        timestamp: Date.now(),
+                        originalRequest: event.data
+                    };
+                    
+                    event.source.postMessage(response, '*');
+                }
+            }
+        });
+
+        console.log('父页面截图处理器初始化完成，等待iframe截图请求...');
+    </script>
+
+</body>
+</html> 

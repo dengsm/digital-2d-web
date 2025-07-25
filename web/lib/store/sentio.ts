@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { ResourceModel, ChatMessage, CHAT_MODE, APP_TYPE, IFER_TYPE } from '@/lib/protocol';
+import { ResourceModel, ChatMessage, CHAT_MODE, APP_TYPE, IFER_TYPE, RESOURCE_TYPE, CHAT_ROLE } from '@/lib/protocol';
 import * as CONSTANTS from '@/lib/constants';
 
 // ==================== 聊天记录 ==================
@@ -21,7 +21,19 @@ export const useChatRecordStore = create<SentioChatRecordState>()(
                 const chatRecord: ChatMessage[] = useChatRecordStore.getState().chatRecord;
                 return chatRecord.length > 0 ? chatRecord[chatRecord.length - 1] : undefined; 
             },
-            updateLastRecord: (message: ChatMessage) => set((state) => ({ chatRecord: [...state.chatRecord.slice(0, -1), message] })),
+            updateLastRecord: (message: ChatMessage) => set((state) => {
+        const newRecord = [...state.chatRecord.slice(0, -1), message];
+        // 防止重复的AI回复
+        if (newRecord.length >= 2) {
+            const lastTwo = newRecord.slice(-2);
+            if (lastTwo[0].role === CHAT_ROLE.AI && lastTwo[1].role === CHAT_ROLE.AI && 
+                lastTwo[0].content === lastTwo[1].content && lastTwo[0].content !== "...") {
+                // 发现重复的AI回复，只保留最新的一条
+                return { chatRecord: [...newRecord.slice(0, -2), message] };
+            }
+        }
+        return { chatRecord: newRecord };
+    }),
             deleteLastRecord: () => set((state) => ({ chatRecord: [...state.chatRecord.slice(0, -1)] })),
             clearChatRecord: () => set((state) => ({ chatRecord: [] })),
         }),
@@ -156,7 +168,12 @@ interface SentioBackgroundState {
 export const useSentioBackgroundStore = create<SentioBackgroundState>()(
     persist(
         (set) => ({
-            background: null,
+            background: {
+                name: "简约",
+                link: `/${CONSTANTS.SENTIO_BACKGROUND_STATIC_PATH}/简约.jpg`,
+                type: RESOURCE_TYPE.BACKGROUND,
+                resource_id: "aaaa"
+            },
             setBackground: (by: ResourceModel | null) => set((state) => ({ background: by })),
         }),
         {
