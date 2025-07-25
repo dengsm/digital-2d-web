@@ -14,21 +14,42 @@ export function Live2d() {
     const { background } = useSentioBackgroundStore();
 
     const handleLoad = () => {
-        if (LAppDelegate.getInstance().initialize() == false) {
-            return;
+        try {
+            const delegate = LAppDelegate.getInstance();
+            if (!delegate) {
+                console.error('LAppDelegate instance is null');
+                return;
+            }
+            if (delegate.initialize() === false) {
+                console.error('Failed to initialize LAppDelegate');
+                return;
+            }
+            delegate.run();
+        } catch (error) {
+            console.error('Error in Live2D handleLoad:', error);
         }
-        LAppDelegate.getInstance().run();
     }
 
     const handleResize = () => {
-        if (LAppDefine.CanvasSize === 'auto') {
-            LAppDelegate.getInstance().onResize();
+        try {
+            if (LAppDefine.CanvasSize === 'auto') {
+                const delegate = LAppDelegate.getInstance();
+                if (delegate && delegate.onResize) {
+                    delegate.onResize();
+                }
+            }
+        } catch (error) {
+            console.error('Error in Live2D handleResize:', error);
         }
     }
 
     const handleBeforeUnload = () => {
-        // 释放实例
-        LAppDelegate.releaseInstance();
+        try {
+            // 释放实例
+            LAppDelegate.releaseInstance();
+        } catch (error) {
+            console.error('Error in Live2D cleanup:', error);
+        }
     }
 
     // useEffect(() => {
@@ -43,10 +64,18 @@ export function Live2d() {
     // }, [background])
 
     useEffect(() => {
-        handleLoad();
+        // 延迟初始化，确保DOM已经加载完成
+        const timer = setTimeout(() => {
+            handleLoad();
+        }, 100);
+        
         window.addEventListener('resize', handleResize);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
         return () => {
+            clearTimeout(timer);
             window.removeEventListener('resize', handleResize);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
             handleBeforeUnload();
         }
     }, []);
@@ -79,8 +108,14 @@ export function Live2d() {
             }
             <canvas
                 id="live2dCanvas"
-                // ref={canvasRef}
                 className='w-full h-full bg-center bg-cover'
+                style={{
+                    display: 'block',
+                    touchAction: 'none'
+                }}
+                onError={(e) => {
+                    console.error('Canvas error:', e);
+                }}
             />
         </div>   
     )

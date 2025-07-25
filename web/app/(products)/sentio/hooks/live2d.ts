@@ -14,12 +14,22 @@ export const useLive2D = () => {
     }
 
     const setLive2dCharacter = (character: ResourceModel| null) => {
-        Live2dManager.getInstance().changeCharacter(character);
-        if (character != null) {
+        try {
+            const manager = Live2dManager.getInstance();
+            if (manager) {
+                manager.changeCharacter(character);
+                if (character != null) {
+                    setReady(false);
+                    checkLive2DReady();
+                }
+            } else {
+                console.error('Live2dManager instance is null');
+            }
+        } catch (error) {
+            console.error('Error in setLive2dCharacter:', error);
+            // 如果出错，确保ready状态正确
             setReady(false);
-            checkLive2DReady();
         }
-
     };
 
     return {

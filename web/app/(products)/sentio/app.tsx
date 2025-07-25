@@ -5,6 +5,7 @@ import { Live2d } from './components/live2d';
 import ChatBot from './components/chatbot';
 import { Header } from './components/header';
 import { useAppConfig } from "./hooks/appConfig";
+import { ErrorBoundary } from './components/error-boundary';
 import { Spinner } from "@heroui/react";
 
 
@@ -29,7 +30,9 @@ export default function App() {
                     <ChatBot />
                 </div>
             }
-            <Live2d />
+            <ErrorBoundary>
+                <Live2d />
+            </ErrorBoundary>
         </div>
     );
 }

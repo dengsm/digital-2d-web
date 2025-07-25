@@ -22,7 +22,16 @@ export class Live2dManager {
     public changeCharacter(character: ResourceModel | null) {
       // _subdelegates中只有一个画布, 所以设置第一个即可
       this._ready = false;
-      LAppDelegate.getInstance().changeCharacter(character)
+      try {
+        const delegate = LAppDelegate.getInstance();
+        if (delegate) {
+          delegate.changeCharacter(character);
+        } else {
+          console.error('LAppDelegate instance is null');
+        }
+      } catch (error) {
+        console.error('Error changing character in Live2dManager:', error);
+      }
     }
 
     public setLipFactor(weight: number): void {

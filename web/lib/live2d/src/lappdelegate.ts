@@ -95,6 +95,7 @@ export class LAppDelegate {
     CubismFramework.dispose();
 
     this._cubismOption = null;
+    this._isInitialized = false;
   }
 
   /**
@@ -132,6 +133,9 @@ export class LAppDelegate {
 
     this.initializeSubdelegates();
     this.initializeEventListener();
+
+    // 初始化完成标志
+    this._isInitialized = true;
 
     return true;
   }
@@ -211,7 +215,26 @@ export class LAppDelegate {
 
   public changeCharacter(character: ResourceModel | null) {
     // _subdelegates中只有一个画布, 所以设置第一个即可
-    this._subdelegates.at(0).changeCharacter(character);
+    // 添加安全检查，确保_subdelegates已初始化且有元素
+    if (!this._isInitialized) {
+      console.warn('LAppDelegate not fully initialized yet, deferring character change');
+      // 延迟执行，等待初始化完成
+      setTimeout(() => {
+        this.changeCharacter(character);
+      }, 500);
+      return;
+    }
+    
+    if (this._subdelegates && this._subdelegates.getSize() > 0) {
+      const subdelegate = this._subdelegates.at(0);
+      if (subdelegate) {
+        subdelegate.changeCharacter(character);
+      } else {
+        console.error('Subdelegate at index 0 is null or undefined');
+      }
+    } else {
+      console.error('Subdelegates not initialized or empty when trying to change character');
+    }
   }
 
   public getSubdelegate(): csmVector<LAppSubdelegate> {
@@ -225,6 +248,7 @@ export class LAppDelegate {
     this._cubismOption = new Option();
     this._subdelegates = new csmVector<LAppSubdelegate>();
     this._canvases = new csmVector<HTMLCanvasElement>();
+    this._isInitialized = false;
   }
 
   /**
@@ -241,6 +265,11 @@ export class LAppDelegate {
    * Subdelegate
    */
   private _subdelegates: csmVector<LAppSubdelegate>;
+
+  /**
+   * 初始化状态标志
+   */
+  private _isInitialized: boolean;
 }
 
 function onPointerBegan(e: PointerEvent): void {
