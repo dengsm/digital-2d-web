@@ -15,8 +15,11 @@
 
   // SVG icons for open and close states
   const svgIcons = {
-    open: `<svg id="openIcon" width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-      <path d="M 12 2.25 C 6.613281 2.25 2.25 6.613281 2.25 12 L 2.25 13.875 C 2.25 14.5 1.75 15 1.125 15 C 0.5 15 0 14.5 0 13.875 L 0 12 C 0 5.371094 5.371094 0 12 0 C 18.628906 0 24 5.371094 24 12 L 24 18.753906 C 24 21.03125 22.152344 22.878906 19.871094 22.878906 L 14.699219 22.875 C 14.3125 23.546875 13.585938 24 12.75 24 L 11.25 24 C 10.007812 24 9 22.992188 9 21.75 C 9 20.507812 10.007812 19.5 11.25 19.5 L 12.75 19.5 C 13.585938 19.5 14.3125 19.953125 14.699219 20.625 L 19.875 20.628906 C 20.910156 20.628906 21.75 19.789062 21.75 18.753906 L 21.75 12 C 21.75 6.613281 17.386719 2.25 12 2.25 Z M 6.75 9.75 L 7.5 9.75 C 8.328125 9.75 9 10.421875 9 11.25 L 9 16.5 C 9 17.328125 8.328125 18 7.5 18 L 6.75 18 C 5.09375 18 3.75 16.65625 3.75 15 L 3.75 12.75 C 3.75 11.09375 5.09375 9.75 6.75 9.75 Z M 17.25 9.75 C 18.90625 9.75 20.25 11.09375 20.25 12.75 L 20.25 15 C 20.25 16.65625 18.90625 18 17.25 18 L 16.5 18 C 15.671875 18 15 17.328125 15 16.5 L 15 11.25 C 15 10.421875 15.671875 9.75 16.5 9.75 Z M 17.25 9.75 "/>
+    open: `<svg id="openIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6.5 14c-.83 0-1.5-.67-1.5-1.5S5.67 11 6.5 11h.05c.25-1.25 1.25-2.25 2.45-2.25.5 0 .95.15 1.35.4C10.85 8.45 11.85 8 13 8c1.65 0 3 1.35 3 3h1.5c.83 0 1.5.67 1.5 1.5S18.33 14 17.5 14H6.5z" fill="#ffffff" stroke="#ffffff" stroke-width="1"/>
+      <circle cx="8" cy="12" r="1.5" fill="#ffffff"/>
+      <circle cx="16" cy="11.5" r="1.2" fill="#ffffff"/>
+      <circle cx="12" cy="10.5" r="1" fill="#ffffff"/>
     </svg>`,
     close: `<svg id="closeIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" >
       <path d="M18 18L6 6M6 18L18 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -53,6 +56,9 @@
         height: 43.75rem;
         max-height: calc(100vh - 6rem);
         border: none;
+        outline: none;
+        box-shadow: none;
+        background: transparent;
         z-index: 2147483640;
         overflow: hidden;
         user-select: none;

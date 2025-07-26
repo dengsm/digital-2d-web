@@ -6,14 +6,9 @@ import clsx from "clsx";
 
 
 export function LogoBar(props: {isExternal: boolean}) {
-    const t = useTranslations('Metadata');
     return (
         <div className="flex items-center">
-            <Link href="https://www.light4ai.com" isExternal={props.isExternal} className="font-bold text-inherit">
-                <div className="flex items-center gap-1 justify-center">
-                    <p className={clsx(hongLei.className,"invisible md:visible text-2xl")}>{t('title')}</p>
-                </div>
-            </Link>
+            {/* 已移除沐光而行超链接 */}
         </div>
     )
 }

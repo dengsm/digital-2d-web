@@ -109,7 +109,9 @@ function ImagesList({
 function BackgroundsTab() {
     const t = useTranslations('Products.sentio.gallery.backgrounds');
     const { background, setBackground } = useSentioBackgroundStore();
-    const [enable, setEnable] = useState<boolean>(background != null);
+    const [enable, setEnable] = useState<boolean>(true);
+    
+
     const [bgType, setBgType] = useState<string>(t('all'));
     // bgType映射关系
     const bgTypeMap = {
@@ -153,6 +155,11 @@ function BackgroundsTab() {
         setEnable(isSelected);
         if (!isSelected) {
             choiceBackground(null);
+        } else {
+            // 如果开启但没有背景，设置默认背景
+            if (!background && backgrounds.length > 0) {
+                choiceBackground(0);
+            }
         }
     }
 
@@ -160,7 +167,7 @@ function BackgroundsTab() {
         <Card>
             <CardBody>
                 <div className='flex flex-col gap-4 max-h-96 overflow-y-auto'>
-                    <Switch defaultSelected={background != null} color="primary" onValueChange={onEnableChange}>{t('enable')}</Switch>
+                    <Switch defaultSelected={true} color="primary" onValueChange={onEnableChange}>{t('enable')}</Switch>
                     <Divider />
                     {
                         enable && <div className='flex flex-row items-center gap-2'>

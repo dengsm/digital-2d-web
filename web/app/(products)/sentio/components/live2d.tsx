@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { LAppDelegate } from '@/lib/live2d/src/lappdelegate';
 import * as LAppDefine from '@/lib/live2d/src/lappdefine';
 import { Spinner } from '@heroui/react';
@@ -10,8 +10,19 @@ import { useLive2D } from '../hooks/live2d';
 
 export function Live2d() {
     const t = useTranslations('Products.sentio');
-    const { ready } = useLive2D();
+    const { ready, setLive2dCharacter } = useLive2D();
     const { background } = useSentioBackgroundStore();
+    const canvasRef = useRef(null);
+    
+
+    
+    // 确保有默认背景
+    const effectiveBackground = background || {
+        name: "简约",
+        link: "/pic/playground.jpg",
+        type: "BACKGROUND" as any,
+        resource_id: "playground"
+    };
 
     const handleLoad = () => {
         try {
@@ -67,6 +78,14 @@ export function Live2d() {
         // 延迟初始化，确保DOM已经加载完成
         const timer = setTimeout(() => {
             handleLoad();
+            
+            // 初始化后强制设置Canvas背景为透明
+            const canvas = document.getElementById('live2dCanvas') as HTMLCanvasElement;
+            if (canvas) {
+                canvas.style.backgroundColor = 'transparent';
+                canvas.style.background = 'none';
+                console.log('Forced canvas background to transparent');
+            }
         }, 100);
         
         window.addEventListener('resize', handleResize);
@@ -83,18 +102,18 @@ export function Live2d() {
     return (
         <div id='live2d-container' className='absolute top-0 left-0 w-full h-full z-0'>
             {
-                background && (background.link.endsWith('.mp4') ? 
+                effectiveBackground && (effectiveBackground.link.endsWith('.mp4') ? 
                 <video 
                     className='absolute top-0 left-0 w-full h-full object-cover z-[-1]' 
                     autoPlay 
                     muted 
                     loop
-                    src={background.link}
+                    src={effectiveBackground.link}
                     style={{ pointerEvents: 'none' }}
                 />
                 :
                 <img 
-                    src={background.link}
+                    src={effectiveBackground.link}
                     alt="Background Image"
                     className='absolute top-0 left-0 w-full h-full object-cover z-[-1]'
                 />
@@ -108,13 +127,14 @@ export function Live2d() {
             }
             <canvas
                 id="live2dCanvas"
-                className='w-full h-full bg-center bg-cover'
+                className='w-full h-full'
                 style={{
                     display: 'block',
-                    touchAction: 'none'
-                }}
-                onError={(e) => {
-                    console.error('Canvas error:', e);
+                    touchAction: 'none',
+                    backgroundColor: 'transparent',
+                    background: 'none',
+                    opacity: ready ? 1 : 0, 
+                    transition: 'opacity 0.3s ease-in-out' 
                 }}
             />
         </div>   

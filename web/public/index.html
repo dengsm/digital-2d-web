@@ -5,7 +5,8 @@
         .iframe-container {
             width: 100%;
             max-width: 1200px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: none; /* 移除阴影 */
+            border: none; /* 移除边框 */
             border-radius: 5px;
             overflow: hidden;
         }
@@ -70,6 +71,20 @@
             width: 100%;
             background: url(pic/pic1.png);
             background-size: 100% 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0;
+        }
+        
+        .teacher-panel .info-pic .info-image {
+            max-height: 150px;
+            max-width: 40%;
+           /* width: 90%; */
+            height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         body {
@@ -1456,6 +1471,8 @@
                 </div>
             </div-->
             <div class="info-pic">
+                <img src="pic/1.png" alt="图片1" class="info-image" />
+                <img src="pic/2.png" alt="图片2" class="info-image" />
             </div>
         </div>
 
@@ -1515,7 +1532,7 @@
                         <iframe 
                             src="/sentio" 
                             id="main-iframe"
-                            style="width: 100%; height: 100%; border: none; border-radius: 0 20px 20px 0;"
+                            style="width: 100%; height: 100%; border: none; outline: none; box-shadow: none; border-radius: 0 20px 20px 0;"
                             allow="microphone; camera; clipboard-read; clipboard-write"
                             sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals allow-downloads allow-presentation">
                         </iframe>
@@ -1588,17 +1605,23 @@
                     }
                     
                     .minimize-btn {
-                        background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-                        color: #fff;
-                        box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
-                        border: 2px solid rgba(255, 255, 255, 0.3);
+                        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+                        color: #4b5563;
+                        box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);
+                        border: 2px solid rgba(209, 213, 219, 0.8);
                     }
                     
                     .minimize-btn::before {
-                        content: '💭';
-                        font-size: 12px;
+                        content: '';
                         position: absolute;
+                        width: 14px;
+                        height: 10px;
+                        background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.9) 25%, transparent 25%),
+                                   radial-gradient(circle at 70% 50%, rgba(255,255,255,0.8) 35%, transparent 35%),
+                                   radial-gradient(circle at 50% 70%, rgba(255,255,255,0.9) 40%, transparent 40%);
+                        border-radius: 50px;
                         animation: bubble-float 2s ease-in-out infinite;
+                        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
                     }
                     
                     @keyframes bubble-float {
@@ -1608,7 +1631,7 @@
                     
                     .window-controls button:hover {
                         transform: scale(1.15);
-                        box-shadow: 0 6px 20px rgba(255, 154, 158, 0.6);
+                        box-shadow: 0 6px 20px rgba(107, 114, 128, 0.6);
                     }
                     
                     .minimize-btn:hover::before {

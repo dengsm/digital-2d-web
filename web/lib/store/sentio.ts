@@ -170,9 +170,10 @@ export const useSentioBackgroundStore = create<SentioBackgroundState>()(
         (set) => ({
             background: {
                 name: "简约",
-                link: `/${CONSTANTS.SENTIO_BACKGROUND_STATIC_PATH}/简约.jpg`,
+                //link: `/${CONSTANTS.SENTIO_BACKGROUND_STATIC_PATH}/简约.jpg`,
+                link: "/pic/playground.jpg", 
                 type: RESOURCE_TYPE.BACKGROUND,
-                resource_id: "aaaa"
+                resource_id: "playground"
             },
             setBackground: (by: ResourceModel | null) => set((state) => ({ background: by })),
         }),
