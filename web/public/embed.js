@@ -44,7 +44,7 @@
       iframe.id = iframeId;
       iframe.src = iframeUrl;
       iframe.style.cssText = `
-        position: absolute;
+        position: fixed;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -52,9 +52,9 @@
         right: 0;
         bottom: 0;
         width: 24rem;
-        max-width: calc(100vw - 2rem);
+        max-width: calc(100vw - 1rem);
         height: 43.75rem;
-        max-height: calc(100vh - 6rem);
+        max-height: calc(100vh - 1rem);
         border: none;
         outline: none;
         box-shadow: none;

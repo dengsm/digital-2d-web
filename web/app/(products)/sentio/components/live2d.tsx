@@ -7,6 +7,7 @@ import { Spinner } from '@heroui/react';
 import { useSentioBackgroundStore } from "@/lib/store/sentio";
 import { useTranslations } from 'next-intl';
 import { useLive2D } from '../hooks/live2d';
+import { getSrcPath } from '@/lib/path';
 
 export function Live2d() {
     const t = useTranslations('Products.sentio');
@@ -24,8 +25,28 @@ export function Live2d() {
         resource_id: "playground"
     };
 
-    const handleLoad = () => {
+    // 动态加载Live2D Core脚本
+    const loadLive2DCore = () => {
+        return new Promise((resolve, reject) => {
+            // 检查脚本是否已经加载
+            if (document.querySelector('script[src*="live2dcubismcore.min.js"]')) {
+                resolve(true);
+                return;
+            }
+            
+            const script = document.createElement('script');
+            script.src = getSrcPath('sentio/core/live2dcubismcore.min.js');
+            script.onload = () => resolve(true);
+            script.onerror = () => reject(new Error('Failed to load Live2D Core'));
+            document.head.appendChild(script);
+        });
+    };
+
+    const handleLoad = async () => {
         try {
+            // 先加载Live2D Core脚本
+            await loadLive2DCore();
+            
             const delegate = LAppDelegate.getInstance();
             if (!delegate) {
                 console.error('LAppDelegate instance is null');
@@ -134,7 +155,9 @@ export function Live2d() {
                     backgroundColor: 'transparent',
                     background: 'none',
                     opacity: ready ? 1 : 0, 
-                    transition: 'opacity 0.3s ease-in-out' 
+                    transition: 'opacity 0.3s ease-in-out',
+                    transform: 'scale(0.8)',
+                    transformOrigin: 'center center'
                 }}
             />
         </div>   

@@ -66,7 +66,7 @@
         }
         .teacher-panel .info-pic{
             position: absolute;
-            bottom: -4px;
+            bottom: 5px;
             height: 230px;
             width: 100%;
             background: url(pic/pic1.png);
@@ -95,15 +95,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin: 0;
+            padding: 0px;
         }
 
         .container {
             display: flex;
-            height: 95vh;
-            max-width: 95%;
-            width: 95%;
+            height: 98vh;
+            max-width: 98%;
+            width: 98%;
             margin: 0 auto;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
@@ -112,8 +114,8 @@
             flex: 1;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            border-radius: 20px 0 0 20px;
-            padding: 20px;
+            border-radius: 16px 0 0 16px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -280,10 +282,10 @@
         }
 
         .chat-panel {
-            flex: 3;
+            flex: 4;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 12px;
             background: #f8f9fa;
             min-width: 0; /* 防止内容溢出 */
             position: relative;
@@ -302,13 +304,13 @@
         }
 
         .right-panel {
-            flex: 2;
+            flex: 1.6;
             background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('pic/playground.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             backdrop-filter: blur(5px);
-            border-radius: 0 20px 20px 0;
+            border-radius: 0 16px 16px 0;
             padding: 0; /* 移除内边距让数字人完全填满 */
             display: flex;
             flex-direction: column;
@@ -517,10 +519,10 @@
         .chat-header {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
+            padding: 6px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -568,12 +570,12 @@
         .chat-messages {
             flex: 1;
             background: #ffffff;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
             overflow-y: auto;
-            max-height: calc(100vh - 200px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-height: calc(100vh - 140px);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
             border: 1px solid #e1e8ed;
         }
 
@@ -599,7 +601,7 @@
 
             .right-panel {
                 border-radius: 0;
-                flex: 2;
+                flex: 1.6;
             }
 
             body {
@@ -665,7 +667,7 @@
             border-radius: 12px;
             padding: 16px 20px;
             margin: 8px 0;
-            max-width: 100%;
+            max-width: 200%;
         }
 
         .question-title {
@@ -1478,7 +1480,7 @@
 
         <div class="chat-panel">
             <div class="chat-header">
-                <img src="pic/school_name.png" alt="鸿源技术学校AI助手" style="max-width: 100%; height: 90px; display: block; margin: 0 auto; object-fit: contain;" />
+                <img src="pic/school_name.png" alt="鸿源技术学校AI助手" style="max-width: 100%; height: 65px; display: block; margin: 0 auto; object-fit: contain;" />
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -1517,7 +1519,7 @@
             </div>
         </div>
 
-                <div class="right-panel">
+        <div class="right-panel">
             
             <div class="iframe-container">
                 <!-- 可拖动的浮窗嵌入完整网页 -->
@@ -1576,7 +1578,7 @@
                         font-weight: 500;
                         border-radius: 0 20px 0 0; /* 匹配右侧面板的圆角 */
                         overflow: hidden;
-                        height: 40px; /* 固定高度 */
+                        height: 30px; /* 固定高度 */
                     }
                     
                     .window-title {
@@ -1645,7 +1647,7 @@
                     }
                     
                     .window-content {
-                        height: calc(100% - 50px);
+                        height: calc(100% - 40px);
                         overflow: hidden;
                         border-radius: 25px; /* 四个角都是25px圆角 */
                     }
@@ -1936,7 +1938,7 @@
                 </div>
             </div>
         -->
-            <!-- 操场人物 -->
+            <!-- 操场人物 
             <div class="playground-characters">
                 <div class="character character1">
                     <img src="pic/1.png" alt="学生1" />
@@ -1945,6 +1947,7 @@
                     <img src="pic/2.png" alt="学生2" />
                 </div>
             </div>
+            -->
         </div>
     </div>
 
