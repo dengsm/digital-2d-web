@@ -925,18 +925,44 @@
         .question-options {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 8px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f1f3f4;
+        }
+        
+        .question-options::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .question-options::-webkit-scrollbar-track {
+            background: #f1f3f4;
+            border-radius: 3px;
+        }
+        
+        .question-options::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+        
+        .question-options::-webkit-scrollbar-thumb:hover {
+            background: #5a67d8;
         }
 
         .option-item {
             display: flex;
-            align-items: center;
-            padding: 12px 16px;
+            align-items: flex-start;
+            padding: 16px 20px;
             background: white;
             border: 2px solid #e9ecef;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-bottom: 12px;
+            min-height: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .option-item:hover {
@@ -953,15 +979,23 @@
         }
 
         .option-radio {
-            margin-right: 12px;
-            transform: scale(1.2);
+            margin-right: 16px;
+            margin-top: 4px;
+            transform: scale(1.3);
+            flex-shrink: 0;
         }
 
         .option-label {
             flex: 1;
-            font-size: 14px;
-            line-height: 1.4;
+            font-size: 15px;
+            line-height: 1.6;
             font-weight: 500;
+            word-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
+            text-align: justify;
+            max-width: 100%;
+            overflow-wrap: break-word;
         }
 
         .submit-answer {
@@ -2094,29 +2128,29 @@
 
         // 页面加载时生成session_id（改为可变变量）
         let sessionId = generateUUID();
-        console.log('Generated session_id:', sessionId);
+        // console.log('Generated session_id:', sessionId);
 
         // 添加全局question_id状态管理
         let currentQuestionId = 111; // 默认值
-        console.log('Initial question_id:', currentQuestionId);
+        // console.log('Initial question_id:', currentQuestionId);
 
         // 添加全局class_id状态管理
         let currentClassId = "1"; // 默认值
-        console.log('Initial class_id:', currentClassId);
+        // console.log('Initial class_id:', currentClassId);
 
         // 重置后台状态函数 - 模拟页面刷新的效果
         function resetBackendState() {
             // 重新生成sessionId
             sessionId = generateUUID();
-            console.log('Reset session_id:', sessionId);
+            // console.log('Reset session_id:', sessionId);
             
             // 重置question_id到默认值
             currentQuestionId = 111;
-            console.log('Reset question_id:', currentQuestionId);
+            // console.log('Reset question_id:', currentQuestionId);
             
             // 重置class_id到默认值
             currentClassId = "1";
-            console.log('Reset class_id:', currentClassId);
+            // console.log('Reset class_id:', currentClassId);
             
             // 重置进度条相关变量
             if (progressInterval) {
@@ -2131,11 +2165,11 @@
                 // 移除被禁用的旧题目容器
                 if (container.style.pointerEvents === 'none' || container.style.opacity === '0.7') {
                     container.remove();
-                    console.log('Removed old disabled question container:', container.getAttribute('data-question-id'));
+                    // console.log('Removed old disabled question container:', container.getAttribute('data-question-id'));
                 }
             });
             
-            console.log('✅ 后台状态已重置，等同于页面刷新效果');
+            // console.log('✅ 后台状态已重置，等同于页面刷新效果');
         }
 
         // 进度条控制变量
@@ -2271,12 +2305,12 @@
                 // 更新当前的question_id
                 if (content.question_id) {
                     currentQuestionId = content.question_id;
-                    console.log('Updated question_id to:', currentQuestionId);
+                    // console.log('Updated question_id to:', currentQuestionId);
                 }
                 // 更新当前的class_id
                 if (content.class_id) {
                     currentClassId = content.class_id;
-                    console.log('Updated class_id to:', currentClassId);
+                    // console.log('Updated class_id to:', currentClassId);
                 }
                 // 显示选择题
                 bubbleDiv.innerHTML = renderQuestion(content);
@@ -2376,13 +2410,13 @@
         }
 
         function renderQuestion(data) {
-            console.log('Rendering question with data:', data);
+            // console.log('Rendering question with data:', data);
             const questionId = data.question_id;
             const question = data.question;
             const options = data.options || [];
             const optionType = data.option_type || 'radio';
             
-            console.log('Extracted question_id:', questionId);
+            // console.log('Extracted question_id:', questionId);
             
             // 如果 question_id 为 0，表示测评完成，只显示结果文本
             if (questionId === 0) {
@@ -2484,8 +2518,8 @@
             const selectedOption = container.querySelector('input:checked');
             
             if (!selectedOption) {
-                console.log('No option selected in container:', container);
-                console.log('Available inputs:', container.querySelectorAll('input'));
+                // console.log('No option selected in container:', container);
+                // console.log('Available inputs:', container.querySelectorAll('input'));
                 alert('请选择一个答案');
                 return;
             }
@@ -2504,7 +2538,7 @@
             showLoading(currentQuestionId === 87);
             
             try {
-                console.log('Submitting answer with question_id:', currentQuestionId, 'class_id:', currentClassId);
+                // console.log('Submitting answer with question_id:', currentQuestionId, 'class_id:', currentClassId);
                 
                 const userInfo = getUserInfo();
                 const url = new URL('https://n8n.ailongma.com/webhook/assessment');
@@ -2536,16 +2570,16 @@
                 });
 
                 const data = await response.json();
-                console.log('Received response data:', data);
+                // console.log('Received response data:', data);
                 
                 if (data.output) {
                     if (data.output.question) {
                         // 如果返回的是新题目
-                        console.log('Processing question data:', data.output);
+                        // console.log('Processing question data:', data.output);
                         addMessage(data.output, false, true);
                     } else {
                         // 如果返回的是普通文本
-                        console.log('Processing text response:', data.output);
+                        // console.log('Processing text response:', data.output);
                         addMessage(data.output || '感谢您的回答！');
                     }
                 } else {
@@ -2597,7 +2631,7 @@
             showLoading(false);
 
             try {
-                console.log('Sending message with question_id:', currentQuestionId, 'class_id:', currentClassId);
+                // console.log('Sending message with question_id:', currentQuestionId, 'class_id:', currentClassId);
                 
                 const userInfo = getUserInfo();
                 const url = new URL('https://n8n.ailongma.com/webhook/assessment');
@@ -2629,16 +2663,16 @@
                 });
 
                 const data = await response.json();
-                console.log('Received response data (sendMessage):', data);
+                // console.log('Received response data (sendMessage):', data);
                 
                 if (data.output) {
                     if (data.output.question) {
                         // 如果返回的是选择题
-                        console.log('Processing question data (sendMessage):', data.output);
+                        // console.log('Processing question data (sendMessage):', data.output);
                         addMessage(data.output, false, true);
                     } else {
                         // 如果返回的是普通文本
-                        console.log('Processing text response (sendMessage):', data.output);
+                        // console.log('Processing text response (sendMessage):', data.output);
                         addMessage(data.output || '收到您的消息');
                     }
                 } else {
@@ -2690,7 +2724,7 @@
                 sendButton.style.backgroundColor = '#ccc';
                 sendButton.style.cursor = 'not-allowed';
                 
-                console.log('🚫 答题模式：聊天输入已禁用');
+                // console.log('🚫 答题模式：聊天输入已禁用');
             }
         }
         
@@ -2709,7 +2743,7 @@
                 sendButton.style.backgroundColor = '';
                 sendButton.style.cursor = '';
                 
-                console.log('✅ 退出答题：聊天输入已启用');
+                // console.log('✅ 退出答题：聊天输入已启用');
             }
         }
 
@@ -2717,15 +2751,15 @@
         function resetBackendStateKeepHistory() {
             // 重新生成sessionId
             sessionId = generateUUID();
-            console.log('Reset session_id:', sessionId);
+            // console.log('Reset session_id:', sessionId);
             
             // 重置question_id到默认值
             currentQuestionId = 111;
-            console.log('Reset question_id:', currentQuestionId);
+            // console.log('Reset question_id:', currentQuestionId);
             
             // 重置class_id到默认值
             currentClassId = "1";
-            console.log('Reset class_id:', currentClassId);
+            // console.log('Reset class_id:', currentClassId);
             
             // 重置进度条相关变量
             if (progressInterval) {
@@ -2735,7 +2769,7 @@
             currentProgress = 0;
             
             // ⚠️ 注意：这里不清理DOM中的历史对话，保留用户的问答记录
-            console.log('✅ 后台状态已重置，历史对话已保留');
+            // console.log('✅ 后台状态已重置，历史对话已保留');
         }
         
         // 自动退出专业推荐函数（答题完成后调用）
@@ -2746,7 +2780,7 @@
                 const chatInput = document.getElementById('chatInput');
                 const sendButton = document.getElementById('sendButton');
                 
-                console.log('📝 答题完成，自动退出专业推荐模式');
+                // console.log('📝 答题完成，自动退出专业推荐模式');
                 
                 // 更新按钮状态
                 toggleBtn.classList.remove('pressed');
@@ -2761,7 +2795,7 @@
                 // 更新模式状态
                 isRecommendMode = true;
                 
-                console.log('✅ 已自动退出专业推荐模式，状态已重置，历史对话已保留，聊天功能已启用');
+                // console.log('✅ 已自动退出专业推荐模式，状态已重置，历史对话已保留，聊天功能已启用');
             }
         }
 
@@ -2888,9 +2922,9 @@
                     if (chatInput && sendButton && !chatInput.disabled && !sendButton.disabled) {
                         chatInput.value = '退出专业推荐';
                         sendButton.click();
-                        console.log('✅ 手动退出：已发送退出专业推荐消息');
+                        // console.log('✅ 手动退出：已发送退出专业推荐消息');
                     } else {
-                        console.error('❌ 手动退出：输入框或发送按钮仍然禁用');
+                        // console.error('❌ 手动退出：输入框或发送按钮仍然禁用');
                     }
                 }, 500);
                 
@@ -2951,7 +2985,7 @@
                     // 发送完成后禁用聊天输入框，进入答题模式
                     setTimeout(() => {
                         disableChatInput();
-                        console.log('🚫 专业推荐消息已发送，输入框已禁用');
+                        // console.log('🚫 专业推荐消息已发送，输入框已禁用');
                     }, 100); // 等待发送完成后再禁用
                 }, 300);
                 
@@ -2970,23 +3004,23 @@
         // 父页面截图处理器 - 用于index.html
         // 监听来自iframe的截图请求并执行完整页面截图
 
-        console.log('父页面截图处理器已加载');
+        // console.log('父页面截图处理器已加载');
 
         // 动态加载html2canvas库（如果尚未加载）
         function loadHtml2Canvas() {
             return new Promise((resolve, reject) => {
                 // 检查是否已经加载
                 if (window.html2canvas) {
-                    console.log('html2canvas已存在，无需重复加载');
+                    // console.log('html2canvas已存在，无需重复加载');
                     resolve(window.html2canvas);
                     return;
                 }
                 
-                console.log('开始加载html2canvas库...');
+                // console.log('开始加载html2canvas库...');
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
                 script.onload = () => {
-                    console.log('html2canvas库加载成功');
+                    // console.log('html2canvas库加载成功');
                     resolve(window.html2canvas);
                 };
                 script.onerror = () => {
@@ -2999,7 +3033,7 @@
 
         // 提取并输出当前会话内容的函数
         function writelog() {
-            console.log('=== writelog: 开始提取当前位置的会话内容 ===');
+            // console.log('=== writelog: 开始提取当前位置的会话内容 ===');
             
             try {
                 // 获取当前滚动位置信息
@@ -3010,12 +3044,12 @@
                     viewportHeight: window.innerHeight,
                     timestamp: new Date().toLocaleString()
                 };
-                console.log('当前页面滚动位置:', scrollInfo);
+                // console.log('当前页面滚动位置:', scrollInfo);
                 
                 // 获取左侧聊天容器
                 const chatContainer = document.getElementById('chatMessages');
                 if (!chatContainer) {
-                    console.log('writelog: 未找到聊天容器 #chatMessages');
+                    // console.log('writelog: 未找到聊天容器 #chatMessages');
                     return;
                 }
                 
@@ -3025,26 +3059,26 @@
                 const containerScrollHeight = chatContainer.scrollHeight;
                 const containerClientHeight = chatContainer.clientHeight;
                 
-                console.log('聊天容器信息:', {
-                    containerRect: {
-                        top: containerRect.top,
-                        bottom: containerRect.bottom,
-                        height: containerRect.height
-                    },
-                    scroll: {
-                        scrollTop: containerScrollTop,
-                        scrollHeight: containerScrollHeight,
-                        clientHeight: containerClientHeight
-                    }
-                });
+                // console.log('聊天容器信息:', {
+                //     containerRect: {
+                //         top: containerRect.top,
+                //         bottom: containerRect.bottom,
+                //         height: containerRect.height
+                //     },
+                //     scroll: {
+                //         scrollTop: containerScrollTop,
+                //         scrollHeight: containerScrollHeight,
+                //         clientHeight: containerClientHeight
+                //     }
+                // });
                 
                 // 提取所有聊天消息
                 const messages = chatContainer.querySelectorAll('.message');
                 const chatHistory = [];
                 const visibleMessages = [];
                 
-                console.log(`writelog: 找到 ${messages.length} 条消息`);
-                console.log(`writelog: 聊天容器可视区域范围: ${containerRect.top.toFixed(1)} - ${containerRect.bottom.toFixed(1)}`);
+                // console.log(`writelog: 找到 ${messages.length} 条消息`);
+                // console.log(`writelog: 聊天容器可视区域范围: ${containerRect.top.toFixed(1)} - ${containerRect.bottom.toFixed(1)}`);
                 
                 messages.forEach((message, index) => {
                     const isUser = message.classList.contains('user');
@@ -3129,7 +3163,7 @@
                             },
                             finalVisible: isVisible
                         };
-                        console.log(`writelog: 消息 ${index + 1} 详细信息:`, debugInfo);
+                        // console.log(`writelog: 消息 ${index + 1} 详细信息:`, debugInfo);
                         
                         const messageData = {
                             index: index + 1,
@@ -3157,7 +3191,7 @@
                         // 只记录可见的消息
                         if (isVisible) {
                             visibleMessages.push(messageData);
-                            console.log(`writelog: [可见] 消息 ${index + 1} [${role}] 可见比例:${Math.round(visibleRatio * 100)}%`, content.trim());
+                            // console.log(`writelog: [可见] 消息 ${index + 1} [${role}] 可见比例:${Math.round(visibleRatio * 100)}%`, content.trim());
                         } else {
                             let reason = '部分可见';
                             if (messageBottomRelativeToContainer <= 0) {
@@ -3173,25 +3207,25 @@
                             } else if (!isCenterInViewport) {
                                 reason = '中心不在容器内';
                             }
-                            console.log(`writelog: [不可见] 消息 ${index + 1} [${role}] ${reason} 容器位置:${messageTopRelativeToContainer.toFixed(1)}-${messageBottomRelativeToContainer.toFixed(1)} 可见比例:${Math.round(visibleRatio * 100)}%`);
+                            // console.log(`writelog: [不可见] 消息 ${index + 1} [${role}] ${reason} 容器位置:${messageTopRelativeToContainer.toFixed(1)}-${messageBottomRelativeToContainer.toFixed(1)} 可见比例:${Math.round(visibleRatio * 100)}%`);
                         }
                     }
                 });
                 
                 // 输出汇总信息
-                console.log('=== writelog: 聊天记录汇总 ===');
-                console.log('writelog: 总消息数:', chatHistory.length);
-                console.log('writelog: 当前可见消息数:', visibleMessages.length);
-                console.log('writelog: 当前可见的聊天内容:', visibleMessages);
+                // console.log('=== writelog: 聊天记录汇总 ===');
+                // console.log('writelog: 总消息数:', chatHistory.length);
+                // console.log('writelog: 当前可见消息数:', visibleMessages.length);
+                // console.log('writelog: 当前可见的聊天内容:', visibleMessages);
                 
                 // 如果有可见消息，详细输出
                 if (visibleMessages.length > 0) {
-                    console.log('=== 当前窗口可见的聊天消息详情 ===');
+                    // console.log('=== 当前窗口可见的聊天消息详情 ===');
                     visibleMessages.forEach((msg, idx) => {
-                        console.log(`可见消息 ${idx + 1}: [${msg.role}] ${msg.content}`);
+                        // console.log(`消息 ${msg.index}: [${msg.role}] ${msg.content.substring(0, 50)}${msg.content.length > 50 ? '...' : ''}`);
                     });
                 } else {
-                    console.log('writelog: 当前窗口内没有可见的聊天消息');
+                    // console.log('writelog: 当前窗口内没有可见的聊天消息');
                 }
                 
                 // 返回数据供调用者使用
