@@ -137,7 +137,7 @@
 
         .feature-intro {
             width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #eaa9a9e0 0%, #764ba2 100%);
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 20px;
@@ -243,6 +243,111 @@
             font-size: 14px;
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        /* 悬浮按钮样式 */
+        .floating-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+            align-items: center;
+        }
+
+        .floating-btn {
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 50%, #2E5F8A 100%);
+            color: white;
+            border: 3px solid #B0BEC5;
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 16px rgba(74, 144, 226, 0.4),
+                0 4px 8px rgba(74, 144, 226, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 150px;
+            text-align: center;
+            transform: translateY(-2px);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 12px 24px rgba(74, 144, 226, 0.5),
+                0 6px 12px rgba(74, 144, 226, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #5BA3F5 0%, #4A90E2 50%, #357ABD 100%);
+        }
+
+        .floating-btn:active {
+            transform: translateY(0px);
+            box-shadow: 
+                0 2px 4px rgba(74, 144, 226, 0.3),
+                inset 0 2px 6px rgba(0, 0, 0, 0.2),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+        }
+
+        /* 按下后的切换状态 - 调整为柔和的橙色 */
+        .floating-btn.pressed {
+            background: linear-gradient(135deg, #E0A96D 0%, #D4956A 50%, #C8845F 100%);
+            border-color: #E8B882;
+            transform: translateY(2px);
+            box-shadow: 
+                0 2px 6px rgba(224, 169, 109, 0.4),
+                0 1px 3px rgba(224, 169, 109, 0.3),
+                inset 0 2px 6px rgba(0, 0, 0, 0.2),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .floating-btn.pressed:hover {
+            transform: translateY(1px);
+            background: linear-gradient(135deg, #E8B882 0%, #E0A96D 50%, #D4956A 100%);
+            box-shadow: 
+                0 4px 8px rgba(224, 169, 109, 0.5),
+                0 2px 4px rgba(224, 169, 109, 0.4),
+                inset 0 2px 6px rgba(0, 0, 0, 0.15),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-btn.processing {
+            background: linear-gradient(135deg, #78909C 0%, #607D8B 50%, #546E7A 100%);
+            cursor: not-allowed;
+            animation: pulse-processing 1.5s infinite;
+            transform: translateY(1px);
+            box-shadow: 0 2px 6px rgba(120, 144, 156, 0.3), 0 1px 2px rgba(120, 144, 156, 0.2);
+        }
+
+        .floating-btn.hidden {
+            display: none;
+        }
+
+        @keyframes pulse-processing {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .floating-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .floating-btn:hover::before {
+            left: 100%;
         }
 
         .user-info {
@@ -625,31 +730,37 @@
         }
 
         .message.assistant::before {
-            content: '🤖';
-            font-size: 24px;
+            content: '';
             width: 32px;
             height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: url('pic/1.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 50%;
             margin-top: 4px;
             flex-shrink: 0;
+            border: 2px solid #667eea;
         }
 
         .message.user::after {
-            content: '👤';
-            font-size: 20px;
+            content: '';
             width: 32px;
             height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #34495e;
+            background-image: url('pic/2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             border-radius: 50%;
             margin-top: 4px;
             flex-shrink: 0;
+            border: 2px solid #34495e;
         }
 
         .message-bubble {
@@ -896,6 +1007,12 @@
             width: calc(100% + 40px);
             margin-left: -20px;
             margin-right: -20px;
+        }
+        
+        /* AI答复的消息气泡宽度设置为80%以上 */
+        .message.assistant .message-bubble:has(.result-container) {
+            max-width: 85%;
+            width: 85%;
         }
 
         .message.assistant .message-bubble .question-container {
@@ -1436,13 +1553,20 @@
 <body>
     <div class="container">
         <div class="teacher-panel">
-          
-            <div class="feature-intro">
-                 <div class="intro-icon">🤖💬</div>
-                                 <div class="intro-text">
-                    我可以和你聊天也可以给你进行专业推荐，只需要发送<span class="intro-highlight clickable" onclick="insertText('专业推荐')">"专业推荐"</span>即可！
-                </div>
-             </div>
+                      <div class="feature-intro">
+                  <div class="intro-icon">🧑‍🏫💬</div>
+                                  <div class="intro-text">
+                     我可以和你聊天，也能进行智能专业推荐.</br>按下方按钮开始测题智能推荐专业，再次按退出推荐。</br>
+                     也可聊天框发送<span class="intro-highlight clickable" onclick="insertText('专业推荐')">“专业推荐”</span>！
+                 </div>
+                 
+                 <!-- 悬浮按钮区域 -->
+                 <div class="floating-buttons">
+                     <button id="toggleBtn" class="floating-btn" onclick="handleToggleClick()">
+                         专业推荐
+                     </button>
+                 </div>
+              </div>
             
             <!--<div class="teacher-container">
                 <div class="teacher">
@@ -1480,7 +1604,7 @@
 
         <div class="chat-panel">
             <div class="chat-header">
-                <img src="pic/school_name.png" alt="鸿源技术学校AI助手" style="max-width: 100%; height: 65px; display: block; margin: 0 auto; object-fit: contain;" />
+                <img src="pic/school_name.png" alt="鸿源技术学校AI助手" style="max-width: 100%; height: 78px; display: block; margin: 0 auto; object-fit: contain;" />
             </div>
 
             <div class="chat-messages" id="chatMessages">
@@ -1968,8 +2092,8 @@
             });
         }
 
-        // 页面加载时生成session_id
-        const sessionId = generateUUID();
+        // 页面加载时生成session_id（改为可变变量）
+        let sessionId = generateUUID();
         console.log('Generated session_id:', sessionId);
 
         // 添加全局question_id状态管理
@@ -1979,6 +2103,40 @@
         // 添加全局class_id状态管理
         let currentClassId = "1"; // 默认值
         console.log('Initial class_id:', currentClassId);
+
+        // 重置后台状态函数 - 模拟页面刷新的效果
+        function resetBackendState() {
+            // 重新生成sessionId
+            sessionId = generateUUID();
+            console.log('Reset session_id:', sessionId);
+            
+            // 重置question_id到默认值
+            currentQuestionId = 111;
+            console.log('Reset question_id:', currentQuestionId);
+            
+            // 重置class_id到默认值
+            currentClassId = "1";
+            console.log('Reset class_id:', currentClassId);
+            
+            // 重置进度条相关变量
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            currentProgress = 0;
+            
+            // 清理DOM中的旧题目容器，避免选择器冲突
+            const oldQuestionContainers = document.querySelectorAll('[data-question-id]');
+            oldQuestionContainers.forEach(container => {
+                // 移除被禁用的旧题目容器
+                if (container.style.pointerEvents === 'none' || container.style.opacity === '0.7') {
+                    container.remove();
+                    console.log('Removed old disabled question container:', container.getAttribute('data-question-id'));
+                }
+            });
+            
+            console.log('✅ 后台状态已重置，等同于页面刷新效果');
+        }
 
         // 进度条控制变量
         let progressInterval;
@@ -2242,6 +2400,12 @@
                         </div>
                     </div>
                 `;
+                
+                // 答题完成后自动退出专业推荐模式
+                setTimeout(() => {
+                    autoExitRecommendation();
+                }, 2000); // 2秒后自动退出，给用户时间查看结果
+                
                 return html;
             }
             
@@ -2298,10 +2462,30 @@
         }
 
         async function submitAnswer(questionId) {
-            const container = document.querySelector(`[data-question-id="${questionId}"]`);
+            // 查找所有匹配的容器，选择最后一个活跃的容器
+            const containers = document.querySelectorAll(`[data-question-id="${questionId}"]`);
+            let container = null;
+            
+            // 从后向前查找，选择最新的活跃容器
+            for (let i = containers.length - 1; i >= 0; i--) {
+                const currentContainer = containers[i];
+                if (currentContainer.style.pointerEvents !== 'none' && currentContainer.style.opacity !== '0.7') {
+                    container = currentContainer;
+                    break;
+                }
+            }
+            
+            if (!container) {
+                console.error('No active container found for question_id:', questionId);
+                alert('题目容器未找到，请刷新页面重试');
+                return;
+            }
+            
             const selectedOption = container.querySelector('input:checked');
             
             if (!selectedOption) {
+                console.log('No option selected in container:', container);
+                console.log('Available inputs:', container.querySelectorAll('input'));
                 alert('请选择一个答案');
                 return;
             }
@@ -2491,6 +2675,249 @@
             // sendMessage();
         }
 
+        // 禁用聊天输入框和发送按钮（答题时）
+        function disableChatInput() {
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            if (chatInput && sendButton) {
+                chatInput.disabled = true;
+                chatInput.placeholder = '答题进行中，请等待...';
+                chatInput.style.backgroundColor = '#f5f5f5';
+                chatInput.style.color = '#999';
+                
+                sendButton.disabled = true;
+                sendButton.style.backgroundColor = '#ccc';
+                sendButton.style.cursor = 'not-allowed';
+                
+                console.log('🚫 答题模式：聊天输入已禁用');
+            }
+        }
+        
+        // 启用聊天输入框和发送按钮（退出答题后）
+        function enableChatInput() {
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            if (chatInput && sendButton) {
+                chatInput.disabled = false;
+                chatInput.placeholder = '请输入您的问题...';
+                chatInput.style.backgroundColor = '';
+                chatInput.style.color = '';
+                
+                sendButton.disabled = false;
+                sendButton.style.backgroundColor = '';
+                sendButton.style.cursor = '';
+                
+                console.log('✅ 退出答题：聊天输入已启用');
+            }
+        }
+
+        // 重置后台状态但保留历史对话的函数（用于自动退出）
+        function resetBackendStateKeepHistory() {
+            // 重新生成sessionId
+            sessionId = generateUUID();
+            console.log('Reset session_id:', sessionId);
+            
+            // 重置question_id到默认值
+            currentQuestionId = 111;
+            console.log('Reset question_id:', currentQuestionId);
+            
+            // 重置class_id到默认值
+            currentClassId = "1";
+            console.log('Reset class_id:', currentClassId);
+            
+            // 重置进度条相关变量
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+            currentProgress = 0;
+            
+            // ⚠️ 注意：这里不清理DOM中的历史对话，保留用户的问答记录
+            console.log('✅ 后台状态已重置，历史对话已保留');
+        }
+        
+        // 自动退出专业推荐函数（答题完成后调用）
+        function autoExitRecommendation() {
+            // 检查当前是否在专业推荐模式
+            if (!isRecommendMode) {
+                const toggleBtn = document.getElementById('toggleBtn');
+                const chatInput = document.getElementById('chatInput');
+                const sendButton = document.getElementById('sendButton');
+                
+                console.log('📝 答题完成，自动退出专业推荐模式');
+                
+                // 更新按钮状态
+                toggleBtn.classList.remove('pressed');
+                toggleBtn.textContent = '专业推荐';
+                
+                // 重置后台状态但保留历史对话
+                resetBackendStateKeepHistory();
+                
+                // 启用聊天输入框和发送按钮
+                enableChatInput();
+                
+                // 更新模式状态
+                isRecommendMode = true;
+                
+                console.log('✅ 已自动退出专业推荐模式，状态已重置，历史对话已保留，聊天功能已启用');
+            }
+        }
+
+        // 退出专业推荐确认弹窗函数
+        function showExitConfirmDialog() {
+            let countdown = 5;
+            let countdownTimer;
+            
+            // 创建弹窗HTML
+            const dialogHTML = `
+                <div id="exitConfirmDialog" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                ">
+                    <div style="
+                        background: white;
+                        border-radius: 12px;
+                        padding: 30px;
+                        max-width: 400px;
+                        width: 90%;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                        text-align: center;
+                    ">
+                        <div style="
+                            font-size: 18px;
+                            color: #333;
+                            margin-bottom: 20px;
+                            line-height: 1.5;
+                        ">本次测题将清除，退出本次测题推荐？</div>
+                        
+                        <div id="countdownText" style="
+                            font-size: 14px;
+                            color: #666;
+                            margin-bottom: 25px;
+                        ">将在 <span id="countdownNumber" style="color: #ff6b6b; font-weight: bold;">${countdown}</span> 秒后自动退出</div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button id="continueBtn" style="
+                                background: #4CAF50;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                transition: background 0.3s;
+                            " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">继续</button>
+                            
+                            <button id="exitBtn" style="
+                                background: #f44336;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                transition: background 0.3s;
+                                font-weight: bold;
+                            " onmouseover="this.style.background='#da190b'" onmouseout="this.style.background='#f44336'">退出</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 插入弹窗到页面
+            document.body.insertAdjacentHTML('beforeend', dialogHTML);
+            
+            const dialog = document.getElementById('exitConfirmDialog');
+            const countdownElement = document.getElementById('countdownNumber');
+            const continueBtn = document.getElementById('continueBtn');
+            const exitBtn = document.getElementById('exitBtn');
+            
+            // 倒计时函数
+            function updateCountdown() {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownTimer);
+                    executeExit();
+                }
+            }
+            
+            // 开始倒计时
+            countdownTimer = setInterval(updateCountdown, 1000);
+            
+            // 执行退出操作
+            function executeExit() {
+                // 清理弹窗
+                if (dialog) {
+                    dialog.remove();
+                }
+                clearInterval(countdownTimer);
+                
+                // 执行原来的退出逻辑
+                const toggleBtn = document.getElementById('toggleBtn');
+                const chatInput = document.getElementById('chatInput');
+                const sendButton = document.getElementById('sendButton');
+                
+                toggleBtn.classList.remove('pressed');
+                toggleBtn.textContent = '专业推荐';
+                
+                // 重置所有后台状态变量，就像刷新页面一样
+                resetBackendState();
+                
+                // 先启用聊天输入框和发送按钮
+                enableChatInput();
+                
+                // 等待输入框启用后再发送消息
+                setTimeout(() => {
+                    const chatInput = document.getElementById('chatInput');
+                    const sendButton = document.getElementById('sendButton');
+                    
+                    // 确保输入框已启用
+                    if (chatInput && sendButton && !chatInput.disabled && !sendButton.disabled) {
+                        chatInput.value = '退出专业推荐';
+                        sendButton.click();
+                        console.log('✅ 手动退出：已发送退出专业推荐消息');
+                    } else {
+                        console.error('❌ 手动退出：输入框或发送按钮仍然禁用');
+                    }
+                }, 500);
+                
+                isRecommendMode = true;
+            }
+            
+            // 继续按钮事件
+            continueBtn.addEventListener('click', () => {
+                clearInterval(countdownTimer);
+                dialog.remove();
+            });
+            
+            // 退出按钮事件
+            exitBtn.addEventListener('click', () => {
+                clearInterval(countdownTimer);
+                executeExit();
+            });
+            
+            // 点击背景关闭弹窗（继续）
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    clearInterval(countdownTimer);
+                    dialog.remove();
+                }
+            });
+        }
+
         // 页面加载后为专业项目添加点击事件
         window.addEventListener('load', () => {
             // 为热门专业添加点击事件
@@ -2502,6 +2929,38 @@
                 });
             });
         });
+
+        // 切换按钮处理函数
+        let isRecommendMode = true; // 跟踪当前状态
+        
+        function handleToggleClick() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            if (isRecommendMode) {
+                // 当前是"专业推荐"模式，点击后切换到"退出专业推荐"模式
+                toggleBtn.classList.add('pressed');
+                toggleBtn.textContent = '退出专业推荐';
+                
+                // 先发送"专业推荐"消息，然后再禁用输入框
+                setTimeout(() => {
+                    chatInput.value = '专业推荐';
+                    sendButton.click();
+                    
+                    // 发送完成后禁用聊天输入框，进入答题模式
+                    setTimeout(() => {
+                        disableChatInput();
+                        console.log('🚫 专业推荐消息已发送，输入框已禁用');
+                    }, 100); // 等待发送完成后再禁用
+                }, 300);
+                
+                isRecommendMode = false;
+            } else {
+                // 当前是"退出专业推荐"模式，点击后显示确认弹窗
+                showExitConfirmDialog();
+            }
+        }
 
      
     </script>
