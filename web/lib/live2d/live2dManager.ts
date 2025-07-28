@@ -27,10 +27,10 @@ export class Live2dManager {
         if (delegate) {
           delegate.changeCharacter(character);
         } else {
-          console.error('LAppDelegate instance is null');
+          // console.error('LAppDelegate instance is null');
         }
       } catch (error) {
-        console.error('Error changing character in Live2dManager:', error);
+        // console.error('Error changing character in Live2dManager:', error);
       }
     }
 

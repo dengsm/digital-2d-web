@@ -225,7 +225,7 @@ export class LAppView {
     const y: number = this.transformViewY(posY);
 
     if (LAppDefine.DebugTouchLogEnable) {
-      LAppPal.printMessage(`[APP]touchesEnded x: ${x} y: ${y}`);
+      // LAppPal.printMessage(`[APP]touchesEnded x: ${x} y: ${y}`);
     }
     lapplive2dmanager.onTap(x, y);
 

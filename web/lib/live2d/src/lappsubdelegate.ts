@@ -161,7 +161,7 @@ export class LAppSubdelegate {
     const vertexShaderId = gl.createShader(gl.VERTEX_SHADER);
 
     if (vertexShaderId == null) {
-      LAppPal.printMessage('failed to create vertexShader');
+      // LAppPal.printMessage('failed to create vertexShader');
       return null;
     }
 
@@ -183,7 +183,7 @@ export class LAppSubdelegate {
     const fragmentShaderId = gl.createShader(gl.FRAGMENT_SHADER);
 
     if (fragmentShaderId == null) {
-      LAppPal.printMessage('failed to create fragmentShader');
+      // LAppPal.printMessage('failed to create fragmentShader');
       return null;
     }
 
@@ -251,7 +251,7 @@ export class LAppSubdelegate {
    */
   public onPointBegan(pageX: number, pageY: number): void {
     if (!this._view) {
-      LAppPal.printMessage('view notfound');
+      // LAppPal.printMessage('view notfound');
       return;
     }
     this._captured = true;
@@ -283,7 +283,7 @@ export class LAppSubdelegate {
     this._captured = false;
 
     if (!this._view) {
-      LAppPal.printMessage('view notfound');
+      // LAppPal.printMessage('view notfound');
       return;
     }
 
@@ -300,7 +300,7 @@ export class LAppSubdelegate {
     this._captured = false;
 
     if (!this._view) {
-      LAppPal.printMessage('view notfound');
+      // LAppPal.printMessage('view notfound');
       return;
     }
 

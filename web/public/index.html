@@ -5,10 +5,35 @@
         .iframe-container {
             width: 100%;
             max-width: 1200px;
-            box-shadow: none; /* 移除阴影 */
-            border: none; /* 移除边框 */
+            box-shadow: none !important; /* 移除阴影 */
+            border: none !important; /* 移除边框 */
+            border-width: 0 !important;
+            border-style: none !important;
+            border-color: transparent !important;
+            outline: none !important;
             border-radius: 5px;
             overflow: hidden;
+        }
+        
+        /* 全局iframe边框移除样式 */
+        iframe {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            border-width: 0 !important;
+            border-style: none !important;
+            border-color: transparent !important;
+        }
+        
+        /* 针对Live2D数字人的iframe */
+        iframe[id*="sentio"], iframe[title*="sentio"] {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            border-width: 0 !important;
+            border-style: none !important;
+            border-color: transparent !important;
+            background: transparent !important;
         }
     </style>
     <meta charset="UTF-8">
@@ -2510,7 +2535,7 @@
             }
             
             if (!container) {
-                console.error('No active container found for question_id:', questionId);
+                // console.error('No active container found for question_id:', questionId);
                 alert('题目容器未找到，请刷新页面重试');
                 return;
             }
@@ -3024,7 +3049,7 @@
                     resolve(window.html2canvas);
                 };
                 script.onerror = () => {
-                    console.error('html2canvas库加载失败');
+                    // console.error('html2canvas库加载失败');
                     reject(new Error('html2canvas库加载失败'));
                 };
                 document.head.appendChild(script);

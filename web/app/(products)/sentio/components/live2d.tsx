@@ -49,16 +49,16 @@ export function Live2d() {
             
             const delegate = LAppDelegate.getInstance();
             if (!delegate) {
-                console.error('LAppDelegate instance is null');
+                // console.error('LAppDelegate instance is null');
                 return;
             }
             if (delegate.initialize() === false) {
-                console.error('Failed to initialize LAppDelegate');
+                // console.error('Failed to initialize LAppDelegate');
                 return;
             }
             delegate.run();
         } catch (error) {
-            console.error('Error in Live2D handleLoad:', error);
+            // console.error('Error in Live2D handleLoad:', error);
         }
     }
 
@@ -71,7 +71,7 @@ export function Live2d() {
                 }
             }
         } catch (error) {
-            console.error('Error in Live2D handleResize:', error);
+            // console.error('Error in Live2D handleResize:', error);
         }
     }
 
@@ -80,7 +80,7 @@ export function Live2d() {
             // 释放实例
             LAppDelegate.releaseInstance();
         } catch (error) {
-            console.error('Error in Live2D cleanup:', error);
+            // console.error('Error in Live2D cleanup:', error);
         }
     }
 
@@ -105,7 +105,7 @@ export function Live2d() {
             if (canvas) {
                 canvas.style.backgroundColor = 'transparent';
                 canvas.style.background = 'none';
-                console.log('Forced canvas background to transparent');
+                // console.log('Forced canvas background to transparent');
             }
         }, 100);
         
@@ -156,7 +156,7 @@ export function Live2d() {
                     background: 'none',
                     opacity: ready ? 1 : 0, 
                     transition: 'opacity 0.3s ease-in-out',
-                    transform: 'scale(0.8)',
+                    transform: 'scale(0.5)',
                     transformOrigin: 'center center'
                 }}
             />

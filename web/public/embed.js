@@ -55,9 +55,12 @@
         max-width: calc(100vw - 1rem);
         height: 43.75rem;
         max-height: calc(100vh - 1rem);
-        border: none;
-        outline: none;
-        box-shadow: none;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        border-width: 0 !important;
+        border-style: none !important;
+        border-color: transparent !important;
         background: transparent;
         z-index: 2147483640;
         overflow: hidden;

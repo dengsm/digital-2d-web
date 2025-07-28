@@ -49,9 +49,9 @@ export class LAppLive2DManager {
    */
   public onTap(x: number, y: number): void {
     if (LAppDefine.DebugLogEnable) {
-      LAppPal.printMessage(
-        `[APP]tap point: {x: ${x.toFixed(2)} y: ${y.toFixed(2)}}`
-      );
+      // LAppPal.printMessage(
+      //   `[APP]tap point: {x: ${x.toFixed(2)} y: ${y.toFixed(2)}}`
+      // );
     }
 
     // const model: LAppModel = this._models.at(0);
@@ -186,7 +186,7 @@ export class LAppLive2DManager {
     let dir = path.dirname(character.link) + "/";
     let modelJsonName: string = `${character.name}.model3.json`;
     if (LAppDefine.DebugLogEnable) {
-      LAppPal.printMessage(`[APP]model json: ${modelJsonName}`);
+      // LAppPal.printMessage(`[APP]model json: ${modelJsonName}`);
     }
 
     this.releaseAllModel();
@@ -209,10 +209,10 @@ export class LAppLive2DManager {
 
   // モーション再生開始のコールバック関数
   beganMotion = (self: ACubismMotion): void => {
-    LAppPal.printMessage('Motion Began');
+    // LAppPal.printMessage('Motion Began');
   };
   // モーション再生終了のコールバック関数
   finishedMotion = (self: ACubismMotion): void => {
-    LAppPal.printMessage('Motion Finished');
+    // LAppPal.printMessage('Motion Finished');
   };
 }

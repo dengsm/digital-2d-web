@@ -97,7 +97,7 @@ export const ChatInput = memo(({
         
         // 立即清空输入框
         setMessage("");
-        console.log('立即显示用户消息:', currentMessage);
+        // console.log('立即显示用户消息:', currentMessage);
         
         // 立即在UI上显示用户消息和AI等待状态
         addChatRecord({ role: CHAT_ROLE.HUMAN, think: "", content: currentMessage });
@@ -114,41 +114,41 @@ export const ChatInput = memo(({
             // 等待一秒确保页面渲染完成
             await new Promise(resolve => setTimeout(resolve, 1000));
             
-            console.log('开始异步截取整个网页内容...');
+            // console.log('开始异步截取整个网页内容...');
             screenshotDataUrl = await captureFullPageScreenshot();
             
             // 全页面截图函数（重构版本 - 针对index.html父页面截图）
             async function captureFullPageScreenshot(): Promise<string> {
-                console.log('=== 开始全页面截图（针对index.html父页面） ===');
+                // console.log('=== 开始全页面截图（针对index.html父页面） ===');
                 
                 // 检查是否在iframe中
                 const isInIframe = window !== window.top;
-                console.log('是否在iframe中:', isInIframe);
+                // console.log('是否在iframe中:', isInIframe);
                 
                 if (isInIframe) {
                     // 在iframe中，需要通过postMessage请求父页面截图
-                    console.log('检测到iframe环境，将请求父页面执行截图');
+                    // console.log('检测到iframe环境，将请求父页面执行截图');
                     
                     return new Promise((resolve, reject) => {
                         // 设置超时处理
                         const timeout = setTimeout(() => {
-                            console.error('父页面截图请求超时');
+                            // console.error('父页面截图请求超时');
                             reject(new Error('父页面截图请求超时'));
                         }, 30000); // 30秒超时
                         
                         // 监听父页面的回复
                         const messageHandler = (event: MessageEvent) => {
-                            console.log('收到父页面消息:', event.data);
+                            // console.log('收到父页面消息:', event.data);
                             
                             if (event.data.type === 'SCREENSHOT_RESPONSE') {
                                 clearTimeout(timeout);
                                 window.removeEventListener('message', messageHandler);
                                 
                                 if (event.data.success) {
-                                    console.log('父页面截图成功，数据大小:', Math.round(event.data.imageData.length / 1024), 'KB');
+                                    // console.log('父页面截图成功，数据大小:', Math.round(event.data.imageData.length / 1024), 'KB');
                                     resolve(event.data.imageData);
                                 } else {
-                                    console.error('父页面截图失败:', event.data.error);
+                                    // console.error('父页面截图失败:', event.data.error);
                                     reject(new Error(event.data.error || '父页面截图失败'));
                                 }
                             }
@@ -163,19 +163,19 @@ export const ChatInput = memo(({
                             source: 'digital-human-iframe'
                         };
                         
-                        console.log('发送截图请求给父页面:', request);
+                        // console.log('发送截图请求给父页面:', request);
                         window.parent.postMessage(request, '*');
                     });
                 } else {
                     // 不在iframe中，直接截取当前页面
-                    console.log('不在iframe中，直接截取当前页面');
+                    // console.log('不在iframe中，直接截取当前页面');
                     return await captureCurrentPageDirectly();
                 }
             }
             
             // 直接截取当前页面的函数
             async function captureCurrentPageDirectly(): Promise<string> {
-                console.log('开始直接截取当前页面');
+                // console.log('开始直接截取当前页面');
                 
                 const targetElement = document.documentElement || document.body;
                 
@@ -194,7 +194,7 @@ export const ChatInput = memo(({
                     window.innerHeight
                 );
                 
-                console.log('页面尺寸:', fullWidth, 'x', fullHeight);
+                // console.log('页面尺寸:', fullWidth, 'x', fullHeight);
                 
                 const canvasOptions: any = {
                     useCORS: true,
@@ -217,27 +217,27 @@ export const ChatInput = memo(({
                 
                 try {
                     const canvas = await html2canvas(targetElement, canvasOptions);
-                    console.log('直接截图成功，尺寸:', canvas.width, 'x', canvas.height);
+                    // console.log('直接截图成功，尺寸:', canvas.width, 'x', canvas.height);
                     return canvas.toDataURL('image/png', 1.0);
                 } catch (error) {
-                    console.error('直接截图失败:', error);
+                    // console.error('直接截图失败:', error);
                     throw error;
                 }
             }
             
             // 截图完成，一次性发送带image字段的完整消息
-            console.log('截图完成，准备发送带截图的完整消息');
+            // console.log('截图完成，准备发送带截图的完整消息');
             
         } catch (error) {
-            console.error('异步截图失败:', error);
-            console.log('截图失败，将发送不带截图的消息');
+            // console.error('异步截图失败:', error);
+            // console.log('截图失败，将发送不带截图的消息');
         }
         
         // 无论截图成功与否，都发送消息给后端（带或不带截图）
         if (screenshotDataUrl) {
-            console.log('发送带截图的完整消息给后端，截图大小:', Math.round(screenshotDataUrl.length / 1024), 'KB');
+            // console.log('发送带截图的完整消息给后端，截图大小:', Math.round(screenshotDataUrl.length / 1024), 'KB');
         } else {
-            console.log('发送不带截图的消息给后端');
+            // console.log('发送不带截图的消息给后端');
         }
         
         // 发送消息+截图数据给后端（注意：UI已经在onSendClick中显示了）
@@ -246,12 +246,12 @@ export const ChatInput = memo(({
     
     // 发送消息和截图数据到后端（不重复添加UI消息）
     const sendMessageToBackend = (messageContent: string, screenshotData: string | null) => {
-        console.log('🚀 发送消息到后端，包含截图数据，避免重复UI显示');
-        console.log('📝 消息内容:', messageContent);
-        console.log('📷 截图数据:', screenshotData ? `存在，长度: ${screenshotData.length}` : '无');
-        console.log('🤖 Agent引擎:', agentEngine);
-        console.log('⚙️ Agent设置:', agentSettings);
-        console.log('💬 会话ID:', conversationIdRef.current);
+        // console.log('🚀 发送消息到后端，包含截图数据，避免重复UI显示');
+        // console.log('📝 消息内容:', messageContent);
+        // console.log('📷 截图数据:', screenshotData ? `存在，长度: ${screenshotData.length}` : '无');
+        // console.log('🤖 Agent引擎:', agentEngine);
+        // console.log('⚙️ Agent设置:', agentSettings);
+        // console.log('💬 会话ID:', conversationIdRef.current);
         
         // 创建AbortController用于取消请求
         const controller = new AbortController();
@@ -345,9 +345,9 @@ export const ChatInput = memo(({
         
         // 定义回调函数处理AI响应 - 优化版本，去除预期之外的内容并添加TTS支持
         const agentCallback = (response: any) => {
-            console.log('✅ 收到AI响应:', response);
-            console.log('📊 响应事件类型:', response.event);
-            console.log('📄 响应数据:', response.data);
+            // console.log('✅ 收到AI响应:', response);
+            // console.log('📊 响应事件类型:', response.event);
+            // console.log('📄 响应数据:', response.data);
             
             const event = response.event;
             const data = response.data;
@@ -359,20 +359,20 @@ export const ChatInput = memo(({
             switch (event) {
                 case 'conversation_id':
                 case 'CONVERSATION_ID':
-                    console.log('🆔 会话ID:', data);
+                    // console.log('🆔 会话ID:', data);
                     conversationIdRef.current = data;
                     break;
                     
                 case 'message_id':
                 case 'MESSAGE_ID':
-                    console.log('📧 消息ID:', data);
+                    // console.log('📧 消息ID:', data);
                     break;
                     
                 case 'agent_thinking':
                 case 'think':
                 case 'THINK':
                     if (isValidData) {
-                        console.log('🤔 AI思考中:', data);
+                        // console.log('🤔 AI思考中:', data);
                         accumulatedThink += data;
                         // 只有在有实际回复内容时才显示，避免显示占位符
                         const displayContent = accumulatedResponse || (accumulatedThink ? "思考中..." : "");
@@ -384,13 +384,13 @@ export const ChatInput = memo(({
                 case 'text':
                 case 'TEXT':
                     if (isValidData) {
-                        console.log('💬 AI回复内容片段:', data);
+                        // console.log('💬 AI回复内容片段:', data);
                         accumulatedResponse += data;
                         updateLastRecord({ role: CHAT_ROLE.AI, think: accumulatedThink, content: accumulatedResponse });
                         
                         // 触发TTS语音播报
                         if (agentDone && sound) {
-                            console.log('🔊 首次触发TTS语音播报');
+                            // console.log('🔊 首次触发TTS语音播报');
                             agentDone = false;
                             doTTS();
                         }
@@ -401,10 +401,10 @@ export const ChatInput = memo(({
                 case 'TASK':
                 case 'done':
                 case 'DONE':
-                    console.log('✅ AI回复完成，最终内容:', accumulatedResponse);
+                    // console.log('✅ AI回复完成，最终内容:', accumulatedResponse);
                     // 确保最终内容被正确显示，清除思考内容
                     if (accumulatedResponse && accumulatedResponse.trim() !== '') {
-                        console.log('🎆 最终内容:', accumulatedResponse);
+                        // console.log('🎆 最终内容:', accumulatedResponse);
                         updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: accumulatedResponse.trim() });
                     } else {
                         // 如果没有有效回复内容，显示默认消息
@@ -421,25 +421,25 @@ export const ChatInput = memo(({
                     
                 case 'error':
                 case 'ERROR':
-                    console.error('❌ AI响应错误:', data);
+                    // console.error('❌ AI响应错误:', data);
                     updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，AI响应出现错误，请重试。' });
                     break;
                     
                 default:
                     // 对于未知事件类型，只记录日志，不处理内容，避免添加预期之外的内容
-                    console.log('❓ 未知事件类型，已忽略:', event, '数据:', data);
+                    // console.log('❓ 未知事件类型，已忽略:', event, '数据:', data);
                     break;
             }
         };
         
         const agentErrorCallback = (error: Error) => {
-            console.error('❌ Agent API错误:', error);
-            console.error('🔍 错误详情:', error.message);
-            console.error('📋 错误堆栈:', error.stack);
+            // console.error('❌ Agent API错误:', error);
+            // console.error('🔍 错误详情:', error.message);
+            // console.error('📋 错误堆栈:', error.stack);
             updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，发生了错误，请重试。' });
         };
         
-        console.log('🔄 开始调用API...');
+        // console.log('🔄 开始调用API...');
         // 直接调用API，不通过chat函数（避免重复添加UI消息）
         try {
             api_agent_stream(
@@ -452,9 +452,9 @@ export const ChatInput = memo(({
                 agentErrorCallback,
                 screenshotData
             );
-            console.log('✨ API调用已发起');
+            // console.log('✨ API调用已发起');
         } catch (error) {
-            console.error('💥 API调用失败:', error);
+            // console.error('💥 API调用失败:', error);
             updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，API调用失败，请重试。' });
         }
     };
@@ -817,7 +817,7 @@ export const ChatStreamInput = memo(() => {
                     case WS_RECV_ACTION_TYPE.ENGINE_FINAL_OUTPUT:
                         deleteLastRecord();
                         // 传入skipUIUpdate: true，避免重复显示消息（因为ASR已经在PARTIAL_OUTPUT阶段显示了用户消息）
-                        console.log('ASR语音识别完成，调用chat函数，跳过UI更新避免重复显示');
+                        // console.log('ASR语音识别完成，调用chat函数，跳过UI更新避免重复显示');
                         chat(recvData, undefined, undefined, true);
                         break;
                     case WS_RECV_ACTION_TYPE.ENGINE_STOPPED:

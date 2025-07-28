@@ -142,7 +142,7 @@ export class LAppModel extends CubismUserModel {
 
       this._state = LoadStep.WaitLoadModel;
     } else {
-      LAppPal.printMessage('Model data does not exist.');
+      // LAppPal.printMessage('Model data does not exist.');
     }
 
     // Expression
@@ -613,7 +613,7 @@ export class LAppModel extends CubismUserModel {
       this._motionManager.setReservePriority(priority);
     } else if (!this._motionManager.reserveMotion(priority)) {
       if (this._debugMode) {
-        LAppPal.printMessage("[APP]can't start motion.");
+        // LAppPal.printMessage("[APP]can't start motion.");
       }
       return InvalidMotionQueueEntryHandleValue;
     }
@@ -670,7 +670,7 @@ export class LAppModel extends CubismUserModel {
     // }
 
     if (this._debugMode) {
-      LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);
+      // LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);
     }
     return this._motionManager.startMotionPriority(
       motion,
@@ -718,14 +718,14 @@ export class LAppModel extends CubismUserModel {
     const motion: ACubismMotion = this._expressions.getValue(expressionId);
 
     if (this._debugMode) {
-      LAppPal.printMessage(`[APP]expression: [${expressionId}]`);
+      // LAppPal.printMessage(`[APP]expression: [${expressionId}]`);
     }
 
     if (motion != null) {
       this._expressionManager.startMotion(motion, false);
     } else {
       if (this._debugMode) {
-        LAppPal.printMessage(`[APP]expression[${expressionId}] is null`);
+        // LAppPal.printMessage(`[APP]expression[${expressionId}] is null`);
       }
     }
   }
@@ -925,7 +925,7 @@ export class LAppModel extends CubismUserModel {
 
       return this._consistency;
     } else {
-      LAppPal.printMessage('Model data does not exist.');
+      // LAppPal.printMessage('Model data does not exist.');
     }
   }
 

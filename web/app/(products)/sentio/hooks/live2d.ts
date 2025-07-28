@@ -23,10 +23,10 @@ export const useLive2D = () => {
                     checkLive2DReady();
                 }
             } else {
-                console.error('Live2dManager instance is null');
+                // console.error('Live2dManager instance is null');
             }
         } catch (error) {
-            console.error('Error in setLive2dCharacter:', error);
+            // console.error('Error in setLive2dCharacter:', error);
             // 如果出错，确保ready状态正确
             setReady(false);
         }

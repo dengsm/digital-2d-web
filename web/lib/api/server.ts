@@ -208,7 +208,7 @@ export function api_agent_stream(
     onError: (error: Error) => void = (error) => {},
     imageData?: string
 ){
-    console.log('API 发送请求，图片数据:', imageData ? `长度: ${imageData.length}` : '无图片数据');
+    //console.log('API 发送请求，图片数据:', imageData ? `长度: ${imageData.length}` : '无图片数据');
     const path = `${AGENT_PATH}/engine`
     const url = getHost() + path;
     fetchEventSource(url, {
