@@ -2363,6 +2363,121 @@
         const progressTitle = document.getElementById('progressTitle');
 
         // 生成UUID作为session_id
+        // ========================================
+        // 通用API请求工具函数
+        // ========================================
+        
+        /**
+         * 构建API请求的基础URL参数
+         * @param {Object} userInfo - 用户信息对象
+         * @returns {URLSearchParams} 构建好的URL参数
+         */
+        function buildApiQueryParams(userInfo) {
+            const params = new URLSearchParams();
+            params.append('app_id', 'app_002');
+            params.append('session_id', sessionId);
+            params.append('user_id', '4');
+            params.append('username', userInfo.name || userInfo.userName || '');
+            params.append('phone', userInfo.phone || userInfo.userPhone || '');
+            params.append('id_card', userInfo.idCard || userInfo.userIdCard || '');
+            params.append('timestamp', new Date().toISOString());
+            return params;
+        }
+        
+        /**
+         * 创建资源数据结构
+         * @param {string} questionId - 问题ID
+         * @param {string} value - 值
+         * @param {string} classId - 类别ID
+         * @param {string} type - 类型，默认为'text'
+         * @returns {Object} 资源数据对象
+         */
+        function createResourceData(questionId, value, classId, type = 'text') {
+            return {
+                resources: [
+                    {
+                        question_id: questionId,
+                        value: value,
+                        class_id: classId,
+                        type: type
+                    }
+                ]
+            };
+        }
+        
+        /**
+         * 通用API请求函数
+         * @param {Object} userInfo - 用户信息
+         * @param {Object} resourceData - 资源数据
+         * @param {number} timeout - 超时时间（毫秒），默认10秒
+         * @returns {Promise<Response>} fetch响应对象
+         */
+        async function sendApiRequest(userInfo, resourceData, timeout = 10000) {
+            const apiUrl = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
+            
+            // 构建URL参数
+            const queryParams = buildApiQueryParams(userInfo);
+            for (const [key, value] of queryParams) {
+                apiUrl.searchParams.append(key, value);
+            }
+            
+            console.log('🌐 API请求URL:', apiUrl.toString());
+            console.log('📦 请求数据:', resourceData);
+            
+            // 创建超时控制
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => {
+                controller.abort();
+                console.log('⏰ 请求超时，已取消');
+            }, timeout);
+            
+            try {
+                const response = await fetch(apiUrl.toString(), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(resourceData),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                throw error;
+            }
+        }
+        
+        /**
+         * 统一的API错误处理函数
+         * @param {Error} error - 错误对象
+         * @param {string} context - 错误上下文描述
+         */
+        function handleApiError(error, context = '请求') {
+            console.error(`❌ ${context}时出错:`, error);
+            console.error('错误详情:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            });
+            
+            // 根据错误类型提供不同的用户提示
+            if (error.name === 'AbortError') {
+                addMessage('⏰ 请求超时，请检查网络连接后重试');
+            } else if (error.message.includes('Failed to fetch')) {
+                addMessage('🌐 网络连接失败，请检查网络设置后重试');
+            } else if (error.message.includes('服务器响应错误')) {
+                addMessage('🔧 服务器暂时不可用，请稍后重试');
+            } else {
+                addMessage(`❌ ${context}失败，请稍后重试`);
+            }
+        }
+        
+        // ========================================
+        // 工具函数
+        // ========================================
+        
         function generateUUID() {
             return 'session_' + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
                 return (Math.random() * 16 | 0).toString(16);
@@ -2537,6 +2652,13 @@
             return { userName, userPhone, userIdCard };
         }
 
+        /**
+         * 向聊天界面添加消息
+         * @param {string|Object} content - 消息内容，可以是字符串或题目对象
+         * @param {boolean} isUser - 是否为用户消息，默认false
+         * @param {boolean} isQuestion - 是否为题目消息，默认false
+         * @description 在聊天界面中添加新消息，支持用户消息、系统消息和题目消息的不同样式
+         */
         function addMessage(content, isUser = false, isQuestion = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
@@ -2652,6 +2774,16 @@
             return html;
         }
 
+        /**
+         * 渲染题目组件
+         * @param {Object} data - 题目数据对象
+         * @param {number} data.question_id - 题目ID
+         * @param {string} data.question - 题目文本
+         * @param {Array} data.options - 选项数组，每个元素包含{label, value}
+         * @param {string} data.option_type - 选项类型，默认为'radio'
+         * @returns {string} 生成的HTML字符串
+         * @description 根据题目数据生成对应的HTML结构，包括特殊题目的处理（如测评完成、专业推荐等）
+         */
         function renderQuestion(data) {
             // console.log('Rendering question with data:', data);
             const questionId = data.question_id;
@@ -2723,6 +2855,13 @@
             return html;
         }
 
+        /**
+         * 选择题目选项
+         * @param {number} questionId - 题目ID
+         * @param {string} value - 选项值
+         * @param {HTMLElement} element - 被点击的选项元素
+         * @description 处理用户点击选项的交互，更新UI状态并启用提交按钮
+         */
         function selectOption(questionId, value, element) {
             // 移除同一题目下其他选项的选中状态
             const container = element.closest('.question-container');
@@ -2738,6 +2877,11 @@
             submitButton.disabled = false;
         }
 
+        /**
+         * 提交题目答案到后端
+         * @param {number} questionId - 题目 ID
+         * @description 处理用户选择的答案，发送到后端并处理响应
+         */
         async function submitAnswer(questionId) {
             // 查找所有匹配的容器，选择最后一个活跃的容器
             const containers = document.querySelectorAll(`[data-question-id="${questionId}"]`);
@@ -2783,54 +2927,42 @@
             try {
                 // console.log('Submitting answer with question_id:', currentQuestionId, 'class_id:', currentClassId);
                 
-                const userInfo = getUserInfo();
-                //const url = new URL('https://n8n.ailongma.com/webhook/assessment');
-                const url = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
-                url.searchParams.append('app_id', 'app_002');
-                url.searchParams.append('session_id', sessionId);
-                url.searchParams.append('user_id', '4');
-                url.searchParams.append('username', userInfo.userName);
-                url.searchParams.append('phone', userInfo.userPhone);
-                url.searchParams.append('id_card', userInfo.userIdCard);
+                // 获取用户信息
+                const userInfo = getCurrentUserInfo();
                 
-                const requestBody = {
-                    resources: [
-                        {
-                            type: "text",
-                            question_id: currentQuestionId,
-                            value: selectedValue,
-                            class_id: currentClassId
-                        }
-                    ]
-                };
+                // 创建资源数据
+                const resourceData = createResourceData(currentQuestionId, selectedValue, currentClassId);
                 
-                const response = await fetch(url.toString(), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                });
+                // 发送API请求
+                const response = await sendApiRequest(userInfo, resourceData);
 
-                const data = await response.json();
-                // console.log('Received response data:', data);
+                // 检查响应状态
+                if (!response.ok) {
+                    const errorText = await response.text().catch(() => '无法获取错误详情');
+                    throw new Error(`服务器响应错误 (${response.status}): ${errorText}`);
+                }
                 
+                // 解析响应数据
+                const data = await response.json();
+                console.log('✅ 收到题目提交响应:', data);
+                
+                // 处理响应数据
                 if (data.output) {
                     if (data.output.question) {
                         // 如果返回的是新题目
-                        // console.log('Processing question data:', data.output);
+                        console.log('📝 处理新题目数据:', data.output);
                         addMessage(data.output, false, true);
                     } else {
                         // 如果返回的是普通文本
-                        // console.log('Processing text response:', data.output);
+                        console.log('💬 处理文本响应:', data.output);
                         addMessage(data.output || '感谢您的回答！');
                     }
                 } else {
-                    addMessage(`❌ 抱歉，响应中没有找到output字段`);
+                    console.warn('⚠️ 响应中没有找到output字段:', data);
+                    addMessage('❌ 抱歉，响应中没有找到output字段');
                 }
             } catch (error) {
-                addMessage(`❌ 网络错误，请检查连接后重试：${error.message}`);
+                handleApiError(error, '提交题目答案');
             } finally {
                 hideLoading();
             }
@@ -2865,11 +2997,14 @@
             sendButton.textContent = '发送';
         }
 
+        /**
+         * 发送聊天消息
+         */
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
 
-            // 添加用户消息
+            // 添加用户消息到界面
             addMessage(message, true);
             chatInput.value = '';
             showLoading(false);
@@ -2877,48 +3012,18 @@
             try {
                 console.log('📤 正在发送消息:', message);
                 
-                const userInfo = getUserInfo();
+                // 获取用户信息
+                const userInfo = getCurrentUserInfo();
                 
-                // 创建AbortController用于超时控制
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+                // 创建资源数据
+                const resourceData = createResourceData(
+                    currentQuestionId || '',
+                    message,
+                    currentClassId || 'chat'
+                );
                 
-                // POST请求：Query参数 + FormData Body
-                const messageUrl = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
-                // 基础参数放在query中
-                messageUrl.searchParams.append('app_id', 'app_002');
-                messageUrl.searchParams.append('session_id', sessionId);
-                messageUrl.searchParams.append('user_id', '4');
-                messageUrl.searchParams.append('username', userInfo.name || userInfo.userName || '');
-                messageUrl.searchParams.append('phone', userInfo.phone || userInfo.userPhone || '');
-                messageUrl.searchParams.append('id_card', userInfo.idCard || userInfo.userIdCard || '');
-                messageUrl.searchParams.append('timestamp', new Date().toISOString());
-                
-                // 业务数据直接作为JSON body发送，包装在resources中
-                const messageData = {
-                    resources: [
-                        {
-                            question_id: currentQuestionId || '',
-                            value: message,
-                            class_id: currentClassId || 'chat',
-                            type: 'text'
-                        }
-                    ]
-                };
-                
-                console.log('发送消息请求URL:', messageUrl.toString());
-                console.log('JSON Body数据:', messageData);
-                
-                const response = await fetch(messageUrl.toString(), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(messageData),
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
+                // 发送API请求（15秒超时）
+                const response = await sendApiRequest(userInfo, resourceData, 15000);
 
                 let data;
                 const contentType = response.headers.get('content-type');
@@ -2956,18 +3061,7 @@
                     addMessage('收到您的消息，请稍后...');
                 }
             } catch (error) {
-                console.error('❌ 发送消息时出错:', error);
-                
-                // 根据错误类型提供不同的用户提示
-                if (error.name === 'AbortError') {
-                    addMessage('❌ 请求超时，请检查网络连接后重试');
-                } else if (error.message.includes('Failed to fetch')) {
-                    addMessage('❌ 网络连接失败，请检查网络设置后重试');
-                } else if (error.message.includes('服务器响应错误')) {
-                    addMessage('❌ 服务器暂时不可用，请稍后重试');
-                } else {
-                    addMessage('❌ 发送消息失败，请稍后重试');
-                }
+                handleApiError(error, '发送消息');
             } finally {
                 hideLoading();
             }
@@ -3442,13 +3536,18 @@
         }
 
         // 发送用户信息到后端API
+        /**
+         * 发送用户信息到后端
+         * @returns {Promise<boolean>} 成功返回true，失败返回false
+         */
         async function sendUserInfoToBackend() {
             // 设置默认值
             const currentQuestionId = window.currentQuestionId || '';
-            const selectedValue = '开始专业推荐'; // 默认值设为'开始专业推荐'
-            const currentClassId = 'chat'; // 默认值设为'chat'
+            const selectedValue = '开始专业推荐';
+            const currentClassId = 'chat';
             
             try {
+                // 验证用户信息
                 const userInfo = getCurrentUserInfo();
                 if (!userInfo || !userInfo.name || !userInfo.phone || !userInfo.idCard) {
                     console.error('用户信息不完整，无法发送到后端');
@@ -3458,56 +3557,19 @@
 
                 console.log('📤 正在发送用户信息到后端...');
                 
-                // 混合方式：Query参数 + FormData Body
-                const apiUrl = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
-                // 基础参数放在query中
-                apiUrl.searchParams.append('app_id', 'app_002');
-                apiUrl.searchParams.append('session_id', sessionId);
-                apiUrl.searchParams.append('user_id', '4');
-                apiUrl.searchParams.append('username', userInfo.name);
-                apiUrl.searchParams.append('phone', userInfo.phone);
-                apiUrl.searchParams.append('id_card', userInfo.idCard);
-                apiUrl.searchParams.append('timestamp', new Date().toISOString());
+                // 创建资源数据
+                const resourceData = createResourceData(currentQuestionId, selectedValue, currentClassId);
                 
-                // 业务数据直接作为JSON body发送，包装在resources中
-                const requestData = {
-                    resources: [
-                        {
-                            question_id: currentQuestionId,
-                            value: selectedValue,
-                            class_id: currentClassId,
-                            type: 'text'
-                        }
-                    ]
-                };
-                
-                console.log('用户信息请求URL:', apiUrl.toString());
-                console.log('JSON Body数据:', requestData);
-                
-                // 创建AbortController用于超时控制
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => {
-                    controller.abort();
-                    console.log('请求超时，已取消');
-                }, 10000); // 10秒超时
-                
-                // 使用POST请求：query参数 + JSON body
-                const response = await fetch(apiUrl.toString(), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData),
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
+                // 发送API请求
+                const response = await sendApiRequest(userInfo, resourceData);
 
+                // 检查响应状态
                 if (!response.ok) {
                     const errorText = await response.text().catch(() => '无法获取错误详情');
                     throw new Error(`服务器响应错误 (${response.status}): ${errorText}`);
                 }
 
+                // 解析响应数据
                 let data;
                 const contentType = response.headers.get('content-type');
                 
@@ -3526,7 +3588,7 @@
                 
                 console.log('✅ 用户信息已成功发送到后端', data);
                 
-                // 更新全局变量
+                // 更新全局状态变量
                 if (data && data.question_id) {
                     window.currentQuestionId = data.question_id;
                     console.log('🔄 已更新question_id:', data.question_id);
@@ -3539,24 +3601,7 @@
                 return true;
                 
             } catch (error) {
-                console.error('❌ 发送用户信息到后端时出错:', error);
-                console.error('错误详情:', {
-                    name: error.name,
-                    message: error.message,
-                    stack: error.stack
-                });
-                
-                // 根据错误类型提供不同的用户提示
-                if (error.name === 'AbortError') {
-                    addMessage('❌ 请求超时，请检查网络连接后重试');
-                } else if (error.message.includes('Failed to fetch')) {
-                    addMessage('❌ 网络连接失败，请检查网络设置后重试');
-                } else if (error.message.includes('服务器响应错误')) {
-                    addMessage('❌ 服务器暂时不可用，请稍后重试');
-                } else {
-                    addMessage('❌ 发送用户信息失败，请稍后重试');
-                }
-                
+                handleApiError(error, '发送用户信息');
                 return false;
             }
         }
