@@ -411,6 +411,224 @@
             font-size: 14px;
         }
 
+        /* 用户信息占位区域 */
+        .user-info-placeholder {
+            margin-top: 20px;
+            width: 100%;
+            height: 160px; /* 保持原有高度 */
+        }
+
+        /* 超紧凑型模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            pointer-events: auto;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        /* Prevent scrolling when modal is open */
+        body.modal-open {
+            overflow: hidden;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            animation: modalSlideIn 0.25s ease-out;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+            border: 1px solid #e8e8e8;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 16px 24px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            background-color: #f9f9f9;
+        }
+
+        .modal-header h3 {
+            color: #1a1a1a;
+            font-size: 18px;
+            margin: 0;
+            font-weight: 600;
+            text-align: center;
+            padding: 0 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .close {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            transform: none;
+            color: #999;
+            font-size: 20px;
+            font-weight: 300;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .close:hover {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+            margin-right: 16px;
+            white-space: nowrap;
+            width: 80px;
+            text-align: right;
+            color: #333;
+        }
+
+        .modal-body .info-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            height: 40px;
+            box-sizing: border-box;
+            min-width: 0;
+            background-color: #fff;
+        }
+
+        .modal-body .info-input:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+            outline: none;
+        }
+
+        .info-input:focus {
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+            outline: none;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            min-height: 14px;
+            line-height: 1.4;
+            position: absolute;
+            left: 96px;
+            bottom: -18px;
+            background: #fff;
+            padding: 0 4px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .modal-btn {
+            padding: 0 20px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 90px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cancel-btn {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #d9d9d9;
+        }
+
+        .cancel-btn:hover {
+            background-color: #f0f0f0;
+            border-color: #c0c0c0;
+            color: #222;
+        }
+
+        .continue-btn {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .continue-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .chat-panel {
             flex: 4;
             display: flex;
@@ -799,7 +1017,7 @@
 
         .question-container {
             background: #f8f9fa;
-            border: 2px solid #e9ecef;
+             /*border: 2px solid #e9ecef;*/
             border-radius: 12px;
             padding: 16px 20px;
             margin: 8px 0;
@@ -1482,7 +1700,7 @@
             }
 
             .result-content li {
-                padding: 6px 0 6px 20px;
+                padding: 6px 0 6px 25px;
                 font-size: 13px;
             }
 
@@ -1615,14 +1833,14 @@
                       <div class="feature-intro">
                   <div class="intro-icon">🧑‍🏫💬</div>
                                   <div class="intro-text">
-                     我可以和你聊天，也能进行智能专业推荐.</br>按下方按钮开始测题智能推荐专业，再次按退出推荐。</br>
+                     我可以和你聊天，也能进行智能专业推荐.</br>按下方按钮开始测题智能推荐，再次按退出推荐。</br>
                      也可聊天框发送<span class="intro-highlight clickable" onclick="insertText('专业推荐')">“专业推荐”</span>！
                  </div>
                  
                  <!-- 悬浮按钮区域 -->
                  <div class="floating-buttons">
                      <button id="toggleBtn" class="floating-btn" onclick="handleToggleClick()">
-                         专业推荐
+                         开始专业推荐
                      </button>
                  </div>
               </div>
@@ -1634,12 +1852,12 @@
                 <div class="teacher-name">鸿源技术学校AI助手</div>
                 <div class="teacher-subtitle">您的专属学习顾问</div>
             </div>-->
-            <div class="user-info">
-                <h3>用户信息</h3>
-                <input type="text" class="info-input" id="userName" placeholder="请输入您的姓名">
-                <input type="text" class="info-input" id="userPhone" placeholder="请输入您的手机号">
-                <input type="text" class="info-input" id="userIdCard" placeholder="请输入您的身份证号">
+            <!-- 用户信息占位区域 -->
+            <div class="user-info-placeholder">
+                <!-- 保留空白占位 -->
             </div>
+
+
                <!-- 明学 明事 明德 明志 艺术字 -->
                <div class="mingxue-art">
                 <span class="mingxue-char">明学</span>
@@ -2566,7 +2784,8 @@
                 // console.log('Submitting answer with question_id:', currentQuestionId, 'class_id:', currentClassId);
                 
                 const userInfo = getUserInfo();
-                const url = new URL('https://n8n.ailongma.com/webhook/assessment');
+                //const url = new URL('https://n8n.ailongma.com/webhook/assessment');
+                const url = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
                 url.searchParams.append('app_id', 'app_002');
                 url.searchParams.append('session_id', sessionId);
                 url.searchParams.append('user_id', '4');
@@ -2656,55 +2875,99 @@
             showLoading(false);
 
             try {
-                // console.log('Sending message with question_id:', currentQuestionId, 'class_id:', currentClassId);
+                console.log('📤 正在发送消息:', message);
                 
                 const userInfo = getUserInfo();
-                const url = new URL('https://n8n.ailongma.com/webhook/assessment');
-                url.searchParams.append('app_id', 'app_002');
-                url.searchParams.append('session_id', sessionId);
-                url.searchParams.append('user_id', '4');
-                url.searchParams.append('username', userInfo.userName);
-                url.searchParams.append('phone', userInfo.userPhone);
-                url.searchParams.append('id_card', userInfo.userIdCard);
                 
-                const requestBody = {
+                // 创建AbortController用于超时控制
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+                
+                // POST请求：Query参数 + FormData Body
+                const messageUrl = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
+                // 基础参数放在query中
+                messageUrl.searchParams.append('app_id', 'app_002');
+                messageUrl.searchParams.append('session_id', sessionId);
+                messageUrl.searchParams.append('user_id', '4');
+                messageUrl.searchParams.append('username', userInfo.name || userInfo.userName || '');
+                messageUrl.searchParams.append('phone', userInfo.phone || userInfo.userPhone || '');
+                messageUrl.searchParams.append('id_card', userInfo.idCard || userInfo.userIdCard || '');
+                messageUrl.searchParams.append('timestamp', new Date().toISOString());
+                
+                // 业务数据直接作为JSON body发送，包装在resources中
+                const messageData = {
                     resources: [
                         {
-                            type: "text",
-                            question_id: currentQuestionId,
+                            question_id: currentQuestionId || '',
                             value: message,
-                            class_id: currentClassId
+                            class_id: currentClassId || 'chat',
+                            type: 'text'
                         }
                     ]
                 };
                 
-                const response = await fetch(url.toString(), {
+                console.log('发送消息请求URL:', messageUrl.toString());
+                console.log('JSON Body数据:', messageData);
+                
+                const response = await fetch(messageUrl.toString(), {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify(messageData),
+                    signal: controller.signal
                 });
-
-                const data = await response.json();
-                // console.log('Received response data (sendMessage):', data);
                 
-                if (data.output) {
-                    if (data.output.question) {
-                        // 如果返回的是选择题
-                        // console.log('Processing question data (sendMessage):', data.output);
-                        addMessage(data.output, false, true);
+                clearTimeout(timeoutId);
+
+                let data;
+                const contentType = response.headers.get('content-type');
+                
+                try {
+                    if (contentType && contentType.includes('application/json')) {
+                        data = await response.json();
                     } else {
-                        // 如果返回的是普通文本
-                        // console.log('Processing text response (sendMessage):', data.output);
-                        addMessage(data.output || '收到您的消息');
+                        const text = await response.text();
+                        console.log('Non-JSON response:', text);
+                        data = { output: text };
                     }
-                } else {
-                    addMessage(`❌ 抱歉，响应中没有找到output字段`);
+
+                    if (!response.ok) {
+                        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+                    }
+                    
+                    if (data.output) {
+                        if (data.output.question) {
+                            // 如果返回的是选择题
+                            // console.log('Processing question data (sendMessage):', data.output);
+                            addMessage(data.output, false, true);
+                        } else {
+                            // 如果返回的是普通文本
+                            // console.log('Processing text response (sendMessage):', data.output);
+                            addMessage(data.output || '收到您的消息');
+                        }
+                    } else {
+                        console.log('Response data:', data);
+                        addMessage(`❌ 抱歉，响应中没有找到output字段`);
+                    }
+                } catch (parseError) {
+                    console.warn('解析响应数据失赅:', parseError);
+                    // 如果解析失败，但响应成功，就显示默认消息
+                    addMessage('收到您的消息，请稍后...');
                 }
             } catch (error) {
-                addMessage(`❌ 网络错误，请检查连接后重试：${error.message}`);
+                console.error('❌ 发送消息时出错:', error);
+                
+                // 根据错误类型提供不同的用户提示
+                if (error.name === 'AbortError') {
+                    addMessage('❌ 请求超时，请检查网络连接后重试');
+                } else if (error.message.includes('Failed to fetch')) {
+                    addMessage('❌ 网络连接失败，请检查网络设置后重试');
+                } else if (error.message.includes('服务器响应错误')) {
+                    addMessage('❌ 服务器暂时不可用，请稍后重试');
+                } else {
+                    addMessage('❌ 发送消息失败，请稍后重试');
+                }
             } finally {
                 hideLoading();
             }
@@ -2816,6 +3079,9 @@
                 
                 // 启用聊天输入框和发送按钮
                 enableChatInput();
+                
+                // 清除用户信息变量
+                clearUserInfoVariables();
                 
                 // 更新模式状态
                 isRecommendMode = true;
@@ -2938,6 +3204,9 @@
                 // 先启用聊天输入框和发送按钮
                 enableChatInput();
                 
+                // 清除用户信息变量
+                clearUserInfoVariables();
+                
                 // 等待输入框启用后再发送消息
                 setTimeout(() => {
                     const chatInput = document.getElementById('chatInput');
@@ -2977,8 +3246,26 @@
             });
         }
 
-        // 页面加载后为专业项目添加点击事件
+        // 防止表单自动填充
+        function preventFormAutofill() {
+            // 设置输入框的autocomplete属性为off
+            document.getElementById('userName').setAttribute('autocomplete', 'off');
+            document.getElementById('userPhone').setAttribute('autocomplete', 'off');
+            document.getElementById('userIdCard').setAttribute('autocomplete', 'off');
+            
+            // 清除输入框的值
+            clearUserInfoVariables();
+            
+            // 监听页面刷新事件
+            window.addEventListener('beforeunload', function() {
+                clearUserInfoVariables();
+            });
+        }
+
+        // 页面加载后初始化
         window.addEventListener('load', () => {
+            // 防止表单自动填充
+            preventFormAutofill();
             // 为热门专业添加点击事件
             const majorItems = document.querySelectorAll('.major-item');
             majorItems.forEach(item => {
@@ -2992,32 +3279,362 @@
         // 切换按钮处理函数
         let isRecommendMode = true; // 跟踪当前状态
         
+        // 全局用户信息变量（在推荐流程中使用）
+        let currentUserInfo = {
+            name: '',
+            phone: '',
+            idCard: ''
+        };
+        
         function handleToggleClick() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            
+            if (isRecommendMode) {
+                // 当前是"专业推荐"模式，点击后首先显示用户信息弹窗
+                showUserInfoModal();
+            } else {
+                // 当前是"退出专业推荐"模式，点击后显示确认弹窗
+                showExitConfirmDialog();
+            }
+        }
+
+        // 用户信息模态框控制函数
+        // 处理键盘事件，防止ESC键关闭模态框
+        function handleKeyDown(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+        
+        function showUserInfoModal() {
+            const modal = document.getElementById('userInfoModal');
+            modal.style.display = 'flex';
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+            
+            // 禁用页面滚动并防止背景内容滚动
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            
+            // 添加键盘事件监听
+            document.addEventListener('keydown', handleKeyDown, true);
+            
+            // 清空所有输入框
+            document.getElementById('userName').value = '';
+            document.getElementById('userPhone').value = '';
+            document.getElementById('userIdCard').value = '';
+            
+            // 清空错误信息
+            clearErrorMessages();
+            
+            // 设置焦点到第一个输入框
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            }, 100);
+        }
+
+        function closeUserInfoModal() {
+            const modal = document.getElementById('userInfoModal');
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+            
+            // 恢复页面滚动和定位
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+            
+            // 移除键盘事件监听
+            document.removeEventListener('keydown', handleKeyDown, true);
+            
+            clearErrorMessages();
+        }
+
+        function clearErrorMessages() {
+            // 清空所有错误信息
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+            });
+            return true;
+        }
+
+        function validateUserInfo() {
+            let isValid = true;
+            const name = document.getElementById('userName').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+            const idCard = document.getElementById('userIdCard').value.trim();
+            
+            // 清空之前的错误信息
+            clearErrorMessages();
+           /* 
+            // 验证姓名（非空）
+            if (!name) {
+                document.getElementById('nameError').textContent = '请输入您的姓名';
+                isValid = false;
+            }
+            
+            // 验证手机号（11位数字）
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            if (!phone) {
+                document.getElementById('phoneError').textContent = '请输入您的手机号';
+                isValid = false;
+            } else if (!phoneRegex.test(phone)) {
+                document.getElementById('phoneError').textContent = '请输入正确的11位手机号';
+                isValid = false;
+            }
+            
+            // 验证身份证号（15位或18位）
+            const idCardRegex = /^(\d{15}|\d{17}[\dXx])$/;
+            if (!idCard) {
+                document.getElementById('idCardError').textContent = '请输入您的身份证号';
+                isValid = false;
+            } else if (!idCardRegex.test(idCard)) {
+                document.getElementById('idCardError').textContent = '请输入正确的15位或18位身份证号';
+                isValid = false;
+            }
+            */
+            return isValid;
+        }
+        
+        function validateAndContinue() {
+            if (validateUserInfo()) {
+                // 保存用户信息到全局变量
+                currentUserInfo = {
+                    name: document.getElementById('userName').value.trim(),
+                    phone: document.getElementById('userPhone').value.trim(),
+                    idCard: document.getElementById('userIdCard').value.trim()
+                };
+                
+                console.log('📝 用户信息已保存到全局变量：', currentUserInfo);
+                
+                // 关闭模态框
+                closeUserInfoModal();
+                
+                // 继续执行原来的专业推荐逻辑
+                proceedWithRecommendation();
+            }
+        }
+
+        function getUserInfo() {
+            // 直接返回全局用户信息变量，如果不存在则返回空对象
+            return currentUserInfo || { name: '', phone: '', idCard: '' };
+        }
+
+        // 清除用户信息变量（退出或完成推荐后调用）
+        function clearUserInfoVariables() {
+            currentUserInfo = {
+                name: '',
+                phone: '',
+                idCard: ''
+            };
+            console.log('🗑️ 用户信息变量已清除');
+        }
+
+        // 获取当前推荐流程中的用户信息
+        function getCurrentUserInfo() {
+            return currentUserInfo;
+        }
+
+        // 发送用户信息到后端API
+        async function sendUserInfoToBackend() {
+            // 设置默认值
+            const currentQuestionId = window.currentQuestionId || '';
+            const selectedValue = '开始专业推荐'; // 默认值设为'开始专业推荐'
+            const currentClassId = 'chat'; // 默认值设为'chat'
+            
+            try {
+                const userInfo = getCurrentUserInfo();
+                if (!userInfo || !userInfo.name || !userInfo.phone || !userInfo.idCard) {
+                    console.error('用户信息不完整，无法发送到后端');
+                    addMessage('❌ 用户信息不完整，请重新填写');
+                    return false;
+                }
+
+                console.log('📤 正在发送用户信息到后端...');
+                
+                // 混合方式：Query参数 + FormData Body
+                const apiUrl = new URL('https://n8n.ailongma.com/webhook/cc5acfb5-e86d-4e8f-99f7-92252015f231');
+                // 基础参数放在query中
+                apiUrl.searchParams.append('app_id', 'app_002');
+                apiUrl.searchParams.append('session_id', sessionId);
+                apiUrl.searchParams.append('user_id', '4');
+                apiUrl.searchParams.append('username', userInfo.name);
+                apiUrl.searchParams.append('phone', userInfo.phone);
+                apiUrl.searchParams.append('id_card', userInfo.idCard);
+                apiUrl.searchParams.append('timestamp', new Date().toISOString());
+                
+                // 业务数据直接作为JSON body发送，包装在resources中
+                const requestData = {
+                    resources: [
+                        {
+                            question_id: currentQuestionId,
+                            value: selectedValue,
+                            class_id: currentClassId,
+                            type: 'text'
+                        }
+                    ]
+                };
+                
+                console.log('用户信息请求URL:', apiUrl.toString());
+                console.log('JSON Body数据:', requestData);
+                
+                // 创建AbortController用于超时控制
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => {
+                    controller.abort();
+                    console.log('请求超时，已取消');
+                }, 10000); // 10秒超时
+                
+                // 使用POST请求：query参数 + JSON body
+                const response = await fetch(apiUrl.toString(), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    const errorText = await response.text().catch(() => '无法获取错误详情');
+                    throw new Error(`服务器响应错误 (${response.status}): ${errorText}`);
+                }
+
+                let data;
+                const contentType = response.headers.get('content-type');
+                
+                try {
+                    if (contentType && contentType.includes('application/json')) {
+                        data = await response.json();
+                    } else {
+                        const text = await response.text();
+                        console.log('收到非JSON响应:', text);
+                        data = { success: true, message: text };
+                    }
+                } catch (parseError) {
+                    console.warn('解析响应数据失败:', parseError);
+                    data = { success: true, message: '请求已发送' };
+                }
+                
+                console.log('✅ 用户信息已成功发送到后端', data);
+                
+                // 更新全局变量
+                if (data && data.question_id) {
+                    window.currentQuestionId = data.question_id;
+                    console.log('🔄 已更新question_id:', data.question_id);
+                }
+                if (data && data.class_id) {
+                    window.currentClassId = data.class_id;
+                    console.log('🔄 已更新class_id:', data.class_id);
+                }
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ 发送用户信息到后端时出错:', error);
+                console.error('错误详情:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                // 根据错误类型提供不同的用户提示
+                if (error.name === 'AbortError') {
+                    addMessage('❌ 请求超时，请检查网络连接后重试');
+                } else if (error.message.includes('Failed to fetch')) {
+                    addMessage('❌ 网络连接失败，请检查网络设置后重试');
+                } else if (error.message.includes('服务器响应错误')) {
+                    addMessage('❌ 服务器暂时不可用，请稍后重试');
+                } else {
+                    addMessage('❌ 发送用户信息失败，请稍后重试');
+                }
+                
+                return false;
+            }
+        }
+
+        async function proceedWithRecommendation() {
             const toggleBtn = document.getElementById('toggleBtn');
             const chatInput = document.getElementById('chatInput');
             const sendButton = document.getElementById('sendButton');
             
-            if (isRecommendMode) {
-                // 当前是"专业推荐"模式，点击后切换到"退出专业推荐"模式
-                toggleBtn.classList.add('pressed');
-                toggleBtn.textContent = '退出专业推荐';
+            // 先发送用户信息到后端
+            const userInfoSent = await sendUserInfoToBackend();
+            if (!userInfoSent) {
+                addMessage('❌ 发送用户信息失败，请稍后重试');
+                return;
+            }
+            
+            // 执行原来的专业推荐逻辑
+            toggleBtn.classList.add('pressed');
+            toggleBtn.textContent = '退出专业推荐';
+            
+            // 先发送"专业推荐"消息，然后再禁用输入框
+            setTimeout(() => {
+                chatInput.value = '开始专业推荐';
+                sendButton.click();
                 
-                // 先发送"专业推荐"消息，然后再禁用输入框
+                // 发送完成后禁用聊天输入框，进入答题模式
                 setTimeout(() => {
-                    chatInput.value = '专业推荐';
-                    sendButton.click();
-                    
-                    // 发送完成后禁用聊天输入框，进入答题模式
-                    setTimeout(() => {
-                        disableChatInput();
-                        // console.log('🚫 专业推荐消息已发送，输入框已禁用');
-                    }, 100); // 等待发送完成后再禁用
-                }, 300);
-                
-                isRecommendMode = false;
-            } else {
-                // 当前是"退出专业推荐"模式，点击后显示确认弹窗
-                showExitConfirmDialog();
+                    disableChatInput();
+                    // console.log('🚫 专业推荐消息已发送，输入框已禁用');
+                }, 100); // 等待发送完成后再禁用
+            }, 300);
+            
+            isRecommendMode = false;
+        }
+
+        // 自动退出专业推荐函数（答题完成后调用）
+        function autoExitRecommendation() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            if (!toggleBtn) return;
+            
+            // 恢复按钮状态
+            toggleBtn.classList.remove('pressed');
+            toggleBtn.textContent = '开始专业推荐';
+            
+            // 启用聊天输入框
+            enableChatInput();
+            
+            // 重置状态
+            isRecommendMode = false;
+            currentQuestionId = null;
+            currentClassId = null;
+            
+            // 清除全局用户信息变量
+            currentUserInfo = null;
+            
+            // 清除输入框的值
+            document.getElementById('userName').value = '';
+            document.getElementById('userPhone').value = '';
+            document.getElementById('userIdCard').value = '';
+            
+            console.log('🗑️ 答题完成，已清除用户信息');
+            
+            // 重置后台状态但保留历史对话
+            resetBackendStateKeepHistory();
+            
+            // 显示退出提示
+            addMessage('您已退出专业推荐模式，可以继续咨询其他问题。');
+            
+            // 重置session_id
+            sessionId = generateUUID();
+            console.log('🆔 已生成新的session_id:', sessionId);
+        }
+
+        // 点击模态框外部关闭模态框
+        window.onclick = function(event) {
+            const modal = document.getElementById('userInfoModal');
+            if (event.target === modal) {
+                closeUserInfoModal();
             }
         }
 
@@ -3381,6 +3998,41 @@
 
         console.log('父页面截图处理器初始化完成，等待iframe截图请求...');
     </script>
+
+    <!-- 用户信息弹出框 - 放在body根级别以实现整个网页居中 -->
+    <div id="userInfoModal" class="modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>请填写以下信息以获得更精准的专业推荐：</h4>
+                <span class="close" onclick="closeUserInfoModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+               
+                
+                <div class="input-group" style="position: relative;">
+                    <label for="userName" class="input-label">姓名：</label>
+                    <input type="text" class="info-input" id="userName" placeholder="请输入您的姓名" autocomplete="off" name="userName">
+                    <div class="error-message" id="nameError"></div>
+                </div>
+                
+                <div class="input-group" style="position: relative;">
+                    <label for="userPhone" class="input-label">手机号：</label>
+                    <input type="text" class="info-input" id="userPhone" placeholder="请输入您的手机号（11位）" autocomplete="off" name="userPhone" inputmode="numeric" pattern="[0-9]*">
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+                
+                <div class="input-group" style="position: relative;">
+                    <label for="userIdCard" class="input-label">身份证号：</label>
+                    <input type="text" class="info-input" id="userIdCard" placeholder="请输入您的身份证号（15或18位）" autocomplete="off" name="userIdCard">
+                    <div class="error-message" id="idCardError"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel-btn" onclick="closeUserInfoModal()">我不填了</button>
+                <button class="modal-btn continue-btn" onclick="validateAndContinue()">开始推荐</button>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html> 
