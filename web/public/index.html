@@ -1106,7 +1106,7 @@
         }
 
         .message-bubble {
-            max-width: 70%;
+            max-width: 80%;
             padding: 16px 20px;
             border-radius: 18px;
             word-wrap: break-word;
@@ -3796,7 +3796,8 @@
                 updateClearButtonState();
                 
                 // 重置所有后台状态变量
-                resetBackendState();
+                //resetBackendState();
+                resetBackendStateKeepHistory(); 
                 
                 // 启用聊天输入框
                 enableChatInput();
@@ -4003,7 +4004,7 @@
             // 清空之前的错误信息
             clearErrorMessages();
             //暂时跳过校验
-        return true;
+        //return true;
             // 验证姓名（非空，至少2个字符）
             if (!name) {
                 const nameError = document.getElementById('nameError');
