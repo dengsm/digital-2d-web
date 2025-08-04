@@ -63,7 +63,7 @@ export function Items() {
                         {t('gallery')}
                     </DropdownItem>
 
-                    <DropdownItem 
+                    {/* <DropdownItem 
                         key="guide"
                         startContent={<AcademicCapIcon className="size-6"/>}
                         onPress={() => window.open(SENTIO_GUIDE_URL, '_blank')}
@@ -77,7 +77,7 @@ export function Items() {
                         onPress={() => window.open(SENTIO_GITHUB_URL, '_blank')}
                     >
                         {t('open')}
-                    </DropdownItem>
+                    </DropdownItem> */}
                 </DropdownMenu>
             </Dropdown>
             <Settings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}/>

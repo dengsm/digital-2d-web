@@ -549,7 +549,7 @@
             background-color: rgba(0, 0, 0, 0.8);
             z-index: 9999;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             pointer-events: auto;
@@ -2149,6 +2149,12 @@
             <!-- 用户信息占位区域 -->
             <div class="user-info-placeholder">
                 <!-- 保留空白占位 -->
+                <div class="floating-buttons">
+                    <button id="psychologyBtn" class="floating-btn interactive-btn" onclick="handleToggleClick()">
+                        <span class="btn-text">开始心理测评</span>
+                        <span class="click-hint">👆</span>
+                    </button>
+                </div>
             </div>
 
 
@@ -4072,7 +4078,7 @@
             
             // 显示欢迎消息
             setTimeout(() => {
-                addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统智能为您推荐专业！`, false);
+                addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能推荐专业分析结果！`, false);
             }, 300);
             
             // 直接启动推荐流程（不显示多余消息）
@@ -4856,7 +4862,7 @@
     <div id="userInfoModal" class="modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>请填写以下信息以获得更精准的专业推荐：</h4>
+                <h4>请填写以下信息以获得更精准的智能分析：</h4>
                 <span class="close" onclick="closeUserInfoModal()">&times;</span>
             </div>
             <div class="modal-body">
