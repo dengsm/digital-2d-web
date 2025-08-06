@@ -37,7 +37,7 @@
         }
     </style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>龙马科技-鸿源技术学校AI助手</title>
     <style>
         * {
@@ -189,11 +189,23 @@
             padding: 0px;
         }
 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
         .container {
             display: flex;
             height: 100vh;
             max-width: 100%;
             width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             margin: 0 auto;
             /* border-radius: 16px; */
             padding: 12px;
@@ -1184,7 +1196,7 @@
             background: #f8f9fa;
              /*border: 2px solid #e9ecef;*/
             border-radius: 12px;
-            padding: 16px 20px;
+            /* padding: 16px 20px; */
             margin: 8px 0;
             max-width: 200%;
         }
@@ -1522,9 +1534,9 @@
 
         .message.assistant .message-bubble .result-container {
             margin: 0;
-            width: calc(100% + 40px);
-            margin-left: -20px;
-            margin-right: -20px;
+            width: 100%;
+            margin-left: -0px;
+            margin-right: -0px;
         }
         
         /* AI答复的消息气泡宽度设置为80%以上 */
@@ -1535,9 +1547,9 @@
 
         .message.assistant .message-bubble .question-container {
             margin: 0;
-            width: calc(100% + 40px);
-            margin-left: -20px;
-            margin-right: -20px;
+            width: 100%;
+            margin-left: -0px;
+            margin-right: -0px;
         }
 
         .chat-input-container {
@@ -1764,10 +1776,22 @@
         }
 
         /* 响应式设计 */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             body {
                 align-items: flex-start;
-                padding: 10px;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+            }
+            .chat-panel {
+                height: 100% !important;
+                max-height: 100% !important;
+            }
+            .chat-messages {
+                padding-bottom: 70px !important;
+                height: calc(100% - 50px) !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch !important;
             }
 
             .container {
@@ -1864,7 +1888,7 @@
             }
 
             .question-container {
-                padding: 12px 16px;
+                /* padding: 12px 16px; */
                 margin: 6px 0;
                 border-radius: 10px;
             }
@@ -2306,6 +2330,32 @@
 
         <div class="right-panel">
             
+             
+                  <!-- 添加图片容器，放在 right-panel 内部的最前面 -->
+    <!-- <div class="info-pic" style="
+    position: absolute;
+    bottom: 240px;  /* 距离底部140px */
+    left: 50%;      /* 水平居中 */
+    transform: translateX(-50%);  /* 使用transform实现完美居中 */
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+">
+    <img src="pic/1.png" alt="图片1" class="info-image" style="
+        width: 110px;
+        height: auto;
+       
+         
+    " />
+    <img src="pic/2.png" alt="图片2" class="info-image" style="
+        width: 110px;
+        height: auto;
+         
+       
+    " />
+</div> -->
+
+
             <div class="iframe-container">
                 <!-- 可拖动的浮窗嵌入完整网页 -->
                 <div id="draggable-window" class="draggable-window">
@@ -3328,8 +3378,8 @@
                 // 处理粗体文本
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 // 处理MBTI类型
-                .replace(/ENFJ-"([^"]+)"/g, '<span class="mbti-type">ENFJ-"$1"</span>')
-                .replace(/ENFJ型/g, '<span class="mbti-type">ENFJ型</span>')
+                //.replace(/ENFJ-"([^"]+)"/g, '<span class="mbti-type">ENFJ-"$1"</span>')
+                //.replace(/ENFJ型/g, '<span class="mbti-type">ENFJ型</span>')
                 // 处理推荐理由
                 .replace(/推荐理由：/g, '<h4 class="recommendation-reason">💡 推荐理由：</h4>')
                 // 处理优势/弱势标签
@@ -3436,7 +3486,7 @@
                 const formattedContent = parseMarkdown(question);
                 let html = `
                     <div class="question-container" data-question-id="${questionId}">
-                        <div style="background: white; padding: 20px; border-radius: 8px; line-height: 1.6; color: #333;">
+                        <div style="background: white;  border-radius: 8px; line-height: 1.6; color: #333;">
                             ${question}
                         </div>
                     </div>
@@ -3458,7 +3508,7 @@
             if (questionId === 88) {
                 let html = `
                     <div class="question-container" data-question-id="${questionId}">
-                        <div style="background: white; padding: 20px; border-radius: 8px; line-height: 1.6; color: #333;">
+                        <div style="background: white; border-radius: 8px; line-height: 1.6; color: #333;">
                             ${question}
                         </div>
                     </div>
@@ -3920,9 +3970,9 @@
                     const sendButton = document.getElementById('sendButton'); 
                     if (chatInput && sendButton && !chatInput.disabled && !sendButton.disabled) {
                         chatInput.value = '退出专业推荐';
-                        sendButton.click();
+                       // sendButton.click();
                         console.log('✅ 用户手动退出：已发送退出专业推荐消息，回到初始状态');
-                        
+                        sendMessage();
                         // 等待消息发送完成后再重置状态
                         setTimeout(() => {
                             chatInput.value = '';
@@ -3933,7 +3983,7 @@
                             clearUserInfoVariables();
                         }, 200);
                     }
-                }, 500);  // 添加了正确的分号和括号
+                }, 500);  
             }
 
             // 继续按钮事件 - 关闭对话框，继续答题
@@ -4099,9 +4149,6 @@
 
                                 // 重置所有后台状态变量
                                 resetBackendStateKeepHistory(); 
-                                
-                              
-                                
                                 // 清除用户信息变量
                                 clearUserInfoVariables();
                         }, 200);
@@ -4205,6 +4252,8 @@
                 toggleBtn.style.cursor = 'pointer';
                 toggleBtn.title = '';
                 
+                toggleBtn.onclick = handleToggleClick;
+
                 // 恢复多元智能测评按钮
                 psychologyBtn.disabled = false;
                 psychologyBtn.style.opacity = '1';
@@ -4313,6 +4362,9 @@
             // 标记当前是专业推荐模式
             currentModalType = 'recommend';
             
+            // 清空用户信息变量
+            clearUserInfoVariables();
+            
             // 添加键盘事件监听
             document.addEventListener('keydown', handleKeyDown, true);
             
@@ -4323,6 +4375,9 @@
             
             // 清空错误信息
             clearErrorMessages();
+            
+            // 移除已提交标记
+            modal.removeAttribute('data-submitted');
             
             // 重置按钮状态（确保每次打开弹窗时按钮都处于正确的初始状态）
             const continueBtn = modal.querySelector('.continue-btn');
@@ -4417,7 +4472,15 @@
             // 移除键盘事件监听
             document.removeEventListener('keydown', handleKeyDown, true);
             
+            // 清空错误信息
             clearErrorMessages();
+            
+            // 如果是通过取消按钮关闭的，清除用户信息
+            //  if (!modal.getAttribute('data-submitted')) {
+                
+            //      clearUserInfoVariables();
+            //  }
+            
         }
 
         function clearErrorMessages() {
@@ -4444,8 +4507,7 @@
             
             // 清空之前的错误信息
             clearErrorMessages();
-            //暂时跳过校验
-        //return true;
+            
             // 验证姓名（非空，至少2个字符）
             if (!name) {
                 const nameError = document.getElementById('nameError');
@@ -4487,121 +4549,9 @@
         async function validateAndContinue() {
             console.log('🚀 开始验证用户信息并继续...');
             
-            if (validateUserInfo()) {
-                // 显示加载状态
-                const continueBtn = document.querySelector('.continue-btn');
-                const originalBtnText = continueBtn ? continueBtn.textContent : '开始推荐';
-                
-                if (continueBtn) {
-                    continueBtn.disabled = true;
-                    continueBtn.textContent = '🔄 正在初始化...';
-                    continueBtn.classList.add('loading');
-                }
-                
-                try {
-                    // 保存用户信息到全局变量
-                    currentUserInfo = {
-                        name: document.getElementById('userName').value.trim(),
-                        phone: document.getElementById('userPhone').value.trim(),
-                        idCard: document.getElementById('userIdCard').value.trim()
-                    };
-                    
-                    console.log('✅ 用户信息验证通过，准备进入聊天界面');
-            
-            // 关闭用户信息模态框
-            closeUserInfoModal();
-            
-            // 显示欢迎消息
-            setTimeout(() => {
-                addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能推荐专业分析结果！`, false);
-            }, 300);
-            
-            // 直接启动推荐流程（不显示多余消息）
-            setTimeout(async () => {
-                try {
-                    const toggleBtn = document.getElementById('toggleBtn');
-                    const chatInput = document.getElementById('chatInput');
-                    const sendButton = document.getElementById('sendButton');
-                    
-                    // 发送用户信息到后端
-                    const userInfoSent = await sendUserInfoToBackend();
-                    if (!userInfoSent) {
-                        console.warn('⚠️ 用户信息发送失败，但继续推荐流程');
-                    }
-                    
-                    // 更新按钮状态 - 进入推荐模式，显示退出按钮
-                    if (toggleBtn) {
-                        toggleBtn.classList.add('pressed');
-                        toggleBtn.innerHTML = '<span class="btn-text">退出专业推荐</span> <span class="click-hint">❌</span>';
-                    }
-                    
-                    // 静默发送"开始专业推荐"到后端（不显示在聊天窗口）
-                    if (chatInput && sendButton) {
-                        // 临时保存当前输入框的值
-                        const originalValue = chatInput.value;
-                        
-                        // 设置要发送的消息
-                        chatInput.value = '开始专业推荐MTBI';
-                        
-                        // 临时隐藏消息显示，避免在聊天窗口显示"开始专业推荐"
-                        const originalAddMessage = window.addMessage;
-                        let skipNextMessage = true;
-                        
-                        window.addMessage = function(message, isUser) {
-                            if (skipNextMessage && isUser && message === '开始专业推荐MTBI') {
-                                skipNextMessage = false;
-                                return; // 跳过显示这条消息
-                            }
-                            return originalAddMessage.call(this, message, isUser);
-                        };
-                        
-                        // 发送消息
-                        sendButton.click();
-                        
-                        // 恢复原始的addMessage函数
-                        setTimeout(() => {
-                            window.addMessage = originalAddMessage;
-                        }, 100);
-                        
-                        // 恢复输入框原始值并禁用
-                        setTimeout(() => {
-                            chatInput.value = originalValue;
-                            disableChatInput();
-                            console.log('✅ 专业推荐流程已启动，输入框已禁用');
-                        }, 200);
-                    }
-                    
-                    // 更新状态 - 进入推荐模式
-                    isRecommendMode = true;
-                    
-                    // 同步更新清除按钮状态（答题模式禁用）
-                    updateClearButtonState();
-                    
-                    // 更新按钮互斥状态（禁用多元智能测评按钮）
-                    updateButtonMutualExclusion();
-                    
-                } catch (error) {
-                    console.error('❌ 启动推荐流程时出错:', error);
-                    addMessage('⚠️ 推荐流程启动遇到问题，但您仍可以正常使用对话功能', false);
-                }
-            }, 600);
-                    
-        } catch (error) {
-            console.error('❌ 初始化过程中出错:', error);
-            
-            // 恢复按钮状态
-            if (continueBtn) {
-                continueBtn.disabled = false;
-                continueBtn.textContent = originalBtnText;
-                continueBtn.classList.remove('loading');
-            }
-            
-            // 显示错误消息
-            addMessage('❌ 初始化失败，请重试', false);
-        }
-                
-            } else {
-                console.log('❌ 用户信息验证失败');
+            // 先进行表单验证
+            if (!validateUserInfo()) {
+                console.log('❌ 用户信息验证未通过');
                 
                 // 恢复按钮状态（防止按钮被禁用或文本被修改）
                 const continueBtn = document.querySelector('.continue-btn');
@@ -4619,6 +4569,119 @@
                         form.classList.remove('shake-error');
                     }, 600);
                 }
+                return; // 验证不通过，直接返回
+            }
+            
+            // 显示加载状态
+            const continueBtn = document.querySelector('.continue-btn');
+            const originalBtnText = continueBtn ? continueBtn.textContent : '开始推荐';
+            
+            if (continueBtn) {
+                continueBtn.disabled = true;
+                continueBtn.textContent = '🔄 正在初始化...';
+                continueBtn.classList.add('loading');
+            }
+                
+            try {
+                // 保存用户信息到全局变量
+                currentUserInfo = {
+                    name: document.getElementById('userName').value.trim(),
+                    phone: document.getElementById('userPhone').value.trim(),
+                    idCard: document.getElementById('userIdCard').value.trim()
+                };
+                console.log(currentUserInfo);
+                console.log('✅ 用户信息验证通过，准备进入聊天界面');
+                
+                // 关闭用户信息模态框
+                closeUserInfoModal();
+                console.log('closeUserInfoModal',currentUserInfo);
+                // 显示欢迎消息
+                setTimeout(() => {
+                    addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能推荐专业分析结果！`, false);
+                }, 300);
+                
+                // 发送用户信息到后端
+                const userInfoSent = await sendUserInfoToBackend();
+                if (!userInfoSent) {
+                    console.error('❌ 用户信息发送失败，无法继续推荐流程');
+                    if (continueBtn) {
+                        continueBtn.disabled = false;
+                        continueBtn.textContent = originalBtnText;
+                        continueBtn.classList.remove('loading');
+                    }
+                    addMessage('❌ 用户信息发送失败，请重试', false);
+                    return;
+                }
+                
+                // 更新按钮状态 - 进入推荐模式
+                const toggleBtn = document.getElementById('toggleBtn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = '退出推荐';
+                    toggleBtn.onclick = showExitConfirmDialog;
+                    toggleBtn.classList.add('pressed');
+                    toggleBtn.innerHTML = '<span class="btn-text">退出专业推荐</span> <span class="click-hint">❌</span>';
+                }
+                
+                // 静默发送"开始专业推荐"到后端（不显示在聊天窗口）
+                const chatInput = document.getElementById('chatInput');
+                const sendButton = document.getElementById('sendButton');
+                
+                if (chatInput && sendButton) {
+                    // 临时保存当前输入框的值
+                    const originalValue = chatInput.value;
+                    
+                    // 设置要发送的消息
+                    chatInput.value = '开始专业推荐MTBI';
+                    
+                    // 临时隐藏消息显示，避免在聊天窗口显示"开始专业推荐"
+                    const originalAddMessage = window.addMessage;
+                    let skipNextMessage = true;
+                    
+                    window.addMessage = function(message, isUser) {
+                        if (skipNextMessage && isUser && message === '开始专业推荐MTBI') {
+                            skipNextMessage = false;
+                            return; // 跳过显示这条消息
+                        }
+                        return originalAddMessage.call(this, message, isUser);
+                    };
+                    
+                    // 发送消息
+                    sendButton.click();
+                    
+                    // 恢复原始的addMessage函数
+                    setTimeout(() => {
+                        window.addMessage = originalAddMessage;
+                    }, 100);
+                    
+                    // 恢复输入框原始值并禁用
+                    setTimeout(() => {
+                        chatInput.value = originalValue;
+                        disableChatInput();
+                        console.log('✅ 专业推荐流程已启动，输入框已禁用');
+                    }, 200);
+                }
+                
+                // 更新状态 - 进入推荐模式
+                isRecommendMode = true;
+                
+                // 同步更新清除按钮状态（答题模式禁用）
+                updateClearButtonState();
+                
+                // 更新按钮互斥状态（禁用多元智能测评按钮）
+                updateButtonMutualExclusion();
+                
+            } catch (error) {
+                console.error('❌ 初始化过程中出错:', error);
+                
+                // 恢复按钮状态
+                if (continueBtn) {
+                    continueBtn.disabled = false;
+                    continueBtn.textContent = originalBtnText;
+                    continueBtn.classList.remove('loading');
+                }
+                
+                // 显示错误消息
+                addMessage('❌ 初始化失败，请重试', false);
             }
         }
         
@@ -4773,7 +4836,22 @@
                 phone: '',
                 idCard: ''
             };
-            console.log('🗑️ 用户信息变量已清除');
+            
+            // 清空表单
+            const modal = document.getElementById('userInfoModal');
+            if (modal) {
+                const inputs = modal.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+                // 清空错误信息
+                const errorMessages = modal.querySelectorAll('.error-message');
+                errorMessages.forEach(error => {
+                    error.textContent = '';
+                });
+            }
+            
+            console.log('🗑️ 用户信息变量和表单已重置');
         }
 
         // 获取当前推荐流程中的用户信息
