@@ -68,6 +68,71 @@
             transform: scale(1.08) rotate(-2deg);
         }
 
+        /* iPad Air 和其他平板设备的响应式样式 */
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            /* iPad Air 的艺术字优化 */
+            .mingxue-art {
+                margin: 30px 0 40px 0; /* 减少上下边距 */
+                padding: 10px 0; /* 添加内边距 */
+                position: relative;
+                z-index: 1; /* 确保艺术字在上层 */
+            }
+            
+            .mingxue-char {
+                font-size: 3.2rem; /* 略微减小字体 */
+                gap: 6px; /* 减小间距 */
+            }
+            
+            /* 用户信息占位区域优化 */
+            .user-info-placeholder {
+                margin-bottom: 20px; /* 增加下边距，给艺术字留出空间 */
+                position: relative;
+                z-index: 0;
+            }
+            
+            /* 功能介绍区域优化 */
+            .feature-intro {
+                margin-bottom: 10px;
+                position: relative;
+                z-index: 0;
+            }
+        }
+        
+        /* 针对iPad Air 的特定尺寸优化 */
+        @media screen and (width: 1024px) and (height: 768px),
+               screen and (width: 768px) and (height: 1024px) {
+            .mingxue-art {
+                margin: 25px 0 35px 0;
+                clear: both; /* 清除浮动 */
+                overflow: visible;
+            }
+            
+            .mingxue-char {
+                font-size: 3rem;
+            }
+        }
+        
+        /* 通用平板设备优化 */
+        @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+            .teacher-panel {
+                overflow: visible; /* 确保内容可见 */
+            }
+            
+            .mingxue-art {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: relative !important;
+                z-index: 10 !important; /* 提高层级 */
+                background: rgba(255, 255, 255, 0.9); /* 添加背景以提高可见性 */
+                border-radius: 8px;
+                padding: 15px;
+                margin: 30px auto;
+                max-width: 90%;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+        }
+
         /* 缩小左侧栏用户信息和联系我们 */
         .teacher-panel .user-info,
         .teacher-panel .info-section {
@@ -191,9 +256,9 @@
             background: linear-gradient(135deg, #eaa9a9e0 0%, #764ba2 100%);
             border-radius: 12px;
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
@@ -248,7 +313,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .teacher {
@@ -535,7 +600,8 @@
         .user-info-placeholder {
             margin-top: 10px;
             width: 100%;
-            height: 20px; /* 保持原有高度 */
+            min-height: 20px; /* 改为最小高度，允许内容自适应 */
+            overflow: visible; /* 确保内容可见 */
         }
 
         /* 超紧凑型模态框样式 */
@@ -1107,7 +1173,7 @@
 
         .message-bubble {
             max-width: 80%;
-            padding: 16px 20px;
+            padding: 10px 10px;
             border-radius: 18px;
             word-wrap: break-word;
             animation: fadeIn 0.5s ease-in;
@@ -1378,7 +1444,7 @@
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-bottom: 12px;
+            margin-bottom: 1px;
             min-height: 60px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
@@ -1734,7 +1800,7 @@
             }
 
             .feature-intro {
-                margin-bottom: 15px;
+                margin-bottom: 10px;
                 padding: 12px;
             }
 
@@ -2148,24 +2214,34 @@
             </div>-->
             <!-- 用户信息占位区域 -->
             <div class="user-info-placeholder">
-                <!-- 保留空白占位 -->
-                <div class="floating-buttons">
-                    <button id="psychologyBtn" class="floating-btn interactive-btn" onclick="handleToggleClick()">
-                        <span class="btn-text">开始心理测评</span>
-                        <span class="click-hint">👆</span>
-                    </button>
+                <div class="feature-intro">
+                    <div class="intro-icon">🧠</div>
+                    <div class="intro-text">
+                        多元智能测评功能：</br>
+                        • 🔍 <strong>性格特点测评</strong>：多元智能测评是测评您的性格特点，单选题，共126道</br>
+                        • 📊 <strong>智能分析</strong>：点击下方👇🏻按钮开始测评，获取个性化分析结果</br>
+                    </div>
+                 
+                    <!-- 浮动按钮区域 -->
+                    <div class="floating-buttons">
+                        <button id="psychologyBtn" class="floating-btn interactive-btn" onclick="handlePsychologyBtnClick()">
+                            <span class="btn-text">多元智能测评</span>
+                            <span class="click-hint">👆</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-
-               <!-- 明学 明事 明德 明志 艺术字 -->
-               <div class="mingxue-art">
+            
+            <!-- 明学 明事 明德 明志 艺术字 -->
+            <div class="mingxue-art">
                 <span class="mingxue-char">明学</span>
                 <span class="mingxue-char">明事</span>
                 <span class="mingxue-char">明德</span>
                 <span class="mingxue-char">明志</span>
             </div>
-            <!--div class="info-section">
+
+
+               <!--div class="info-section">
                 <h3>💬 联系我们</h3>
                 <div class="contact-info">
                     <p>📞 咨询电话：13800138000</p>
@@ -2377,8 +2453,8 @@
                     }
                     
                     /* 确保 iframe 也有圆角 */
-                    .window-content iframe {
-                        /* border-radius: 25px;  */
+                     .window-content iframe {    
+                         border-radius: 0px;  
                         /* 四个角都是25px圆角 */
                     }
                     
@@ -2993,9 +3069,9 @@
                 stage.classList.remove('active', 'completed');
             });
             
-            // 进度取消后重新启用“退出专业测评”按钮
+            // 进度取消后重新启用“退出专业测评”按钮（但要考虑互斥状态）
             const toggleBtn = document.getElementById('toggleBtn');
-            if (toggleBtn && !isRecommendMode) {
+            if (toggleBtn && !isRecommendMode && !isPsychologyMode) {
                 toggleBtn.disabled = false;
                 toggleBtn.style.opacity = '1';
                 toggleBtn.style.cursor = 'pointer';
@@ -3324,10 +3400,14 @@
             // 如果 question_id 为 0，表示测评完成，只显示结果文本
             if (questionId === 0) {
                 const formattedContent = parseMarkdown(question);
+                
+                // 根据当前模式显示不同的结果标题
+                const resultTitle = isPsychologyMode ? '🎉 多元智能测评结果 🎉' : '🎉 AI智能专业推荐结果 🎉';
+                
                 let html = `
                     <div class="result-container" data-question-id="${questionId}">
                         <div class="result-title">
-                            🎉 AI智能专业推荐结果 🎉
+                            ${resultTitle}
                         </div>
                         <div class="result-content">
                             ${formattedContent}
@@ -3338,11 +3418,39 @@
                     </div>
                 `;
                 
-                // 答题完成后自动退出专业推荐模式（延长时间，给用户查看结果）
+                // 答题完成后根据当前模式自动退出（延长时间，给用户查看结果）
                 setTimeout(() => {
-                    autoExitRecommendation();
-                }, 5000); // 5秒后自动退出
+                    if (isPsychologyMode) {
+                        console.log('🔄 多元智能测评完成，3秒后自动退出');
+                        autoExitPsychology();
+                    } else {
+                        console.log('🔄 专业推荐完成，3秒后自动退出');
+                        autoExitRecommendation();
+                    }
+                }, 3000); // 3秒后自动退出
                 
+                return html;
+            }
+            // 如果 question_id 为 -1，终止测评，只显示结果文本
+            if (questionId === -1) {
+                const formattedContent = parseMarkdown(question);
+                let html = `
+                    <div class="question-container" data-question-id="${questionId}">
+                        <div style="background: white; padding: 20px; border-radius: 8px; line-height: 1.6; color: #333;">
+                            ${question}
+                        </div>
+                    </div>
+                `;
+                 
+                // 根据当前模式调用相应的自动退出函数
+                if (isPsychologyMode) {
+                    console.log('⚠️ 多元智能测评终止，立即退出');
+                    autoExitPsychology();
+                } else {
+                    console.log('⚠️ 专业推荐终止，立即退出');
+                    autoExitRecommendation();
+                }
+              
                 return html;
             }
             
@@ -3626,7 +3734,7 @@
             
             if (chatInput && sendButton) {
                 chatInput.disabled = true;
-                chatInput.placeholder = '🚫 答题模式：聊天输入已禁用，退出专业推荐才可以聊天哦...';
+                chatInput.placeholder = '🚫 答题模式：聊天输入已禁用，退出测评答题才可以聊天哦...';
                 chatInput.style.backgroundColor = '#f5f5f5';
                 chatInput.style.color = '#999';
                 
@@ -3801,31 +3909,33 @@
                 // 同步更新清除按钮状态（非答题模式启用）
                 updateClearButtonState();
                 
-                // 重置所有后台状态变量
-                //resetBackendState();
-                resetBackendStateKeepHistory(); 
-                
+                // 更新按钮互斥状态（恢复所有按钮正常状态）
+                updateButtonMutualExclusion();
                 // 启用聊天输入框
                 enableChatInput();
-                
-                // 清除用户信息变量
-                clearUserInfoVariables();
-                
                 // 发送退出消息到后端
+                // 修改专业推荐的退出逻辑
                 setTimeout(() => {
                     const chatInput = document.getElementById('chatInput');
-                    const sendButton = document.getElementById('sendButton');
-                    
+                    const sendButton = document.getElementById('sendButton'); 
                     if (chatInput && sendButton && !chatInput.disabled && !sendButton.disabled) {
                         chatInput.value = '退出专业推荐';
                         sendButton.click();
                         console.log('✅ 用户手动退出：已发送退出专业推荐消息，回到初始状态');
+                        
+                        // 等待消息发送完成后再重置状态
+                        setTimeout(() => {
+                            chatInput.value = '';
+                            // 重置所有后台状态变量
+                            resetBackendStateKeepHistory(); 
+                            
+                            // 清除用户信息变量
+                            clearUserInfoVariables();
+                        }, 200);
                     }
-                }, 500);
-                
-                console.log('✅ 专业推荐已退出，按钮回到初始状态');
+                }, 500);  // 添加了正确的分号和括号
             }
-            
+
             // 继续按钮事件 - 关闭对话框，继续答题
             continueBtn.addEventListener('click', () => {
                 clearInterval(countdownTimer);
@@ -3844,6 +3954,182 @@
                 if (e.target === dialog) {
                     clearInterval(countdownTimer);
                     dialog.remove();
+                }
+            });
+        }
+
+        // 心理测评专用的退出确认弹窗函数
+        function showPsychologyExitConfirmDialog() {
+            let countdown = 5;
+            let countdownTimer;
+            
+            // 创建弹窗HTML
+            const dialogHTML = `
+                <div id="psychologyExitConfirmDialog" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                ">
+                    <div style="
+                        background: white;
+                        border-radius: 12px;
+                        padding: 30px;
+                        max-width: 400px;
+                        width: 90%;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                        text-align: center;
+                    ">
+                        <div style="
+                            font-size: 18px;
+                            color: #333;
+                            margin-bottom: 20px;
+                            line-height: 1.5;
+                        ">本次多元智能测评将清除，退出本次测评？</div>
+                        
+                        <div id="psychologyCountdownText" style="
+                            font-size: 14px;
+                            color: #666;
+                            margin-bottom: 25px;
+                        ">将在 <span id="psychologyCountdownNumber" style="color: #ff6b6b; font-weight: bold;">${countdown}</span> 秒后自动退出</div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button id="psychologyContinueBtn" style="
+                                background: #4CAF50;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                transition: background 0.3s;
+                            " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4CAF50'">继续</button>
+                            
+                            <button id="psychologyExitBtn" style="
+                                background: #f44336;
+                                color: white;
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                transition: background 0.3s;
+                                font-weight: bold;
+                            " onmouseover="this.style.background='#da190b'" onmouseout="this.style.background='#f44336'">退出</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 插入弹窗到页面
+            document.body.insertAdjacentHTML('beforeend', dialogHTML);
+            
+            const dialog = document.getElementById('psychologyExitConfirmDialog');
+            const countdownElement = document.getElementById('psychologyCountdownNumber');
+            const continueBtn = document.getElementById('psychologyContinueBtn');
+            const exitBtn = document.getElementById('psychologyExitBtn');
+            
+            // 倒计时函数
+            function updateCountdown() {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownTimer);
+                    executePsychologyExit();
+                }
+            }
+            
+            // 开始倒计时
+            countdownTimer = setInterval(updateCountdown, 1000);
+            
+            // 执行心理测评退出操作
+            function executePsychologyExit() {
+                // 清理弹窗
+                if (dialog) {
+                    dialog.remove();
+                }
+                clearInterval(countdownTimer);
+                
+                // 执行退出逻辑 - 回到初始状态
+                const psychologyBtn = document.getElementById('psychologyBtn');
+                const chatInput = document.getElementById('chatInput');
+                const sendButton = document.getElementById('sendButton');
+                
+                // 重置按钮到初始状态
+                if (psychologyBtn) {
+                    psychologyBtn.classList.remove('pressed');
+                    psychologyBtn.innerHTML = '<span class="btn-text">多元智能测评</span> <span class="click-hint">👆</span>';
+                }
+                
+                // 重置状态为初始状态（非心理测评模式）
+                isPsychologyMode = false;
+                currentQuestionId = null;
+                currentClassId = null;
+                
+                // 同步更新清除按钮状态（非答题模式启用）
+                updateClearButtonState();
+                
+                // 更新按钮互斥状态（恢复所有按钮正常状态）
+                updateButtonMutualExclusion();
+                
+                 // 启用聊天输入框
+                 enableChatInput();
+                
+                // 发送退出消息到后端
+                setTimeout(() => {
+                    const chatInput = document.getElementById('chatInput');
+                    const sendButton = document.getElementById('sendButton');
+                    
+                    if (chatInput && sendButton && !chatInput.disabled && !sendButton.disabled) {
+                        chatInput.value = '退出多元智能测评';
+                        sendButton.click();
+                        console.log('✅ 用户手动退出：已发送退出多元智能测评XLCP_TAIWAN消息，回到初始状态');
+                        
+                        // 清空输入框
+                        setTimeout(() => {
+                            chatInput.value = '';
+
+                                // 重置所有后台状态变量
+                                resetBackendStateKeepHistory(); 
+                                
+                              
+                                
+                                // 清除用户信息变量
+                                clearUserInfoVariables();
+                        }, 200);
+                    }
+                }, 500);
+                
+                console.log('✅ 已退出多元智能测评模式');
+            }
+            
+            // 继续按钮点击事件
+            continueBtn.addEventListener('click', function() {
+                clearInterval(countdownTimer);
+                dialog.remove();
+                console.log('🔄 用户选择继续多元智能测评');
+            });
+            
+            // 退出按钮点击事件
+            exitBtn.addEventListener('click', function() {
+                clearInterval(countdownTimer);
+                executePsychologyExit();
+            });
+            
+            // 点击背景关闭弹窗（继续测评）
+            dialog.addEventListener('click', function(e) {
+                if (e.target === dialog) {
+                    clearInterval(countdownTimer);
+                    dialog.remove();
+                    console.log('🔄 用户点击背景继续多元智能测评');
                 }
             });
         }
@@ -3880,6 +4166,74 @@
 
         // 切换按钮处理函数
         let isRecommendMode = false; // 跟踪当前状态，初始为false（未在推荐模式）
+        let isPsychologyMode = false; // 跟踪心理测评状态，初始为false（未在心理测评模式）
+        let currentModalType = ''; // 标记当前模态框类型：'recommend' 或 'psychology'
+        
+        // 按钮互斥管理函数
+        function updateButtonMutualExclusion() {
+            const toggleBtn = document.getElementById('toggleBtn');
+            const psychologyBtn = document.getElementById('psychologyBtn');
+            
+            console.log('🔄 updateButtonMutualExclusion 被调用，当前状态：isRecommendMode =', isRecommendMode, ', isPsychologyMode =', isPsychologyMode);
+            
+            if (!toggleBtn || !psychologyBtn) {
+                console.warn('⚠️ 按钮元素未找到，跳过互斥状态更新');
+                return;
+            }
+            
+            // 当专业推荐进行中时，禁用多元智能测评按钮
+            if (isRecommendMode) {
+                psychologyBtn.disabled = true;
+                psychologyBtn.style.opacity = '0.5';
+                psychologyBtn.style.cursor = 'not-allowed';
+                psychologyBtn.title = '专业推荐进行中，请先退出后再使用多元智能测评';
+                console.log('🚫 专业推荐进行中，已禁用多元智能测评按钮');
+            }
+            // 当多元智能测评进行中时，禁用专业推荐按钮
+            else if (isPsychologyMode) {
+                toggleBtn.disabled = true;
+                toggleBtn.style.opacity = '0.5';
+                toggleBtn.style.cursor = 'not-allowed';
+                toggleBtn.title = '多元智能测评进行中，请先退出后再使用专业推荐';
+                console.log('🚫 多元智能测评进行中，已禁用专业推荐按钮');
+            }
+            // 都未进行时，恢复所有按钮正常状态
+            else {
+                // 恢复专业推荐按钮
+                toggleBtn.disabled = false;
+                toggleBtn.style.opacity = '1';
+                toggleBtn.style.cursor = 'pointer';
+                toggleBtn.title = '';
+                
+                // 恢复多元智能测评按钮
+                psychologyBtn.disabled = false;
+                psychologyBtn.style.opacity = '1';
+                psychologyBtn.style.cursor = 'pointer';
+                psychologyBtn.title = '';
+                
+                console.log('✅ 所有按钮已恢复正常状态');
+            }
+        }
+        
+        // 手动测试按钮互斥状态的函数（仅用于调试）
+        function testButtonMutualExclusion() {
+            console.log('🧪 手动测试按钮互斥状态:');
+            console.log('  - isRecommendMode:', isRecommendMode);
+            console.log('  - isPsychologyMode:', isPsychologyMode);
+            
+            const toggleBtn = document.getElementById('toggleBtn');
+            const psychologyBtn = document.getElementById('psychologyBtn');
+            
+            if (toggleBtn) {
+                console.log('  - 专业推荐按钮 disabled:', toggleBtn.disabled, ', opacity:', toggleBtn.style.opacity);
+            }
+            if (psychologyBtn) {
+                console.log('  - 多元智能测评按钮 disabled:', psychologyBtn.disabled, ', opacity:', psychologyBtn.style.opacity);
+            }
+            
+            // 手动调用一次互斥管理函数
+            updateButtonMutualExclusion();
+        }
         
         // 全局用户信息变量（在推荐流程中使用）
         let currentUserInfo = {
@@ -3890,6 +4244,13 @@
         
         function handleToggleClick() {
             const toggleBtn = document.getElementById('toggleBtn');
+            
+            // 检查按钮是否被禁用（多元智能测评进行中）
+            if (toggleBtn.disabled) {
+                console.log('🚫 专业推荐按钮被禁用，多元智能测评进行中');
+                addMessage('⚠️ 多元智能测评进行中，请先退出后再使用专业推荐功能', false);
+                return;
+            }
             
             console.log('👆 按钮被点击，当前isRecommendMode:', isRecommendMode);
             
@@ -3903,6 +4264,30 @@
                 showExitConfirmDialog();
             }
         }
+
+        function handlePsychologyBtnClick() {
+            const psychologyBtn = document.getElementById('psychologyBtn');
+            
+            // 检查按钮是否被禁用（专业推荐进行中）
+            if (psychologyBtn.disabled) {
+                console.log('🚫 多元智能测评按钮被禁用，专业推荐进行中');
+                addMessage('⚠️ 专业推荐进行中，请先退出后再使用多元智能测评功能', false);
+                return;
+            }
+            
+            console.log('👆 心理测评按钮被点击，当前isPsychologyMode:', isPsychologyMode);
+            
+            if (!isPsychologyMode) {
+                // 当前不在心理测评模式（初始状态或测评完成后），点击开始新一轮心理测评
+                console.log('🎆 开始新一轮心理测评，显示用户信息弹窗');
+                showPsychologyUserInfoModal();
+            } else {
+                // 当前在心理测评模式中（测评过程中），点击退出
+                console.log('🚪 用户在心理测评过程中点击退出，显示确认弹窗');
+                showPsychologyExitConfirmDialog();
+            }
+        }
+        
 
         // 用户信息模态框控制函数
         // 处理键盘事件，防止ESC键关闭模态框
@@ -3925,6 +4310,9 @@
             document.body.style.position = 'fixed';
             document.body.style.width = '100%';
             
+            // 标记当前是专业推荐模式
+            currentModalType = 'recommend';
+            
             // 添加键盘事件监听
             document.addEventListener('keydown', handleKeyDown, true);
             
@@ -3942,7 +4330,54 @@
             
             if (continueBtn) {
                 continueBtn.disabled = false;
-                continueBtn.textContent = '开始推荐';
+                continueBtn.textContent = '开始测评';
+                continueBtn.classList.remove('loading');
+                continueBtn.style.display = 'inline-flex';
+                continueBtn.style.visibility = 'visible';
+                continueBtn.style.opacity = '1';
+            }
+            
+            if (cancelBtn) {
+                cancelBtn.disabled = false;
+                cancelBtn.textContent = '我不填了';
+                cancelBtn.style.display = 'inline-flex';
+                cancelBtn.style.visibility = 'visible';
+                cancelBtn.style.opacity = '1';
+            }
+        }
+        
+        function showPsychologyUserInfoModal() {
+            const modal = document.getElementById('userInfoModal');
+            modal.style.display = 'flex';
+            modal.classList.add('active');
+            document.body.classList.add('modal-open');
+            
+            // 禁用页面滚动并防止背景内容滚动
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            
+            // 标记当前是心理测评模式
+            currentModalType = 'psychology';
+            
+            // 添加键盘事件监听
+            document.addEventListener('keydown', handleKeyDown, true);
+            
+            // 清空所有输入框
+            document.getElementById('userName').value = '';
+            document.getElementById('userPhone').value = '';
+            document.getElementById('userIdCard').value = '';
+            
+            // 清空错误信息
+            clearErrorMessages();
+            
+            // 重置按钮状态（确保每次打开弹窗时按钮都处于正确的初始状态）
+            const continueBtn = modal.querySelector('.continue-btn');
+            const cancelBtn = modal.querySelector('.cancel-btn');
+            
+            if (continueBtn) {
+                continueBtn.disabled = false;
+                continueBtn.textContent = '开始测评';
                 continueBtn.classList.remove('loading');
                 continueBtn.style.display = 'inline-flex';
                 continueBtn.style.visibility = 'visible';
@@ -3957,7 +4392,7 @@
                 cancelBtn.style.opacity = '1';
             }
             
-            console.log('✅ 用户信息弹窗已打开，按钮状态已重置为初始状态');
+            console.log('✅ 心理测评用户信息弹窗已打开，按钮状态已重置为初始状态');
             
             // 设置焦点到第一个输入框
             setTimeout(() => {
@@ -4142,6 +4577,9 @@
                     // 同步更新清除按钮状态（答题模式禁用）
                     updateClearButtonState();
                     
+                    // 更新按钮互斥状态（禁用多元智能测评按钮）
+                    updateButtonMutualExclusion();
+                    
                 } catch (error) {
                     console.error('❌ 启动推荐流程时出错:', error);
                     addMessage('⚠️ 推荐流程启动遇到问题，但您仍可以正常使用对话功能', false);
@@ -4183,6 +4621,145 @@
                 }
             }
         }
+        
+        // 心理测评专用的验证和继续函数
+        async function validateAndContinuePsychology() {
+            console.log('🚀 开始验证用户信息并继续心理测评...');
+            
+            if (validateUserInfo()) {
+                // 显示加载状态
+                const continueBtn = document.querySelector('.continue-btn');
+                const originalBtnText = continueBtn ? continueBtn.textContent : '开始测评';
+                
+                if (continueBtn) {
+                    continueBtn.disabled = true;
+                    continueBtn.textContent = '🔄 正在初始化...';
+                    continueBtn.classList.add('loading');
+                }
+                
+                try {
+                    // 保存用户信息到全局变量
+                    currentUserInfo = {
+                        name: document.getElementById('userName').value.trim(),
+                        phone: document.getElementById('userPhone').value.trim(),
+                        idCard: document.getElementById('userIdCard').value.trim()
+                    };
+                    
+                    console.log('✅ 用户信息验证通过，准备进入心理测评界面');
+            
+                    // 关闭用户信息模态框
+                    closeUserInfoModal();
+                    
+                    // 显示欢迎消息
+                    setTimeout(() => {
+                        addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能分析心理测评结果！`, false);
+                    }, 300);
+                    
+                    // 直接启动心理测评流程（不显示多余消息）
+                    setTimeout(async () => {
+                        try {
+                            const psychologyBtn = document.getElementById('psychologyBtn');
+                            const chatInput = document.getElementById('chatInput');
+                            const sendButton = document.getElementById('sendButton');
+                            
+                            // 更新按钮状态 - 进入心理测评模式，显示退出按钮
+                            if (psychologyBtn) {
+                                psychologyBtn.classList.add('pressed');
+                                psychologyBtn.innerHTML = '<span class="btn-text">退出心理测评</span> <span class="click-hint">❌</span>';
+                            }
+                            
+                            // 静默发送"多元智能测评XLCP_TAIWAN"到后端（不显示在聊天窗口）
+                            if (chatInput && sendButton) {
+                                // 临时保存当前输入框的值
+                                const originalValue = chatInput.value;
+                                
+                                // 设置要发送的消息
+                                chatInput.value = '多元智能测评XLCP_TAIWAN';
+                                
+                                // 临时隐藏消息显示，避免在聊天窗口显示"多元智能测评XLCP_TAIWAN"
+                                const originalAddMessage = window.addMessage;
+                                let skipNextMessage = true;
+                                
+                                window.addMessage = function(message, isUser) {
+                                    if (skipNextMessage && isUser && message === '多元智能测评XLCP_TAIWAN') {
+                                        skipNextMessage = false;
+                                        return; // 跳过显示这条消息
+                                    }
+                                    return originalAddMessage.call(this, message, isUser);
+                                };
+                                
+                                // 发送消息
+                                sendButton.click();
+                                
+                                // 恢复原始的addMessage函数
+                                setTimeout(() => {
+                                    window.addMessage = originalAddMessage;
+                                }, 100);
+                                
+                                // 恢复输入框原始值并禁用
+                                setTimeout(() => {
+                                    chatInput.value = originalValue;
+                                    disableChatInput();
+                                    console.log('✅ 心理测评流程已启动，输入框已禁用');
+                                }, 200);
+                            }
+                            
+                            // 更新状态 - 进入心理测评模式
+                            isPsychologyMode = true;
+                            console.log('🔄 心理测评状态已设置：isPsychologyMode =', isPsychologyMode);
+                            
+                            // 同步更新清除按钮状态（答题模式禁用）
+                            updateClearButtonState();
+                            
+                            // 更新按钮互斥状态（禁用专业推荐按钮）
+                            console.log('🔄 即将调用 updateButtonMutualExclusion，当前 isPsychologyMode:', isPsychologyMode);
+                            updateButtonMutualExclusion();
+                            
+                        } catch (error) {
+                            console.error('❌ 心理测评流程启动失败:', error);
+                            
+                            // 恢复按钮状态
+                            if (continueBtn) {
+                                continueBtn.disabled = false;
+                                continueBtn.textContent = originalBtnText;
+                                continueBtn.classList.remove('loading');
+                            }
+                            
+                            // 显示错误提示
+                            addMessage('抱歉，心理测评系统初始化失败，请稍后重试。', false);
+                        }
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('❌ 心理测评流程启动失败:', error);
+                    
+                    // 恢复按钮状态
+                    if (continueBtn) {
+                        continueBtn.disabled = false;
+                        continueBtn.textContent = originalBtnText;
+                        continueBtn.classList.remove('loading');
+                    }
+                    
+                    // 显示错误提示
+                    addMessage('抱歉，心理测评系统初始化失败，请稍后重试。', false);
+                }
+            } else {
+                console.log('❌ 用户信息验证失败，请检查输入');
+            }
+        }
+        
+        // 统一处理模态框继续按钮点击事件
+        function handleContinueClick() {
+            console.log('👆 模态框继续按钮被点击，当前模态框类型:', currentModalType);
+            
+            if (currentModalType === 'psychology') {
+                // 心理测评模式
+                validateAndContinuePsychology();
+            } else {
+                // 默认为专业推荐模式
+                validateAndContinue();
+            }
+        }
 
         function getUserInfo() {
             // 直接返回全局用户信息变量，如果不存在则返回空对象
@@ -4212,7 +4789,11 @@
         async function sendUserInfoToBackend() {
             // 设置默认值
             const currentQuestionId = window.currentQuestionId || '';
-            const selectedValue = '开始专业推荐';
+            // 根据当前模式确定消息类型
+            let selectedValue = '开始专业推荐'; // 默认为专业推荐
+            if (isPsychologyMode) {
+                selectedValue = '多元智能测评XLCP_TAIWAN';
+            }
             const currentClassId = 'chat';
             
             try {
@@ -4315,7 +4896,7 @@
             
             // 重置按钮到初始状态（开始专业推荐）
             toggleBtn.classList.remove('pressed');
-            toggleBtn.innerHTML = '开始专业推荐 <span class="hand-icon">👆</span>';
+            toggleBtn.innerHTML = '<span class="btn-text">开始专业推荐</span> <span class="click-hint">👆</span>';
             
             // 重置模式状态为非推荐模式（可以重新开始）
             isRecommendMode = false;
@@ -4324,6 +4905,9 @@
             
             // 同步更新清除按钮状态（非答题模式启用）
             updateClearButtonState();
+            
+            // 更新按钮互斥状态（恢复所有按钮正常状态）
+            updateButtonMutualExclusion();
             
             // 清除用户信息，为下一次推荐做准备
             currentUserInfo = null;
@@ -4347,6 +4931,53 @@
             sessionId = generateUUID();
             
             console.log('✅ 专业推荐流程已重置，用户可以重新开始新一轮推荐或继续聊天');
+            console.log('🆔 新session_id:', sessionId);
+        }
+        
+        // 自动退出心理测评函数（答题完成后调用）
+        function autoExitPsychology() {
+            const psychologyBtn = document.getElementById('psychologyBtn');
+            if (!psychologyBtn) return;
+            
+            console.log('🎉 多元智能测评完成，准备重置按钮状态');
+            
+            // 重置按钮到初始状态（多元智能测评）
+            psychologyBtn.classList.remove('pressed');
+            psychologyBtn.innerHTML = '<span class="btn-text">多元智能测评</span> <span class="click-hint">👆</span>';
+            
+            // 重置模式状态为非心理测评模式（可以重新开始）
+            isPsychologyMode = false;
+            currentQuestionId = null;
+            currentClassId = null;
+            
+            // 同步更新清除按钮状态（非答题模式启用）
+            updateClearButtonState();
+            
+            // 更新按钮互斥状态（恢复所有按钮正常状态）
+            updateButtonMutualExclusion();
+            
+            // 清除用户信息，为下一次测评做准备
+            currentUserInfo = null;
+            
+            // 清除表单输入框的值
+            const userNameInput = document.getElementById('userName');
+            const userPhoneInput = document.getElementById('userPhone');
+            const userIdCardInput = document.getElementById('userIdCard');
+            
+            if (userNameInput) userNameInput.value = '';
+            if (userPhoneInput) userPhoneInput.value = '';
+            if (userIdCardInput) userIdCardInput.value = '';
+            
+            // 启用聊天输入框
+            enableChatInput();
+            
+            // 重置后台状态但保留历史对话
+            resetBackendStateKeepHistory();
+            
+            // 生成新的session_id为下一次测评做准备
+            sessionId = generateUUID();
+            
+            console.log('✅ 多元智能测评已重置完成，可以开始新一轮测评');
             console.log('🆔 新session_id:', sessionId);
         }
 
@@ -4427,11 +5058,12 @@
             }
             if (!clearBtn) return;
             
-            if (isRecommendMode) {
-                // 答题模式时禁用清除按钮
+            if (isRecommendMode || isPsychologyMode) {
+                // 答题模式时禁用清除按钮（专业推荐或心理测评）
                 clearBtn.disabled = true;
-                clearBtn.title = '答题过程中无法清除记录';
-                console.log('🚫 答题模式：清除按钮已禁用');
+                const modeText = isRecommendMode ? '专业推荐' : '多元智能测评';
+                clearBtn.title = `${modeText}答题过程中无法清除记录`;
+                console.log(`🚫 ${modeText}模式：清除按钮已禁用`);
             } else {
                 // 非答题模式时启用清除按钮
                 clearBtn.disabled = false;
@@ -4495,8 +5127,10 @@
             // 等待DOM完全渲染后添加常驻清除按钮
             setTimeout(() => {
                 addPermanentClearChatButton();
-            }, 500);
+            }, 500)
+            
         });
+        
      
     </script>
 
@@ -4888,7 +5522,7 @@
             </div>
             <div class="modal-footer">
                 <button class="modal-btn cancel-btn" onclick="closeUserInfoModal()">我不填了</button>
-                <button class="modal-btn continue-btn" onclick="validateAndContinue()">开始推荐</button>
+                <button class="modal-btn continue-btn" onclick="handleContinueClick()">开始测评</button>
             </div>
         </div>
     </div>

@@ -36,11 +36,10 @@ function ChatModeSwitch() {
 export function Header() {
     return (
         <div className="flex w-full h-[64px] p-6 justify-between z-10">
-            <LogoBar isExternal={true}/>
-            <div className="flex flex-row gap-4 items-center">
-                {/* <ChatModeSwitch /> */}
+            {/* <div className="flex flex-row gap-4 items-center">
+                <ChatModeSwitch /> 
                 <Items />
-            </div>
+            </div> */}
         </div>
     )
 }
