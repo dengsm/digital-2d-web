@@ -21,7 +21,7 @@ export class Live2dManager {
 
     public changeCharacter(character: ResourceModel | null) {
       this._ready = true;
-      return;
+      return; 
       // // _subdelegates中只有一个画布, 所以设置第一个即可
       // this._ready = false;
       // try {
