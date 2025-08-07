@@ -2875,8 +2875,8 @@
                 apiUrl.searchParams.append(key, value);
             }
             
-            console.log('🌐 API请求URL:', apiUrl.toString());
-            console.log('📦 请求数据:', resourceData);
+           // console.log('🌐 API请求URL:', apiUrl.toString());
+           // console.log('📦 请求数据:', resourceData);
             
             let lastError = null;
             
@@ -3251,15 +3251,90 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
+
+        function parseMarkdown_new(text) {
+              // 如果是纯文本，只处理换行
+    if (!/[\*\_\~\`\#\-\+\=\{\}\[\]\(\)\\\>]/.test(text)) {
+        return text.replace(/\n\n+/g, '</p><p>')
+                 .replace(/\n/g, '<br>')
+                 .replace(/<p><\/p>/g, '');
+    }
+           // 首先处理换行，确保段落之间的换行被保留
+            text = text.replace(/\n\n+/g, '</p><p>');
+            text = text.replace(/\n/g, '<br>');
+            text = text.replace(/<p><\/p>/g, ''); // 移除空段落
+            
+           // 处理推荐专业标题和适配率
+            text = text.replace(/\*\*\s*(🥇|🥈|🥉)\s*推荐专业([一二三])：(.*?)\s*（适配率：(\d+%)\s*）\s*\*\*/g, 
+                (match, medal, number, major, rate) => {
+                    // 移除前后的 </p><p> 标签，避免产生额外换行
+                    return `<div style="font-size: large; font-weight: bold; margin: 10px 0 5px 0;">${medal} 推荐专业${number}：${major} <span class="compatibility-rate" style="font-size: large;">适配率：${rate}</span></div>`;
+                }
+            );
+
+            // 处理列表项
+            text = text.replace(/^\s*[\*\-]\s(.*$)/gm, '<li>$1</li>');
+            text = text.replace(/^\s*\d+\.\s(.*$)/gm, '<li>$1</li>');
+            
+            // 包装列表
+            text = text.replace(/(<li>.*?<\/li>\s*)+/gs, (match) => {
+                if (match.match(/\d+\./)) {
+                    return `<ol>${match}</ol>`;
+                } else {
+                    return `<ul>${match}</ul>`;
+                }
+            });
+
+            // 标题
+            text = text.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+            text = text.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+            text = text.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+            
+            // 加粗和斜体
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
+            text = text.replace(/_(.*?)_/g, '<em>$1</em>');
+            
+            // 删除线
+            text = text.replace(/~~(.*?)~~/g, '<del>$1</del>');
+            
+            // 链接和图片
+            text = text.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+            text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+            
+            // 引用
+            text = text.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
+            
+            // 水平线
+            text = text.replace(/^\-\-\-$/gm, '<hr>');
+            
+            // 清理多余的段落标签
+            text = text.replace(/<p><\/p>/g, '');
+            text = text.replace(/<p><br><\/p>/g, '');
+            
+            // 确保内容被包裹在段落中
+            if (!text.startsWith('<h') && !text.startsWith('<p>') && !text.startsWith('<ul>') && !text.startsWith('<ol>')) {
+                text = '<p>' + text;
+            }
+            if (!text.endsWith('</p>') && !text.endsWith('</h1>') && !text.endsWith('</h2>') && !text.endsWith('</h3>') && 
+                !text.endsWith('</ul>') && !text.endsWith('</ol>') && !text.endsWith('</blockquote>')) {
+                text = text + '</p>';
+            }
+            text = text.replace(/(推荐专业[一二三]：.*?<\/div>)\s*<br>\s*/g, '$1');
+
+            return text;
+}
         // 处理Markdown格式的函数
         function parseMarkdown(text) {
             if (!text) return '';
-            //console.log('parseMarkdown input: ', text);
+            
+            
             let html = text;
             
             // 清理换行符
-            html = html.replace(/\n/g, '').replace(/\\n/g, '');
-            
+            html = html.replace(/\n/g, '<br>').replace(/\\n/g, '<br>');
+             
             // 处理推荐专业 - 统一的处理逻辑
             html = processMajorRecommendations(html);
             
@@ -3270,7 +3345,7 @@
             html = processListItems(html);
             
             // 清理多余的空行
-            html = html.replace(/(<br>\s*){2,}/g, '<br><br>');
+            html = html.replace(/(<br>\s*){2,}/g, '<br>');
             
            // console.log('parseMarkdown output: ', html);
             return html;
@@ -3279,21 +3354,35 @@
         // 处理推荐专业的函数
         function processMajorRecommendations(html) {
             
-            
+            //console.log('processMajorRecommendations input: ', html);
             // 首先清理干扰内容，确保推荐专业前面没有其他**内容
+            // let cleanedHtml = html
+            //     // 先处理非推荐专业的**内容，避免干扰正则匹配
+            //     .replace(/\*\*(优势：[^*]*?)\*\*/g, '<span class="strength">$1</span>')
+            //     .replace(/\*\*(弱势：[^*]*?)\*\*/g, '<span class="weakness">$1</span>')
+            //     .replace(/\*\*(劣势：[^*]*?)\*\*/g, '<span class="weakness">$1</span>')
+            //     // 处理其他非推荐专业的**内容
+            //     .replace(/\*\*(?!🥇|🥈|🥉)([^*]*?)\*\*/g, '<strong>$1</strong>');
+        // 新的处理方式
             let cleanedHtml = html
-                // 先处理非推荐专业的**内容，避免干扰正则匹配
-                .replace(/\*\*(优势：[^*]*?)\*\*/g, '<span class="strength">$1</span>')
-                .replace(/\*\*(弱势：[^*]*?)\*\*/g, '<span class="weakness">$1</span>')
-                .replace(/\*\*(劣势：[^*]*?)\*\*/g, '<span class="weakness">$1</span>')
-                // 处理其他非推荐专业的**内容
-                .replace(/\*\*(?!🥇|🥈|🥉)([^*]*?)\*\*/g, '<strong>$1</strong>');
-            
-          
-            
+                // 处理优势标签
+                .replace(/\*\*(优势：[^*]*?)(?:\*\*|$)/g, '<span class="strength">$1</span>')
+                // 处理弱势/劣势标签及后面的内容，确保移除所有**标记
+                .replace(/\*\*(弱势：)([^*]*?)(?:\*\*|$)/g, '<span class="weakness">$1$2</span>')
+                .replace(/\*\*(劣势：)([^*]*?)(?:\*\*|$)/g, '<span class="weakness">$1$2</span>')
+                // 处理其他非推荐专业的**内容，但要排除推荐专业开头的**
+                .replace(/\*\*(?!🥇|🥈|🥉)([^*]*?)(?:\*\*|$)/g, '<strong>$1</strong>')
+                // 移除所有剩余的**标记
+                .replace(/\*\*/g, '');
+
+    // 处理带有**包围的专业推荐格式
+         //    const majorPatternWithStars = /(\*\*)?\s*(🥇|🥈|🥉)\s*推荐专业([一二三])：(.*?)（适配率：(\d+%)）(\*\*)?([\s\S]*?)(?=\*\*\s*(?:🥇|🥈|🥉)|$)/g;
+    
+
+
             // 处理带有**包围的专业推荐格式
             // 修正正则：使用非贪婪匹配找到最后一个（适配率：
-            const majorPatternWithStars = /\*\*\s*(🥇|🥈|🥉)\s*推荐专业([一二三])：(.*?)（适配率：(\d+%)）\*\*([\s\S]*?)(?=\*\*\s*(?:🥇|🥈|🥉)|$)/g;
+         const majorPatternWithStars = /\*\*\s*(🥇|🥈|🥉)\s*推荐专业([一二三])：(.*?)（适配率：(\d+%)）\*\*([\s\S]*?)(?=\*\*\s*(?:🥇|🥈|🥉)|$)/g;
             
             let result = cleanedHtml.replace(majorPatternWithStars, (match, medal, number, major, rate, content) => {
                 //console.log(` 匹配到推荐专业${number}:`, { medal, number, major: major.trim(), rate });
@@ -3449,7 +3538,7 @@
             
             // 如果 question_id 为 0，表示测评完成，只显示结果文本
             if (questionId === 0) {
-                const formattedContent = parseMarkdown(question);
+                const formattedContent = parseMarkdown_new(question);
                 
                 // 根据当前模式显示不同的结果标题
                 const resultTitle = isPsychologyMode ? '🎉 多元智能测评结果 🎉' : '🎉 AI智能专业推荐结果 🎉';
@@ -3636,15 +3725,15 @@
                 if (data.output) {
                     if (data.output.question) {
                         // 如果返回的是新题目
-                        console.log('📝 处理新题目数据:', data.output);
+                        //console.log('📝 处理新题目数据:', data.output);
                         addMessage(data.output, false, true);
                     } else {
                         // 如果返回的是普通文本
-                        console.log('💬 处理文本响应:', data.output);
+                       // console.log('💬 处理文本响应:', data.output);
                         addMessage(data.output || '感谢您的回答！');
                     }
                 } else {
-                    console.warn('⚠️ 响应中没有找到output字段:', data);
+                    //console.warn('⚠️ 响应中没有找到output字段:', data);
                     addMessage('❌ 抱歉，响应中没有找到output字段');
                 }
             } catch (error) {
@@ -3719,7 +3808,7 @@
                         data = await response.json();
                     } else {
                         const text = await response.text();
-                        console.log('Non-JSON response:', text);
+                        //console.log('Non-JSON response:', text);
                         data = { output: text };
                     }
 
@@ -3738,11 +3827,11 @@
                             addMessage(data.output || '收到您的消息');
                         }
                     } else {
-                        console.log('Response data:', data);
+                        //console.log('Response data:', data);
                         addMessage(`❌ 抱歉，响应中没有找到output字段`);
                     }
                 } catch (parseError) {
-                    console.warn('解析响应数据失赅:', parseError);
+                    //console.warn('解析响应数据失赅:', parseError);
                     // 如果解析失败，但响应成功，就显示默认消息
                     addMessage('收到您的消息，请稍后...');
                 }
@@ -4589,12 +4678,12 @@
                     phone: document.getElementById('userPhone').value.trim(),
                     idCard: document.getElementById('userIdCard').value.trim()
                 };
-                console.log(currentUserInfo);
+               // console.log(currentUserInfo);
                 console.log('✅ 用户信息验证通过，准备进入聊天界面');
                 
                 // 关闭用户信息模态框
                 closeUserInfoModal();
-                console.log('closeUserInfoModal',currentUserInfo);
+                //console.log('closeUserInfoModal',currentUserInfo);
                 // 显示欢迎消息
                 setTimeout(() => {
                     addMessage(`👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能推荐专业分析结果！`, false);
@@ -4914,7 +5003,7 @@
                     data = { success: true, message: '请求已发送' };
                 }
                 
-                console.log('✅ 用户信息已成功发送到后端', data);
+                //console.log('✅ 用户信息已成功发送到后端', data);
                 
                 // 更新全局状态变量
                 if (data && data.question_id) {

@@ -66,25 +66,66 @@ export const ChatInput = memo(({
             }
         )
     }
-
+//原有录音逻辑
+    // const handleStopRecord = async () => {
+    //     micRecoder.stop();
+    //     setStartMicRecord(false);
+    //     if (!stopAudioTimer()) return;
+    //     // 开始做语音识别
+    //     setMessage(t('speech2text'));
+    //     setStartAsrConvert(true);
+    //     // 获取mp3数据, 转mp3的计算放到web客户端, 后端拿到的是mp3数据
+    //     const mp3Blob = convertToMp3(micRecoder);
+    //     let asrResult = "";
+    //     asrResult = await api_asr_infer_file(asrEngine, asrSettings, mp3Blob);
+    //     if (asrResult.length > 0) {
+    //         setMessage(asrResult);
+    //     } else {
+    //         setMessage("");
+    //     }
+    //     setStartAsrConvert(false);
+    // }
     const handleStopRecord = async () => {
-        micRecoder.stop();
-        setStartMicRecord(false);
-        if (!stopAudioTimer()) return;
-        // 开始做语音识别
-        setMessage(t('speech2text'));
-        setStartAsrConvert(true);
-        // 获取mp3数据, 转mp3的计算放到web客户端, 后端拿到的是mp3数据
-        const mp3Blob = convertToMp3(micRecoder);
-        let asrResult = "";
-        asrResult = await api_asr_infer_file(asrEngine, asrSettings, mp3Blob);
-        if (asrResult.length > 0) {
-            setMessage(asrResult);
-        } else {
-            setMessage("");
+        try {
+            // 停止录音
+            micRecoder.stop();
+            setStartMicRecord(false);
+            
+            if (!stopAudioTimer()) return;
+            
+            // 开始做语音识别
+            setMessage(t('speech2text'));
+            setStartAsrConvert(true);
+            
+            try {
+                // 获取mp3数据
+                const mp3Blob = convertToMp3(micRecoder);
+                
+                // 释放麦克风资源
+                micRecoder.destroy();
+                micRecoder = null;
+                
+                // 进行语音识别
+                const asrResult = await api_asr_infer_file(asrEngine, asrSettings, mp3Blob);
+                
+                if (asrResult.length > 0) {
+                    setMessage(asrResult);
+                } else {
+                    setMessage("");
+                }
+            } catch (error) {
+                console.error("Error during speech recognition:", error);
+                setMessage("");
+            } finally {
+                setStartAsrConvert(false);
+            }
+        } catch (error) {
+            console.error("Error stopping recording:", error);
+            setStartMicRecord(false);
+            setStartAsrConvert(false);
         }
-        setStartAsrConvert(false);
     }
+
 
     const onFileClick = () => {
         // TODO: open file dialog
