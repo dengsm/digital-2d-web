@@ -45,7 +45,16 @@ export class Live2dManager {
     }
 
     public pushAudioQueue(audioData: ArrayBuffer): void {
+      console.log('🔊 将音频数据添加到队列，当前队列长度:', this._ttsQueue.length);
       this._ttsQueue.push(audioData);
+      
+      // 如果没有正在播放的音频，则开始播放
+      if (!this._audioIsPlaying) {
+        console.log('🔊 当前没有音频在播放，开始播放新音频');
+        this.playAudio();
+      } else {
+        console.log('🔊 当前有音频正在播放，将新音频加入队列等待');
+      }
     }
 
     public popAudioQueue(): ArrayBuffer | null {
@@ -62,7 +71,11 @@ export class Live2dManager {
     }
 
     public playAudio(): ArrayBuffer | null {
-      if (this._audioIsPlaying) return null; // 如果正在播放则返回
+      console.log('🔊 尝试播放音频，当前播放状态:', this._audioIsPlaying);
+      if (this._audioIsPlaying) {
+        console.log('🔊 音频正在播放，跳过本次播放');
+        return null; // 如果正在播放则返回
+      }
       const audioData = this.popAudioQueue();
       if (audioData == null) return null; // 没有音频数据则返回
       this._audioIsPlaying = true;
@@ -74,7 +87,13 @@ export class Live2dManager {
         source.connect(this._audioContext.destination);
         // 监听音频播放完毕事件
         source.onended = () => {
+          console.log('🔊 音频播放结束');
           this._audioIsPlaying = false;
+          // 检查队列中是否还有待播放的音频
+          if (this._ttsQueue.length > 0) {
+            console.log('🔊 队列中还有待播放的音频，继续播放下一段');
+            setTimeout(() => this.playAudio(), 100); // 添加小延迟避免可能的竞态条件
+          }
         };
         source.start();
         this._audioSource = source;
