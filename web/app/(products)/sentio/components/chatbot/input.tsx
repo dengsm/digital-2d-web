@@ -473,6 +473,7 @@ export const ChatInput = memo(({
             }
         };
         
+        // 定义错误回调函数处理AI响应错误
         const agentErrorCallback = (error: Error) => {
             // console.error('❌ Agent API错误:', error);
             // console.error('🔍 错误详情:', error.message);
@@ -501,7 +502,8 @@ export const ChatInput = memo(({
     };
     
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
+        // 检查是否是 Enter 键，并且不在输入法组合输入过程中
+        if (e.key === "Enter" && !e.nativeEvent.isComposing) {
             onSendClick();
         }
     }
