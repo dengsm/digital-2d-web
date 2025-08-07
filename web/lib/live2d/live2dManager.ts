@@ -45,15 +45,14 @@ export class Live2dManager {
     }
 
     public pushAudioQueue(audioData: ArrayBuffer): void {
-      console.log('🔊 将音频数据添加到队列，当前队列长度:', this._ttsQueue.length);
       this._ttsQueue.push(audioData);
       
       // 如果没有正在播放的音频，则开始播放
       if (!this._audioIsPlaying) {
-        console.log('🔊 当前没有音频在播放，开始播放新音频');
+       // console.log('🔊 当前没有音频在播放，开始播放新音频');
         this.playAudio();
       } else {
-        console.log('🔊 当前有音频正在播放，将新音频加入队列等待');
+        //console.log('🔊 当前有音频正在播放，将新音频加入队列等待');
       }
     }
 
@@ -71,9 +70,9 @@ export class Live2dManager {
     }
 
     public playAudio(): ArrayBuffer | null {
-      console.log('🔊 尝试播放音频，当前播放状态:', this._audioIsPlaying);
+     // console.log('🔊 尝试播放音频，当前播放状态:', this._audioIsPlaying);
       if (this._audioIsPlaying) {
-        console.log('🔊 音频正在播放，跳过本次播放');
+       // console.log('🔊 音频正在播放，跳过本次播放');
         return null; // 如果正在播放则返回
       }
       const audioData = this.popAudioQueue();

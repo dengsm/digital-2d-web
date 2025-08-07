@@ -322,7 +322,7 @@ export const ChatInput = memo(({
         
         // TTS处理函数
         const doTTS = () => {
-            console.log('🔊 doTTS 被调用, agentDone:', agentDone, 'ttsProcessIndex:', ttsProcessIndex, 'accumulatedResponseLength:', accumulatedResponse.length);
+           // console.log('🔊 doTTS 被调用, agentDone:', agentDone, 'ttsProcessIndex:', ttsProcessIndex, 'accumulatedResponseLength:', accumulatedResponse.length);
             if (!!!controller) {
                 console.error('❌ TTS 控制器未初始化');
                 return;
@@ -331,22 +331,22 @@ export const ChatInput = memo(({
             if (!agentDone || accumulatedResponse.length > ttsProcessIndex) {
                 let ttsText = "";
                 const ttsCallback = (ttsResult: string) => {
-                    console.log('🔊 ttsCallback 被调用, 结果长度:', ttsResult?.length || 0);
+                    //console.log('🔊 ttsCallback 被调用, 结果长度:', ttsResult?.length || 0);
                     if (ttsResult != "") {
                         try {
-                            console.log('🔊 开始处理TTS结果, 原始数据长度:', ttsResult.length);
+                            //console.log('🔊 开始处理TTS结果, 原始数据长度:', ttsResult.length);
                             const audioData = base64ToArrayBuffer(ttsResult);
-                            console.log('🔊 转换后的音频数据大小:', audioData?.byteLength || 0);
+                            //console.log('🔊 转换后的音频数据大小:', audioData?.byteLength || 0);
                             
                             convertMp3ArrayBufferToWavArrayBuffer(audioData)
                                 .then((buffer) => {
-                                    console.log('✅ 音频转换成功, 缓冲区大小:', buffer?.byteLength || 0);
+                                    //console.log('✅ 音频转换成功, 缓冲区大小:', buffer?.byteLength || 0);
                                     try {
                                         const manager = Live2dManager.getInstance();
                                         console.log('🔊 Live2D Manager 实例:', manager ? '已初始化' : '未初始化');
                                         if (manager) {
                                             manager.pushAudioQueue(buffer);
-                                            console.log('✅ 音频已推送到播放队列');
+                                          //  console.log('✅ 音频已推送到播放队列');
                                         } else {
                                             console.error('❌ Live2D Manager 未正确初始化');
                                         }
@@ -414,9 +414,9 @@ export const ChatInput = memo(({
         
         // 定义回调函数处理AI响应 - 优化版本，去除预期之外的内容并添加TTS支持
         const agentCallback = (response: any) => {
-            console.log('✅ 收到AI响应:', response);
-            console.log('📊 响应事件类型:', response.event);
-            console.log('📄 响应数据:', response.data);
+           // console.log('✅ 收到AI响应:', response);
+          //  console.log('📊 响应事件类型:', response.event);
+           // console.log('📄 响应数据:', response.data);
             
             const event = response.event;
             const data = response.data;
@@ -453,13 +453,13 @@ export const ChatInput = memo(({
                 case 'text':
                 case 'TEXT':
                     if (isValidData) {
-                        console.log('💬 收到AI回复内容片段:', data);
+                       // console.log('💬 收到AI回复内容片段:', data);
                         accumulatedResponse += data;
                         updateLastRecord({ role: CHAT_ROLE.AI, think: accumulatedThink, content: accumulatedResponse });
                         
                         // 触发TTS语音播报
                         if (agentDone && sound) {
-                            console.log('🔊 触发TTS语音播报，sound状态:', sound, 'agentDone:', agentDone);
+                           // console.log('🔊 触发TTS语音播报，sound状态:', sound, 'agentDone:', agentDone);
                             agentDone = false;
                             doTTS();
                         } else {
