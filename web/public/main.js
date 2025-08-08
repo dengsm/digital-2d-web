@@ -1946,7 +1946,8 @@ function validateUserInfo() {
     }
 
     // 验证身份证号（15位或18位）
-    const idCardRegex = /^(\d{15}|\d{17}[\dXx])$/;
+    //const idCardRegex = /^(\d{15}|\d{17}[\dXx])$/;
+    const idCardRegex = /^(?:[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[0-9Xx]|[1-9]\d{5}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3})$/;
     if (!idCard) {
         const idCardError = document.getElementById("idCardError");
         if (idCardError) idCardError.textContent = "请输入您的身份证号";

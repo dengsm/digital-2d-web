@@ -17,7 +17,7 @@
 
 .feature-intro {
     width: 100%;
-    background: linear-gradient(135deg, #eaa9a9e0 0%, #764ba2 100%);
+    background: linear-gradient(120deg, #f0f9ff 0%, #c1d2e5 100%);
     border-radius: 12px;
     padding: 16px;
     position: relative;
@@ -49,7 +49,7 @@
 }
 
 .feature-intro .intro-text {
-    color: white;
+    color: #344268;
     font-size: 13px;
     line-height: 1.4;
     font-weight: 500;
@@ -93,7 +93,7 @@
 }
 
 .floating-btn {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #2e5f8a 100%);
+    background: linear-gradient(90deg, #6cc3ff 0%, #49a7ff 100%);
     color: white;
     border: 3px solid #b0bec5;
     border-radius: 30px;
