@@ -2013,7 +2013,7 @@ async function validateAndContinue() {
         // 显示欢迎消息
         setTimeout(() => {
             addMessage(
-                `👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能推荐专业分析结果！`,
+                `嗨，${currentUserInfo.name}！请完成下面的选择题。系统将基于你的回答生成测评分析，并给出个性化专业推荐哦。祝你答题顺利！`,
                 false,
             );
         }, 300);
@@ -2140,7 +2140,7 @@ async function validateAndContinuePsychology() {
             // 显示欢迎消息
             setTimeout(() => {
                 addMessage(
-                    `👋 您好 ${currentUserInfo.name}！完成以下选择题后，系统为您智能分析心理测评结果！`,
+                    `嗨，${currentUserInfo.name}！请完成下面的选择题。系统将基于你的回答生成测评分析，并给出个性化专业推荐哦。祝你答题顺利！`,
                     false,
                 );
             }, 300);
@@ -2629,17 +2629,19 @@ function clearChatHistory() {
         const bubbleDiv = document.createElement("div");
         bubbleDiv.className = "message-bubble";
         bubbleDiv.innerHTML = `
-         🎓 欢迎使用鸿源技术学校智能推荐系统！<br><br>
-            🎯 <strong>产品介绍：</strong><br>
-            • 专业智能推荐：通过答题分析，为职业学生推荐最适合的专业方向<br>
-            • 智能咨询对话：可咨询专业信息、学校情况等问题<br>
-            • 语音交互体验：右侧数字人支持语音对话交流<br><br>
-            📝 <strong>使用说明：</strong><br>
-            1️⃣ 点击左侧“开始专业推荐”按钮，填写个人信息后开始答题<br>
-            2️⃣ 答题完成后，系统将生成个性化的专业推荐报告<br>
-            3️⃣ 也可直接在下方输入框发送消息，进行自由咨询<br><br>
-            现在就开始体验吧！🚀
-    `;
+            🎉 Hello，未来的职业玩家！这里是「鸿源职校智能测评站」<br><br>
+              💡 <strong>我们能帮你做什么？</strong><br>
+              • 酷酷的多元智能测评：采用台湾正版版权题库，8大智能一网打尽，秒懂你的隐藏技能。<br>
+              • AI 专业匹配引擎：把测评结果与大数据结合，匹配最适合你的专业和职业方向。<br>
+              • 随问随答：即时解答专业课程、校园生活、升学就业等疑问，信息可靠，更新及时。<br>
+              • 语音数字导师：右侧数字人陪你聊，打字 or 语音都OK。<br><br>
+              🚀 <strong>怎么开始？</strong><br>
+              1️⃣ 点击左侧【开始】按钮，填写信息;<br>
+              2️⃣ 用 10 分钟完成题目;<br>
+              3️⃣ 拿到你的专属《多元智能分析与专业推荐报告》;<br>
+              4️⃣ 也可直接在下方输入框发送消息，进行自由咨询。<br><br>
+              🌟 准备好发现更厉害的自己了吗？Go！
+              `;
 
         welcomeMessageDiv.appendChild(bubbleDiv);
         chatMessages.appendChild(welcomeMessageDiv);
