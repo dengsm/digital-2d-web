@@ -7,72 +7,79 @@
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover"
         />
         <title>龙马科技-鸿源技术学校AI助手</title>
+        <link rel="stylesheet" href="/preflight.css" />
         <link rel="stylesheet" href="/motion.css" />
         <link rel="stylesheet" href="/frame.css" />
         <link rel="stylesheet" href="/main.css" />
+        <link rel="stylesheet" href="/leftPanel.css" />
+        <link rel="stylesheet" href="/media.css" />
     </head>
     <body>
         <div class="container">
             <div class="teacher-panel">
-                <!-- 专业推荐 -->
-                <div class="feature-intro">
-                    <div class="intro-icon">🧑‍🏫</div>
-                    <div class="intro-text">
-                        您好！我是您的智能咨询助手，可提供：<br />
-                        • 💬
-                        <strong>在线咨询</strong>
-                        ：可在底部聊天框咨询专业信息和学校情况<br />
-                        • 🎯
-                        <strong>专业智能推荐</strong>：
-                        点击下方👇🏻按钮开始答题，获取个性化推荐<br />
-                    </div>
-
-                    <!-- 浮动按钮区域 -->
-                    <div class="floating-buttons">
-                        <button
-                            id="toggleBtn"
-                            class="floating-btn interactive-btn"
-                            onclick="handleToggleClick()"
-                        >
-                            <span class="btn-text">开始专业推荐</span>
-                            <span class="click-hint">👆</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 多元智能评测 -->
-                <div class="user-info-placeholder">
+                <div>
+                    <!-- 专业推荐 -->
                     <div class="feature-intro">
-                        <div class="intro-text">🧠多元智能测评 · 全面洞察</div>
+                        <div class="intro-icon">🧑‍🏫</div>
                         <div class="intro-text">
-                            • 8大智能+性格特质:
-                            覆盖语言、逻辑、空间、音乐等全维度潜能。<br />
-                            • 126 道“秒选”题:
-                            全是单选，操作轻松，还有进度条陪你冲刺！<br />
-                            • 测评报告专业呈现:
-                            个性化分析结果，帮你看到自己的隐藏技能，给出匹配你的学习发展推荐！<br />
+                            您好！我是您的智能咨询助手，可提供：<br />
+                            • 💬
+                            <strong>在线咨询</strong>
+                            ：可在底部聊天框咨询专业信息和学校情况<br />
+                            • 🎯
+                            <strong>专业智能推荐</strong>：
+                            点击下方👇🏻按钮开始答题，获取个性化推荐<br />
                         </div>
 
                         <!-- 浮动按钮区域 -->
                         <div class="floating-buttons">
                             <button
-                                id="psychologyBtn"
+                                id="toggleBtn"
                                 class="floating-btn interactive-btn"
-                                onclick="handlePsychologyBtnClick()"
+                                onclick="handleToggleClick()"
                             >
-                                <span class="btn-text">多元智能测评</span>
+                                <span class="btn-text">开始专业推荐</span>
                                 <span class="click-hint">👆</span>
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- 多元智能评测 -->
+                    <div class="user-info-placeholder">
+                        <div class="feature-intro">
+                            <div class="intro-text">
+                                🧠多元智能测评 · 全面洞察
+                            </div>
+                            <div class="intro-text">
+                                • 8大智能+性格特质:
+                                覆盖语言、逻辑、空间、音乐等全维度潜能。<br />
+                                • 126 道“秒选”题:
+                                全是单选，操作轻松，还有进度条陪你冲刺！<br />
+                                • 测评报告专业呈现:
+                                个性化分析结果，帮你看到自己的隐藏技能，给出匹配你的学习发展推荐！<br />
+                            </div>
+
+                            <!-- 浮动按钮区域 -->
+                            <div class="floating-buttons">
+                                <button
+                                    id="psychologyBtn"
+                                    class="floating-btn interactive-btn"
+                                    onclick="handlePsychologyBtnClick()"
+                                >
+                                    <span class="btn-text">多元智能测评</span>
+                                    <span class="click-hint">👆</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 明学 明事 明德 明志 艺术字 -->
                 <div class="mingxue-art">
-                    <span class="mingxue-char">明学</span>
-                    <span class="mingxue-char">明事</span>
-                    <span class="mingxue-char">明德</span>
-                    <span class="mingxue-char">明志</span>
+                    <div class="mingxue-char">明学</div>
+                    <div class="mingxue-char">明事</div>
+                    <div class="mingxue-char">明德</div>
+                    <div class="mingxue-char">明志</div>
                 </div>
 
                 <!-- 小图片 -->
@@ -268,7 +275,6 @@
             </div>
         </div>
 
-        <!-- 父页面截图处理器 - 移动到页面末尾避免干扰 -->
         <script src="/screenshot.js"></script>
 
         <script src="/draggableWindow.js"></script>

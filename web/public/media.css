@@ -1,0 +1,86 @@
+@media screen and (orientation: portrait) {
+    .container {
+        padding: 0;
+    }
+
+    .teacher-panel {
+        border-radius: 0;
+    }
+
+    .mingxue-art {
+        flex-direction: column;
+    }
+
+    .right-panel {
+        display: none;
+    }
+
+    @media (width < 768px) {
+        .teacher-panel {
+            display: none;
+        }
+    }
+    @media (768px <=width < 820px) {
+        .mingxue-art {
+            flex-direction: row;
+        }
+        .mingxue-char {
+            font-size: 20px;
+        }
+    }
+    @media (820px <=width < 1024px) {
+        .mingxue-char {
+            font-size: 40px;
+        }
+    }
+}
+
+@media screen and (orientation: landscape) {
+    @media (1000px <= height < 1050px) {
+        .mingxue-char {
+            font-size: 40px;
+        }
+    }
+    @media (950px <= height < 1000px) {
+        .mingxue-char {
+            font-size: 32px;
+        }
+    }
+    @media (height < 950px) {
+        .mingxue-char {
+            font-size: 26px;
+        }
+    }
+
+    @media (1500px < width <= 1800px) {
+        .mingxue-char {
+            font-size: 50px;
+        }
+    }
+
+    @media (1366px < width <= 1500px) {
+        .mingxue-char {
+            font-size: 40px;
+        }
+    }
+    @media (width < 1366px) {
+        .mingxue-char {
+            font-size: 32px;
+        }
+        .teacher-panel .info-pic {
+            display: none;
+        }
+    }
+
+    @media (aspect-ratio: 8/5) or (width <= 1366px) {
+        .container {
+            padding: 0;
+        }
+        .teacher-panel {
+            border-radius: 0;
+        }
+        .right-panel {
+            border-radius: 0;
+        }
+    }
+}
