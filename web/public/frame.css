@@ -1,0 +1,234 @@
+.iframe-container {
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: none !important; /* 移除阴影 */
+    border: none !important; /* 移除边框 */
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    outline: none !important;
+    /* border-radius: 5px; */
+    overflow: hidden;
+}
+
+/* 全局iframe边框移除样式 */
+iframe {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+}
+
+/* 针对Live2D数字人的iframe */
+iframe[id*="sentio"],
+iframe[title*="sentio"] {
+    background: transparent !important;
+}
+
+.draggable-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    background: transparent; /* 透明背景 */
+    /* border-radius: 0 20px 20px 0;  */
+    /* 匹配右侧面板的圆角 */
+    border: none; /* 移除边框 */
+    box-shadow: none; /* 移除阴影 */
+    z-index: 1;
+    overflow: hidden;
+    transition: none; /* 禁用过渡效果以便调整大小 */
+}
+
+.draggable-window.minimized {
+    height: 50px;
+    transition: all 0.3s ease; /* 只在最小化时使用过渡 */
+}
+
+.window-header {
+    background: transparent; /* 透明背景 */
+    color: white;
+    /* padding: 8px 12px; */
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    font-weight: 500;
+    /* border-radius: 0 20px 0 0;  */
+    /* 匹配右侧面板的圆角 */
+    overflow: hidden;
+    /* height: 30px;  */
+    /* 固定高度 */
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 16px;
+    left: 16px;
+    right: 0;
+}
+
+.window-title {
+    font-size: 14px;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.window-controls button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.minimize-btn {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+    color: #4b5563;
+    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);
+    border: 2px solid rgba(209, 213, 219, 0.8);
+}
+
+.minimize-btn::before {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 10px;
+    background:
+        radial-gradient(
+            circle at 30% 40%,
+            rgba(255, 255, 255, 0.9) 25%,
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 70% 50%,
+            rgba(255, 255, 255, 0.8) 35%,
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 50% 70%,
+            rgba(255, 255, 255, 0.9) 40%,
+            transparent 40%
+        );
+    border-radius: 50px;
+    animation: bubble-float 2s ease-in-out infinite;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.window-controls button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.6);
+}
+
+.minimize-btn:hover::before {
+    animation: bubble-bounce 0.6s ease-in-out;
+}
+
+.window-content {
+    /* height: calc(100% - 40px); */
+    height: 100%;
+    overflow: hidden;
+    /* border-radius: 25px;  */
+    /* 四个角都是25px圆角 */
+}
+
+.draggable-window.minimized .window-content {
+    display: none;
+}
+
+/* 调整大小手柄样式 */
+.resize-handle {
+    position: absolute;
+    background: transparent;
+    z-index: 1001;
+}
+
+.resize-handle-n {
+    top: 0;
+    left: 10px;
+    right: 10px;
+    height: 5px;
+    cursor: n-resize;
+}
+
+.resize-handle-s {
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    height: 5px;
+    cursor: s-resize;
+}
+
+.resize-handle-e {
+    top: 10px;
+    right: 0;
+    bottom: 10px;
+    width: 5px;
+    cursor: e-resize;
+}
+
+.resize-handle-w {
+    top: 10px;
+    left: 0;
+    bottom: 10px;
+    width: 5px;
+    cursor: w-resize;
+}
+
+.resize-handle-ne {
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    cursor: ne-resize;
+}
+
+.resize-handle-nw {
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    cursor: nw-resize;
+}
+
+.resize-handle-se {
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    cursor: se-resize;
+}
+
+.resize-handle-sw {
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    cursor: sw-resize;
+}
+
+/* 调整大小时的视觉反馈 */
+.draggable-window.resizing {
+    user-select: none;
+}
