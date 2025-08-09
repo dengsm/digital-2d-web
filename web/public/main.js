@@ -1918,7 +1918,7 @@ function validateUserInfo() {
     const name = document.getElementById("userName").value.trim();
     const phone = document.getElementById("userPhone").value.trim();
     const idCard = document.getElementById("userIdCard").value.trim();
-
+    return isValid;
     // 清空之前的错误信息
     clearErrorMessages();
 

@@ -840,15 +840,15 @@ body.modal-open {
 }
 
 .option-item:hover {
-    border-color: #667eea;
+    border-color: #fdfdfd;
     background: #f8f9ff;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 .option-item.selected {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #fdfdfd;
+    background: linear-gradient(352deg, #91d9ba 0% 50%, #116fbd82 100%);
     color: white;
 }
 
@@ -875,7 +875,7 @@ body.modal-open {
 .submit-answer {
     margin-top: 12px;
     padding: 8px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #60bd84 0%, #116fbd82 100%);
     color: white;
     border: none;
     border-radius: 20px;
@@ -898,7 +898,7 @@ body.modal-open {
 }
 
 .message.user .message-bubble {
-    background: #2c3e50;
+    background: #7e9095;
     color: white;
     margin-left: 10px;
 }
@@ -959,7 +959,7 @@ body.modal-open {
 
 .send-button {
     padding: 16px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #f3fff9 0%, #98c791 100%);
     color: white;
     border: none;
     border-radius: 25px;

@@ -17,7 +17,7 @@
 
 .feature-intro {
     width: 100%;
-    background: linear-gradient(120deg, #f0f9ff 0%, #c1d2e5 100%);
+    background: linear-gradient(120deg, #f5fbff 0%, #c1d2e5 100%);
     border-radius: 12px;
     padding: 16px;
     position: relative;
@@ -93,7 +93,7 @@
 }
 
 .floating-btn {
-    background: linear-gradient(90deg, #6cc3ff 0%, #49a7ff 100%);
+    background: linear-gradient(4deg, #6de9b0 0%, #88bdd7 100%);
     color: white;
     border: 3px solid #b0bec5;
     border-radius: 30px;
@@ -102,8 +102,8 @@
     font-weight: 700;
     cursor: pointer;
     box-shadow:
-        0 8px 16px rgba(74, 144, 226, 0.4),
-        0 4px 8px rgba(74, 144, 226, 0.3),
+        0 8px 16px rgba(80, 233, 121, 0.506),
+        0 4px 8px rgba(59, 220, 67, 0.3),
         inset 0 2px 4px rgba(255, 255, 255, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -126,7 +126,7 @@
         0 6px 12px rgba(74, 144, 226, 0.4),
         inset 0 2px 4px rgba(255, 255, 255, 0.4),
         inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(135deg, #5ba3f5 0%, #4a90e2 50%, #357abd 100%);
+    background: linear-gradient(176deg, #83c1a4 50%, #8cd0ca 100%);
 }
 
 .floating-btn:active {
@@ -173,7 +173,7 @@
 
 /* 按下后的切换状态 - 调整为柔和的橙色 */
 .floating-btn.pressed {
-    background: linear-gradient(135deg, #e0a96d 0%, #d4956a 50%, #c8845f 100%);
+    background: linear-gradient(135deg, lab(84.34% 5.13 19.02) 0%, #c19d76 50%, #bc9d88 100%);
     border-color: #e8b882;
     transform: translateY(2px);
     box-shadow:
@@ -185,7 +185,7 @@
 
 .floating-btn.pressed:hover {
     transform: translateY(1px);
-    background: linear-gradient(135deg, #e8b882 0%, #e0a96d 50%, #d4956a 100%);
+    background: linear-gradient(135deg, lab(84.34% 5.13 19.02) 0%, #c19d76 50%, #bc9d88 100%);
     box-shadow:
         0 4px 8px rgba(224, 169, 109, 0.5),
         0 2px 4px rgba(224, 169, 109, 0.4),
