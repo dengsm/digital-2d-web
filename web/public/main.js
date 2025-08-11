@@ -1725,6 +1725,8 @@ function handleToggleClick() {
 
 function handlePsychologyBtnClick() {
     const psychologyBtn = document.getElementById("psychologyBtn");
+    const minimizeBtn = document.getElementById("minimizeBtn");
+    const draggableWindow = document.querySelector(".draggable-window");
 
     // 检查按钮是否被禁用（专业推荐进行中）
     if (psychologyBtn.disabled) {
@@ -1736,18 +1738,37 @@ function handlePsychologyBtnClick() {
         return;
     }
 
-    console.log(
-        "👆 心理测评按钮被点击，当前isPsychologyMode:",
-        isPsychologyMode,
-    );
+    console.log("👆 心理测评按钮被点击，当前isPsychologyMode:", isPsychologyMode);
 
     if (!isPsychologyMode) {
         // 当前不在心理测评模式（初始状态或测评完成后），点击开始新一轮心理测评
         console.log("🎆 开始新一轮心理测评，显示用户信息弹窗");
+        
+        // 最小化右侧栏
+        if (draggableWindow) {
+            draggableWindow.classList.add("minimized");
+        }
+        
+        // 禁用最小化按钮
+        if (minimizeBtn) {
+            minimizeBtn.disabled = true;
+        }
+        
         showPsychologyUserInfoModal();
     } else {
         // 当前在心理测评模式中（测评过程中），点击退出
         console.log("🚪 用户在心理测评过程中点击退出，显示确认弹窗");
+        
+        // 恢复右侧栏
+        if (draggableWindow) {
+            draggableWindow.classList.remove("minimized");
+        }
+        
+        // 恢复最小化按钮状态
+        if (minimizeBtn) {
+            minimizeBtn.disabled = false;
+        }
+        
         showPsychologyExitConfirmDialog();
     }
 }
@@ -2312,7 +2333,7 @@ async function sendUserInfoToBackend() {
     // 设置默认值
     const currentQuestionId = window.currentQuestionId || "";
     // 根据当前模式确定消息类型
-    let selectedValue = "开始专业推荐"; // 默认为专业推荐
+    let selectedValue = "开始专业推荐MTBI"; // 默认为专业推荐
     if (isPsychologyMode) {
         selectedValue = "多元智能测评XLCP_TAIWAN";
     }
@@ -2408,7 +2429,7 @@ async function proceedWithRecommendation() {
 
     // 先发送"专业推荐"消息，然后再禁用输入框
     setTimeout(() => {
-        chatInput.value = "开始专业推荐";
+        chatInput.value = "开始专业推荐MTBI";
         sendButton.click();
 
         // 发送完成后禁用聊天输入框，进入答题模式
@@ -2472,6 +2493,9 @@ function autoExitRecommendation() {
 // 自动退出心理测评函数（答题完成后调用）
 function autoExitPsychology() {
     const psychologyBtn = document.getElementById("psychologyBtn");
+    const minimizeBtn = document.getElementById("minimizeBtn");
+    const draggableWindow = document.querySelector(".draggable-window");
+    
     if (!psychologyBtn) return;
 
     console.log("🎉 多元智能测评完成，准备重置按钮状态");
@@ -2485,6 +2509,16 @@ function autoExitPsychology() {
     isPsychologyMode = false;
     currentQuestionId = null;
     currentClassId = null;
+
+    // 恢复右侧栏
+    if (draggableWindow) {
+        draggableWindow.classList.remove("minimized");
+    }
+    
+    // 恢复最小化按钮状态
+    if (minimizeBtn) {
+        minimizeBtn.disabled = false;
+    }
 
     // 同步更新清除按钮状态（非答题模式启用）
     updateClearButtonState();

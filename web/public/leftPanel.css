@@ -283,3 +283,14 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* 龙马智芯logo样式 */
+.info-pic-longma {
+    width: 100px;
+    height: 100px;
+    background: url(pic/longma.jpeg) no-repeat center center;
+    background-size: contain;
+    margin: 10px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
