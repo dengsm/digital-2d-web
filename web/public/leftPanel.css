@@ -17,7 +17,7 @@
 
 .feature-intro {
     width: 100%;
-    background: linear-gradient(120deg, #f5fbff 0%, #c1d2e5 100%);
+    background: linear-gradient(120deg, #deecf6 0%, #bcd0e5 100%);
     border-radius: 12px;
     padding: 16px;
     position: relative;
@@ -49,15 +49,22 @@
 }
 
 .feature-intro .intro-text {
-    color: #344268;
+    color: #020306;
     font-size: 13px;
     line-height: 1.4;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    /* font-weight: 500; */
+    /* text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
     position: relative;
     z-index: 1;
 }
-
+ .intro-text-bottom {
+    color: gray;
+    font-size: 14px;
+    line-height: 1.4; 
+    position: relative;
+    margin-left: 0px;
+    z-index: 1;
+}
 .feature-intro .intro-highlight {
     background: rgba(255, 255, 255, 0.2);
     padding: 2px 6px;
@@ -93,7 +100,7 @@
 }
 
 .floating-btn {
-    background: linear-gradient(4deg, #6de9b0 0%, #88bdd7 100%);
+    background: linear-gradient(135deg, #91d0d9 0%, #116fbdb5 100%);
     color: white;
     border: 3px solid #b0bec5;
     border-radius: 30px;
@@ -102,8 +109,8 @@
     font-weight: 700;
     cursor: pointer;
     box-shadow:
-        0 8px 16px rgba(80, 233, 121, 0.506),
-        0 4px 8px rgba(59, 220, 67, 0.3),
+        0 8px 16px rgba(83, 152, 231, 0.506),
+        0 4px 8px rgba(59, 107, 220, 0.3),
         inset 0 2px 4px rgba(255, 255, 255, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -126,7 +133,7 @@
         0 6px 12px rgba(74, 144, 226, 0.4),
         inset 0 2px 4px rgba(255, 255, 255, 0.4),
         inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(176deg, #83c1a4 50%, #8cd0ca 100%);
+    background: linear-gradient(135deg, #91d0d9 30%, #0e64abb5 100%);
 }
 
 .floating-btn:active {

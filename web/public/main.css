@@ -848,7 +848,7 @@ body.modal-open {
 
 .option-item.selected {
     border-color: #fdfdfd;
-    background: linear-gradient(352deg, #91d9ba 0% 50%, #116fbd82 100%);
+    background: linear-gradient(352deg, #91d0d9 0% 50%, #116fbd82 100%);
     color: white;
 }
 
@@ -875,7 +875,7 @@ body.modal-open {
 .submit-answer {
     margin-top: 12px;
     padding: 8px 20px;
-    background: linear-gradient(135deg, #60bd84 0%, #116fbd82 100%);
+    background: linear-gradient(135deg, #91d0d9 0%, #116fbdb5 100%);
     color: white;
     border: none;
     border-radius: 20px;
@@ -959,7 +959,7 @@ body.modal-open {
 
 .send-button {
     padding: 16px 24px;
-    background: linear-gradient(135deg, #f3fff9 0%, #98c791 100%);
+    background: linear-gradient(135deg, #91d0d9 0%, #116fbdb5 100%);
     color: white;
     border: none;
     border-radius: 25px;
