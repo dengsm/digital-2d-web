@@ -343,7 +343,7 @@ export const ChatInput = memo(({
                                     //console.log('✅ 音频转换成功, 缓冲区大小:', buffer?.byteLength || 0);
                                     try {
                                         const manager = Live2dManager.getInstance();
-                                        console.log('🔊 Live2D Manager 实例:', manager ? '已初始化' : '未初始化');
+                                        //console.log('🔊 Live2D Manager 实例:', manager ? '已初始化' : '未初始化');
                                         if (manager) {
                                             manager.pushAudioQueue(buffer);
                                           //  console.log('✅ 音频已推送到播放队列');
@@ -463,7 +463,7 @@ export const ChatInput = memo(({
                             agentDone = false;
                             doTTS();
                         } else {
-                            console.log('🔇 未触发TTS，原因:', { sound, agentDone });
+                            //console.log('🔇 未触发TTS，原因:', { sound, agentDone });
                         }
                     }
                     break;
@@ -492,13 +492,23 @@ export const ChatInput = memo(({
                     
                 case 'error':
                 case 'ERROR':
-                    // console.error('❌ AI响应错误:', data);
-                    updateLastRecord({ role: CHAT_ROLE.AI, think: "", content: '抱歉，AI响应出现错误，请重试。' });
+                    // 只有当data不是'answer'（带单引号的字符串）时才显示系统提示
+                    if (data !== "'answer'") {
+                        updateLastRecord({ 
+                            role: CHAT_ROLE.AI, 
+                            think: '', 
+                            content: `[系统提示] ${data || 'AI响应出现错误'}`
+                        });
+                    }
                     break;
                     
                 default:
-                    // 对于未知事件类型，只记录日志，不处理内容，避免添加预期之外的内容
-                    // console.log('❓ 未知事件类型，已忽略:', event, '数据:', data);
+                    console.log('❓ 未知事件类型:', event, '数据:', data);
+                    updateLastRecord({ 
+                        role: CHAT_ROLE.AI, 
+                        think: `[未知事件: ${event}]`,
+                        content: '对不起，我没理解，请再跟我说一次。'
+                    });
                     break;
             }
         };

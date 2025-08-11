@@ -2157,7 +2157,7 @@ async function validateAndContinuePsychology() {
                     if (psychologyBtn) {
                         psychologyBtn.classList.add("pressed");
                         psychologyBtn.innerHTML =
-                            '<span class="btn-text">退出心理测评</span> <span class="click-hint">❌</span>';
+                            '<span class="btn-text">退出多元智能</span> <span class="click-hint">❌</span>';
                     }
 
                     // 静默发送"多元智能测评XLCP_TAIWAN"到后端（不显示在聊天窗口）
@@ -2668,4 +2668,127 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
         addPermanentClearChatButton();
     }, 500);
+});
+
+// ========================================
+// 服务协议相关功能
+// ========================================
+
+/**
+ * 初始化服务协议弹窗功能
+ */
+function initServiceAgreement() {
+    // 获取DOM元素
+    const showAgreementBtn = document.getElementById('showServiceAgreement');
+    const closeAgreementBtn = document.getElementById('closeServiceAgreement');
+    const agreeAgreementBtn = document.getElementById('agreeServiceAgreement');
+    const serviceAgreementModal = document.getElementById('serviceAgreementModal');
+    const serviceAgreementCheckbox = document.getElementById('serviceAgreement');
+    const continueBtn = document.querySelector('.continue-btn');
+
+    if (!serviceAgreementModal || !showAgreementBtn || !continueBtn) {
+        console.warn('服务协议相关元素未找到，功能将不可用');
+        return;
+    }
+
+    // 显示服务协议弹窗
+    function showAgreementModal() {
+        if (serviceAgreementModal) {
+            serviceAgreementModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+    }
+
+    // 隐藏服务协议弹窗
+    function hideAgreementModal() {
+        if (serviceAgreementModal) {
+            serviceAgreementModal.style.display = 'none';
+            document.body.style.overflow = ''; // 恢复滚动
+        }
+    }
+
+    // 点击弹窗外部关闭
+    window.addEventListener('click', function(event) {
+        if (event.target === serviceAgreementModal) {
+            hideAgreementModal();
+        }
+    });
+
+    // 绑定事件
+    if (showAgreementBtn) {
+        showAgreementBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAgreementModal();
+        });
+    }
+
+    if (closeAgreementBtn) {
+        closeAgreementBtn.addEventListener('click', hideAgreementModal);
+    }
+
+    if (agreeAgreementBtn) {
+        agreeAgreementBtn.addEventListener('click', function() {
+            if (serviceAgreementCheckbox) {
+                serviceAgreementCheckbox.checked = true;
+            }
+            hideAgreementModal();
+        });
+    }
+
+    // 修改继续按钮点击事件，添加服务协议验证
+    if (continueBtn) {
+        const originalOnClick = continueBtn.onclick;
+        const agreementError = document.getElementById('agreementError');
+        
+        // 显示错误信息
+        function showAgreementError() {
+            if (agreementError) {
+                agreementError.textContent = '请阅读并同意服务协议';
+                agreementError.style.display = 'block';
+                // 滚动到错误提示位置
+                agreementError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // 隐藏错误信息
+        function hideAgreementError() {
+            if (agreementError) {
+                agreementError.textContent = '';
+                agreementError.style.display = 'none';
+            }
+        }
+        
+        continueBtn.onclick = function(e) {
+            // 检查是否同意服务协议
+            if (serviceAgreementCheckbox && !serviceAgreementCheckbox.checked) {
+                showAgreementError();
+                return false;
+            }
+            
+            // 隐藏错误提示（如果有）
+            hideAgreementError();
+            
+            // 调用原始点击事件
+            if (typeof originalOnClick === 'function') {
+                return originalOnClick.call(this, e);
+            }
+        };
+        
+        // 当用户勾选协议时，隐藏错误提示
+        if (serviceAgreementCheckbox) {
+            serviceAgreementCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    hideAgreementError();
+                }
+            });
+        }
+    }
+
+    console.log('✅ 服务协议功能已初始化');
+}
+
+// 页面加载完成后初始化服务协议功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 延迟执行，确保DOM完全加载
+    setTimeout(initServiceAgreement, 1000);
 });
