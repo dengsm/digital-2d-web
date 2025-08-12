@@ -94,8 +94,18 @@ export function useChatWithAgent() {
         // 只有在不跳过UI更新时才添加聊天记录
         if (!skipUIUpdate) {
             console.log('添加用户消息和AI等待状态到UI');
-            addChatRecord({ role: CHAT_ROLE.HUMAN, think: "", content: message });
-            addChatRecord({ role: CHAT_ROLE.AI, think: "", content: "..." });
+            addChatRecord({
+                id: crypto.randomUUID(),
+                role: CHAT_ROLE.HUMAN,
+                think: "",
+                content: message,
+            });
+            addChatRecord({
+                id: crypto.randomUUID(),
+                role: CHAT_ROLE.AI,
+                think: "",
+                content: "...",
+            });
         } else {
             console.log('跳过UI更新，避免重复显示消息');
         }
@@ -183,11 +193,21 @@ export function useChatWithAgent() {
                     break;
                 case STREAMING_EVENT_TYPE.THINK:
                     agentThink += data;
-                    updateLastRecord({ role: CHAT_ROLE.AI, think: agentThink, content: agentResponse });
+                    updateLastRecord({
+                        id: crypto.randomUUID(),
+                        role: CHAT_ROLE.AI,
+                        think: agentThink,
+                        content: agentResponse,
+                    });
                     break;
                 case STREAMING_EVENT_TYPE.TEXT:
                     agentResponse += data;
-                    updateLastRecord({ role: CHAT_ROLE.AI, think: agentThink, content: agentResponse });
+                    updateLastRecord({
+                        id: crypto.randomUUID(),
+                        role: CHAT_ROLE.AI,
+                        think: agentThink,
+                        content: agentResponse,
+                    });
                     if (agentDone) {
                         // 首次触发TTS
                         agentDone = false;

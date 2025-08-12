@@ -1083,12 +1083,14 @@ export const ChatStreamInput = memo(() => {
                                 role: CHAT_ROLE.HUMAN,
                                 think: "",
                                 content: recvData,
+                                id: crypto.randomUUID(),
                             });
                         } else {
                             updateLastRecord({
                                 role: CHAT_ROLE.HUMAN,
                                 think: "",
                                 content: recvData,
+                                id: crypto.randomUUID(),
                             });
                         }
                         break;
