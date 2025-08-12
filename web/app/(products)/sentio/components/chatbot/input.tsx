@@ -238,7 +238,7 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
                     return new Promise((resolve, reject) => {
                         // 设置超时处理
                         const timeout = setTimeout(() => {
-                            // console.error('父页面截图请求超时');
+                            console.error('父页面截图请求超时');
                             reject(new Error("父页面截图请求超时"));
                         }, 30000); // 30秒超时
 
@@ -257,7 +257,7 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
                                     // console.log('父页面截图成功，数据大小:', Math.round(event.data.imageData.length / 1024), 'KB');
                                     resolve(event.data.imageData);
                                 } else {
-                                    // console.error('父页面截图失败:', event.data.error);
+                                     console.error('父页面截图失败:', event.data.error);
                                     reject(
                                         new Error(
                                             event.data.error ||
@@ -345,7 +345,7 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
             // 截图完成，一次性发送带image字段的完整消息
             // console.log('截图完成，准备发送带截图的完整消息');
         } catch (error) {
-            // console.error('异步截图失败:', error);
+            console.error('异步截图失败:', error);
             // console.log('截图失败，将发送不带截图的消息');
         }
 
