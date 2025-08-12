@@ -3,38 +3,38 @@ export enum ENGINE_TYPE {
     "ASR" = "ASR",
     "TTS" = "TTS",
     "LLM" = "LLM",
-    "AGENT" = "AGENT"
+    "AGENT" = "AGENT",
 }
 
 export enum IFER_TYPE {
     "NORMAL" = "normal",
-    "STREAM" = "stream"
+    "STREAM" = "stream",
 }
 
 export enum PARAM_TYPE {
     "STRING" = "string",
     "INT" = "int",
     "FLOAT" = "float",
-    "BOOL" = "bool"
+    "BOOL" = "bool",
 }
 
 export enum GENDER_TYPE {
-    "MALE" = 'MALE',
-    "FEMALE" = 'FEMALE'
+    "MALE" = "MALE",
+    "FEMALE" = "FEMALE",
 }
 
 export enum BACKGROUND_TYPE {
     "STATIC" = "STATIC",
     "DYNAMIC" = "DYNAMIC",
     "CUSTOM" = "CUSTOM",
-    "ALL" = "ALL"
+    "ALL" = "ALL",
 }
 
 export enum CHARACTER_TYPE {
     "IP" = "IP",
     "FREE" = "FREE",
     "CUSTOM" = "CUSTOM",
-    "ALL" = "ALL"
+    "ALL" = "ALL",
 }
 
 export enum APP_TYPE {
@@ -43,17 +43,17 @@ export enum APP_TYPE {
 
 export enum CHAT_ROLE {
     "HUMAN" = "HUMAN",
-    "AI" = "AI"
+    "AI" = "AI",
 }
 
 export enum CHAT_MODE {
     "DIALOGUE" = "DIALOGUE",
-    "IMMSERSIVE" = "IMMSERSIVE"
+    "IMMSERSIVE" = "IMMSERSIVE",
 }
 
 export enum AUDIO_TYPE {
     "MP3" = "mp3",
-    "WAV" = "wav"
+    "WAV" = "wav",
 }
 
 export enum STREAMING_EVENT_TYPE {
@@ -63,20 +63,20 @@ export enum STREAMING_EVENT_TYPE {
     "TEXT" = "TEXT",
     "TASK" = "TASK",
     "DONE" = "DONE",
-    "ERROR" = "ERROR"
+    "ERROR" = "ERROR",
 }
 
 export enum RESOURCE_TYPE {
     "BACKGROUND" = "background",
     "CHARACTER" = "character",
-    "ICON" = "icon"
+    "ICON" = "icon",
 }
 
 // 接口
 export interface BaseResponse {
-    code: number,
-    data: any,
-    message: string,
+    code: number;
+    data: any;
+    message: string;
 }
 
 export interface EngineParamDesc {
@@ -90,15 +90,15 @@ export interface EngineParamDesc {
 }
 
 export interface EngineConfigResponse extends BaseResponse {
-    data: EngineParamDesc[]
+    data: EngineParamDesc[];
 }
 
 export interface EngineListResponse extends BaseResponse {
-    data: EngineDesc[]
+    data: EngineDesc[];
 }
 
 export interface EngineDefaultResponse extends BaseResponse {
-    data: EngineDesc
+    data: EngineDesc;
 }
 
 export interface VoiceDesc {
@@ -107,7 +107,7 @@ export interface VoiceDesc {
 }
 
 export interface VoiceListResponse extends BaseResponse {
-    data: VoiceDesc[]
+    data: VoiceDesc[];
 }
 
 export interface ResourceModel {
@@ -117,12 +117,13 @@ export interface ResourceModel {
     link: string;
 }
 
-export interface ResourceDesc extends ResourceModel{
+export interface ResourceDesc extends ResourceModel {
     user_id: string;
     create_time: string;
 }
 
 export interface ChatMessage {
+    id: string;
     role: CHAT_ROLE;
     think: string;
     content: string;
@@ -146,7 +147,6 @@ export interface EngineConfig {
     type: ENGINE_TYPE;
     config: {};
 }
-
 
 export interface AudioDescResponse extends BaseResponse {
     data: string | null;
