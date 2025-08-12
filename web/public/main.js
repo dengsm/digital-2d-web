@@ -1489,39 +1489,50 @@ function showPsychologyExitConfirmDialog() {
         if (dialog) {
             dialog.remove();
         }
+        
         clearInterval(countdownTimer);
 
-        // 执行退出逻辑 - 回到初始状态
+        // 获取DOM元素
         const psychologyBtn = document.getElementById("psychologyBtn");
+        const minimizeBtn = document.getElementById("minimizeBtn");
+        const draggableWindow = document.querySelector(".draggable-window");
         const chatInput = document.getElementById("chatInput");
         const sendButton = document.getElementById("sendButton");
 
-        // 重置按钮到初始状态
+        // 1. 恢复按钮状态
         if (psychologyBtn) {
             psychologyBtn.classList.remove("pressed");
-            psychologyBtn.innerHTML =
-                '<span class="btn-text">多元智能测评</span> <span class="click-hint">👆</span>';
+            psychologyBtn.innerHTML = '<span class="btn-text">多元智能测评</span> <span class="click-hint">👆</span>';
         }
 
-        // 重置状态为初始状态（非心理测评模式）
+        // 2. 恢复窗口状态和最小化按钮
+        if (draggableWindow && minimizeBtn) {
+            // 恢复窗口
+            draggableWindow.classList.remove("minimized");
+            
+            // 恢复按钮状态
+            minimizeBtn.disabled = false;
+            minimizeBtn.style.opacity = "1";
+            minimizeBtn.style.cursor = "pointer";
+            minimizeBtn.textContent = "−";
+        }
+
+        // 3. 重置状态
         isPsychologyMode = false;
         currentQuestionId = null;
         currentClassId = null;
 
-        // 同步更新清除按钮状态（非答题模式启用）
+        // 4. 同步更新清除按钮状态（非答题模式启用）
         updateClearButtonState();
 
-        // 更新按钮互斥状态（恢复所有按钮正常状态）
+        // 5. 更新按钮互斥状态（恢复所有按钮正常状态）
         updateButtonMutualExclusion();
 
-        // 启用聊天输入框
+        // 6. 启用聊天输入框
         enableChatInput();
 
-        // 发送退出消息到后端
+        // 7. 发送退出消息到后端
         setTimeout(() => {
-            const chatInput = document.getElementById("chatInput");
-            const sendButton = document.getElementById("sendButton");
-
             if (
                 chatInput &&
                 sendButton &&
@@ -1544,7 +1555,7 @@ function showPsychologyExitConfirmDialog() {
                     clearUserInfoVariables();
                 }, 200);
             }
-        }, 500);
+        }, 300);
 
         console.log("✅ 已退出多元智能测评模式");
     }
@@ -1743,32 +1754,15 @@ function handlePsychologyBtnClick() {
     if (!isPsychologyMode) {
         // 当前不在心理测评模式（初始状态或测评完成后），点击开始新一轮心理测评
         console.log("🎆 开始新一轮心理测评，显示用户信息弹窗");
-        
-        // 最小化右侧栏
-        if (draggableWindow) {
-            draggableWindow.classList.add("minimized");
-        }
-        
-        // 禁用最小化按钮
-        if (minimizeBtn) {
-            minimizeBtn.disabled = true;
-        }
+        // 填写信息阶段不处理窗口和按钮状态，保持原样
         
         showPsychologyUserInfoModal();
     } else {
         // 当前在心理测评模式中（测评过程中），点击退出
         console.log("🚪 用户在心理测评过程中点击退出，显示确认弹窗");
         
-        // 恢复右侧栏
-        if (draggableWindow) {
-            draggableWindow.classList.remove("minimized");
-        }
-        
-        // 恢复最小化按钮状态
-        if (minimizeBtn) {
-            minimizeBtn.disabled = false;
-        }
-        
+        // 只显示确认弹窗，不修改窗口和按钮状态
+        // 窗口和按钮状态的恢复将在用户确认退出后执行（在executePsychologyExit函数中）
         showPsychologyExitConfirmDialog();
     }
 }
@@ -2227,6 +2221,21 @@ async function validateAndContinuePsychology() {
 
                     // 更新状态 - 进入心理测评模式
                     isPsychologyMode = true;
+                    
+                    // 最小化窗口并禁用最小化按钮（真正开始答题时）
+                    const minimizeBtn = document.getElementById("minimizeBtn");
+                    const draggableWindow = document.querySelector(".draggable-window");
+                    
+                    if (draggableWindow) {
+                        draggableWindow.classList.add("minimized");
+                        if (minimizeBtn) {
+                            minimizeBtn.disabled = true;
+                            minimizeBtn.style.opacity = "0.6";
+                            minimizeBtn.style.cursor = "not-allowed";
+                            minimizeBtn.textContent = "−";
+                        }
+                    }
+                    
                     console.log(
                         "🔄 心理测评状态已设置：isPsychologyMode =",
                         isPsychologyMode,
@@ -2510,14 +2519,16 @@ function autoExitPsychology() {
     currentQuestionId = null;
     currentClassId = null;
 
-    // 恢复右侧栏
+    // 恢复右侧栏和最小化按钮状态
     if (draggableWindow) {
         draggableWindow.classList.remove("minimized");
-    }
-    
-    // 恢复最小化按钮状态
-    if (minimizeBtn) {
-        minimizeBtn.disabled = false;
+        // 恢复最小化按钮状态
+        if (minimizeBtn) {
+            minimizeBtn.disabled = false;
+            // 恢复按钮样式
+            minimizeBtn.style.opacity = "1";
+            minimizeBtn.style.cursor = "pointer";
+        }
     }
 
     // 同步更新清除按钮状态（非答题模式启用）
