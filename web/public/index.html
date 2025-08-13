@@ -52,15 +52,58 @@
             }
         </style>
         <link rel="stylesheet" href="/media.css" />
+        <!-- 本地字体 -->
+        <link rel="stylesheet" href="/fonts/fonts.css" />
+        <style>
+            /* 添加字体样式 */
+            .font-ma-shan {
+                font-family: 'Ma Shan Zheng', cursive, 'KaiTi', 'STKaiti', serif;
+            }
+            .font-zcool {
+                font-family: 'ZCOOL KuaiLe', 'YouYuan', 'Microsoft YaHei', sans-serif;
+            }
+            .font-noto-sans {
+                font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            }
+            .font-xiaoke {
+                font-family: 'Xiaoke Cheese', 'ZCOOL KuaiLe', 'YouYuan', 'Microsoft YaHei', cursive;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
             <div class="teacher-panel">
-                <div class="font-size-control">
-                    <span style="font-size: 0.9rem;">A-</span>
-                    <input type="range" min="12" max="18" value="14" 
-                           oninput="document.documentElement.style.fontSize = this.value + 'px'; updateFontSize(this.value)">
-                    <span style="font-size: 1.1rem;">A+</span>
+                <div class="font-controls">
+                    <div class="font-size-control" style="margin-bottom: 8px;">
+                        <span style="font-size: 0.9rem; margin-right: 5px;">字体大小:</span>
+                        <span style="font-size: 0.9rem;">A-</span>
+                        <input type="range" min="12" max="18" value="14" 
+                               oninput="document.documentElement.style.fontSize = this.value + 'px'; updateFontSize(this.value)"
+                               style="vertical-align: middle;">
+                        <span style="font-size: 1.1rem;">A+</span>
+                    </div>
+                    <div class="font-family-control">
+                        <span style="font-size: 0.9rem; margin-right: 5px; color: #666;">样式:</span>
+                        <select onchange="updateFontFamily(this.value)" 
+                                style="padding: 4px 8px; 
+                                       border-radius: 4px; 
+                                       border: 1px solid #d1d1d1;
+                                       min-width: 180px;
+                                       font-size: 0.9rem;
+                                       background-color: #f5f5f5;
+                                       color: #333;
+                                       cursor: pointer;
+                                       outline: none;
+                                       transition: all 0.2s ease;">
+                            <option value="'Microsoft YaHei', 'PingFang SC', sans-serif" selected>默认</option>
+                            <option value="'STXingkai', 'KaiTi', cursive">华文行楷 (书法)</option>
+                            <option value="'Xiaoke Cheese', 'ZCOOL KuaiLe', 'YouYuan', 'Microsoft YaHei', cursive" class="font-xiaoke">小可奶酪体 (可爱萌系)</option>
+                            <option value="'Comic Sans MS', 'Marker Felt', 'Comic Sans', cursive">卡通体 (Comic Sans)</option>
+                            <option value="'Arial Rounded MT Bold', 'Arial', sans-serif">圆体 (Arial Rounded)</option>
+                            <option value="'Brush Script MT', 'Brush Script Std', cursive">手写体 (Brush Script)</option>
+                            <option value="'Ma Shan Zheng', 'KaiTi', 'STKaiti', serif" class="font-ma-shan">马善政毛笔楷书 (手写体)</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
                     <!-- 专业推荐 -->
@@ -446,6 +489,14 @@
                 const elements = document.querySelectorAll('body, .feature-intro, .intro-text, .chat-messages');
                 elements.forEach(el => {
                     el.style.fontSize = size + 'px';
+                });
+            }
+            
+            // 更新字体
+            function updateFontFamily(font) {
+                const elements = document.querySelectorAll('body, .feature-intro, .intro-text, .chat-messages');
+                elements.forEach(el => {
+                    el.style.fontFamily = font;
                 });
             }
         </script>

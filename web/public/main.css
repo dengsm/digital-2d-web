@@ -715,9 +715,9 @@ body.modal-open {
     font-weight: 500;
     cursor: pointer;
     z-index: 1001;
-    transition: all 0.3s ease;
     opacity: 0.7;
     pointer-events: auto;
+    transform: scale(1); /* 添加默认的transform值 */
 }
 
 .clear-chat-button:hover {
@@ -728,7 +728,7 @@ body.modal-open {
 }
 
 .clear-chat-button:active {
-    transform: translateY(0);
+    /* 移除transform属性，保持按钮位置不变 */
 }
 
 .clear-chat-button:disabled {

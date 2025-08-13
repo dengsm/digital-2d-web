@@ -1,0 +1,47 @@
+/* 马善政毛笔楷书 */
+@font-face {
+    font-family: 'Ma Shan Zheng';
+    src: url('MaShanZheng-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 思源黑体 - 使用系统自带的Noto Sans SC */
+@font-face {
+    font-family: 'Noto Sans SC';
+    src: local('Noto Sans SC'),
+         local('Noto Sans SC Regular'),
+         local('Noto Sans SC-Regular'),
+         local('Source Han Sans CN'),
+         local('Source Han Sans CN Regular'),
+         local('Source Han Sans CN-Regular'),
+         local('PingFang SC'),
+         local('Microsoft YaHei'),
+         local('sans-serif');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 站酷酷圆体 - 使用系统自带的ZCOOL KuaiLe */
+@font-face {
+    font-family: 'ZCOOL KuaiLe';
+    src: local('ZCOOL KuaiLe'),
+         local('ZCOOLKuaiLe-Regular'),
+         local('YouYuan'),
+         local('Microsoft YaHei'),
+         local('sans-serif');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* 小可奶酪体 */
+@font-face {
+    font-family: 'Xiaoke Cheese';
+    src: url('xiaoke/XiaokeCheese.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
