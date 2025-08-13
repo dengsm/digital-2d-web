@@ -105,11 +105,18 @@ export class Live2dManager {
         return audioData;
     }
 
-    public stopAudio(): void {
-        this.clearAudioQueue();
+    /**
+     * 立即停止所有音频播放
+     * @param clearQueue 是否清空播放队列，默认为true
+     */
+    public stopAudio(clearQueue: boolean = true): void {
         if (this._audioSource) {
+            this._audioSource.onended = null;
             this._audioSource.stop();
             this._audioSource = null;
+        }
+        if (clearQueue) {
+            this._ttsQueue = [];
         }
         this._audioIsPlaying = false;
     }

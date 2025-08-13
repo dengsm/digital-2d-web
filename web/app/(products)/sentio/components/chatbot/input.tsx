@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, memo } from "react";
-import {
-    StopCircleIcon,
-    MicrophoneIcon,
-    PaperAirplaneIcon,
+import { 
+    StopCircleIcon, 
+    MicrophoneIcon, 
+    PaperAirplaneIcon, 
+    SpeakerWaveIcon, 
+    SpeakerXMarkIcon 
 } from "@heroicons/react/24/solid";
 import {
     useSentioAsrStore,
@@ -75,6 +77,7 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
         null,
     );
     const [showScreenshotPreview, setShowScreenshotPreview] = useState(false);
+    const [isTTSEnabled, setIsTTSEnabled] = useState(true); // 控制是否启用TTS播报
     const {
         enable: enableASR,
         engine: asrEngine,
@@ -568,10 +571,12 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
                         });
 
                         // 触发TTS语音播报
-                        if (agentDone && sound) {
+                        if (isTTSEnabled && agentDone && sound) {
                             // console.log('🔊 触发TTS语音播报，sound状态:', sound, 'agentDone:', agentDone);
                             agentDone = false;
                             doTTS();
+                        } else if (!isTTSEnabled) {
+                            console.log('🔇 TTS播报已禁用，跳过语音播报');
                         } else {
                             //console.log('🔇 未触发TTS，原因:', { sound, agentDone });
                         }
@@ -742,7 +747,7 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    });
+    }, []);
 
     return (
         <div className="flex flex-col w-4/5 md:w-2/3 2xl:w-1/2 items-start z-10 gap-2">
@@ -810,14 +815,38 @@ export const ChatInput = memo(({ postProcess }: IProps) => {
                     onKeyDown={onKeyDown}
                     disabled={startMicRecord || startAsrConvert}
                 />
-                <Button
-                    className="opacity-90"
-                    isIconOnly
-                    color="primary"
-                    onPress={onSendClick}
-                >
-                    <PaperAirplaneIcon className="size-6" />
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        className="opacity-90"
+                        isIconOnly
+                        color="primary"
+                        onPress={onSendClick}
+                    >
+                        <PaperAirplaneIcon className="size-6" />
+                    </Button>
+                    <Tooltip content={isTTSEnabled ? "禁用语音播报" : "启用语音播报"}>
+                        <Button
+                            isIconOnly
+                            variant="flat"
+                            className={`${isTTSEnabled ? 'bg-cyan-100 hover:bg-cyan-200 text-cyan-700' : 'bg-red-100 hover:bg-red-200 text-red-700'}`}
+                            onPress={() => {
+                                const newState = !isTTSEnabled;
+                                if (!newState) {
+                                    // 如果禁用TTS，立即停止所有播报
+                                    const manager = Live2dManager.getInstance();
+                                    manager.stopAudio();
+                                }
+                                setIsTTSEnabled(newState);
+                            }}
+                        >
+                            {isTTSEnabled ? (
+                                <SpeakerWaveIcon className="size-5" />
+                            ) : (
+                                <SpeakerXMarkIcon className="size-5" />
+                            )}
+                        </Button>
+                    </Tooltip>
+                </div>
             </div>
 
             {/* 截图预览模态框 */}
