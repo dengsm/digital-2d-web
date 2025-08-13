@@ -12,11 +12,56 @@
         <link rel="stylesheet" href="/frame.css" />
         <link rel="stylesheet" href="/main.css" />
         <link rel="stylesheet" href="/leftPanel.css" />
+        <style>
+            /* 字体大小控制样式 */
+            .font-size-control {
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                color: #999;
+                font-size: 14px;
+            }
+            .font-size-control input[type="range"] {
+                -webkit-appearance: none;
+                appearance: none;
+                height: 4px;
+                background: #666;
+                border-radius: 2px;
+                outline: none;
+                width: 100px;
+                cursor: pointer;
+            }
+            .font-size-control input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 14px;
+                height: 14px;
+                background: #999;
+                border: 2px solid #666;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            /* 确保所有元素继承根字体大小 */
+            html {
+                font-size: 14px;
+            }
+            body, .feature-intro, .intro-text, .chat-messages {
+                font-size: 1rem !important;
+            }
+        </style>
         <link rel="stylesheet" href="/media.css" />
     </head>
     <body>
         <div class="container">
             <div class="teacher-panel">
+                <div class="font-size-control">
+                    <span style="font-size: 0.9rem;">A-</span>
+                    <input type="range" min="12" max="18" value="14" 
+                           oninput="document.documentElement.style.fontSize = this.value + 'px'; updateFontSize(this.value)">
+                    <span style="font-size: 1.1rem;">A+</span>
+                </div>
                 <div>
                     <!-- 专业推荐 -->
                     <div class="feature-intro">
@@ -93,9 +138,7 @@
                 <div class="intro-text-bottom">
                     💬 技术支持：龙马智芯
                 </div> 
-                <div class="font-size-controll">
-                    进度条
-                </div>
+               
             </div>
 
             <div class="chat-panel">
@@ -392,5 +435,19 @@
                 </div>
             </div>
         </div>
+        <script>
+            // 设置基础字体大小
+            document.documentElement.style.fontSize = '14px';
+            
+            // 更新所有元素的字体大小
+            function updateFontSize(size) {
+                document.documentElement.style.fontSize = size + 'px';
+                // 强制重新渲染
+                const elements = document.querySelectorAll('body, .feature-intro, .intro-text, .chat-messages');
+                elements.forEach(el => {
+                    el.style.fontSize = size + 'px';
+                });
+            }
+        </script>
     </body>
 </html>

@@ -2586,7 +2586,7 @@ function addPermanentClearChatButton() {
     const clearBtn = document.createElement("button");
     clearBtn.id = "clearChatBtn";
     clearBtn.className = "clear-chat-button";
-    clearBtn.textContent = "清除记录";
+    clearBtn.textContent = "清理屏幕";
     clearBtn.title = "清除聊天记录，保留欢迎消息";
     clearBtn.onclick = clearChatHistory;
 
