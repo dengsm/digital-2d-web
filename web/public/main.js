@@ -87,13 +87,12 @@ async function sendApiRequest(
 
     // 重试循环
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        console.log(`🔄 第${attempt}次尝试请求...`);
+       
 
         // 创建超时控制
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
             controller.abort();
-            console.log(`⏰ 第${attempt}次请求超时，已取消`);
         }, timeout);
 
         try {
@@ -1081,7 +1080,7 @@ async function sendMessage() {
         );
 
         // 发送API请求（15秒超时）
-        const response = await sendApiRequest(userInfo, resourceData, 15000);
+        const response = await sendApiRequest(userInfo, resourceData);
 
         let data;
         const contentType = response.headers.get("content-type");
